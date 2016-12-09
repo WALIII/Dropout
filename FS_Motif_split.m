@@ -59,7 +59,8 @@ M_cuts = (sorted_syllable{i}(GG)*((N-NOVERLAP)*DOWNSAMPLE)-N)
 % %Tally(counter,1:size(})) = };
 % Tally{counter} = };
 
-CUTS = horzcat(St_cut,M_cuts);
+CUTS = horzcat(St_cut,M_cuts');
+clear St_cut;
 for ii = 1:size(CUTS,2);
     try
     temp = mic_data{i}(CUTS(ii):CUTS(ii+1));
@@ -79,12 +80,16 @@ for ii = 1:size(CUTS,2);
 end
 
 else % if only one detection,
+    try
     temp = mic_data{i}(St_cut:end);
     %Tally(counter,1:size(temp)) = temp;
     Tally{counter} = temp';
 
     clear temp
     counter = counter+1; 
+    catch
+        continue
+    end;
 end
 end
 
@@ -112,10 +117,6 @@ Tally = a_matrix;
 % c = cluster(Z,'maxclust',4);
 
 % linkage
-l = linkage(Tally2(1:45,:), 'single', 'correlation');
-
-% find clusters
-clusters = cluster(l, 'maxclust', 10);
 
 
 

@@ -1,22 +1,24 @@
-% for i = 1: size(Tally);
-%     
-% envelope = abs(hilbert(Tally(i,:)'));
-% yupper = tsmovavg(envelope','s',10)*10000;
-% 
-% Tally2(i,:) = yupper;
-% 
-% clear envelope;
-% clear yupper;
-% 
-% end
+function Tally2 = hilbert_FS(Tally);
+
+for i = 1: size(Tally);
+    
+envelope = abs(hilbert(Tally(i,:)'));
+yupper = tsmovavg(envelope','s',100);
+
+Tally2(i,:) = yupper;
+
+clear envelope;
+clear yupper;
+
+end
 
 
 % linkage
-Tally3 = Tally2(1:45,10:1.4e5);% 1.5e5
+Tally3 = Tally2(1:size(Tally2,1),100:end-0.5e5);% 1.5e5
 
 l = linkage(Tally3, 'average', 'correlation');
 % find clusters
-clusters = cluster(l, 'maxclust', 6);
+clusters = cluster(l, 'maxclust', 20);
 
 
 [~, idx] = sort(clusters);
@@ -27,6 +29,7 @@ subplot(2,1,1);
 imagesc(Tally3);
 subplot(2,1,2);
 imagesc(Tally4);
+colormap(hot);
 
 
 
