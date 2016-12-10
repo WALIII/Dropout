@@ -1,9 +1,7 @@
 
 function Tally = FS_Motif_split()
 
-% run in exreaction directory
 
-DIR = pwd;
 N=1024;
 NOVERLAP=1e3;
 DOWNSAMPLE=5;
@@ -12,7 +10,6 @@ fs = 48000;
 
 DIR = pwd;
 load(fullfile(DIR,'cluster_results.mat'),'sorted_syllable');
-load(fullfile(DIR,'cluster_data.mat'),'filenames');
 counter = 1;
 % Tally = zeros(10,100000);
 
@@ -24,7 +21,8 @@ counter = 1;
 
 % Get Mic Data
 cd ../
-mov_listing=filenames;
+mov_listing=dir(fullfile(pwd,'*.mat'));
+mov_listing={mov_listing(:).name};
 
 counter2 = 1;
 for i=1:length(mov_listing)
@@ -35,15 +33,15 @@ end
 
 
       
-for i = 1:length(mov_listing);
+for i = 1length(mov_listing);
     
      try
-St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N);
-     catch
+St_cut = (sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N);
+      catch
           continue
      end
     
-GG = find(diff(sorted_syllable{i})>300);
+GG = find(diff(sorted_syllable{i})>10000);
 GG = GG+1;
 
 % try
@@ -56,10 +54,10 @@ GG = GG+1;
 
 if size(GG,1) >= 1;
 M_cuts = (sorted_syllable{i}(GG)*((N-NOVERLAP)*DOWNSAMPLE)-N);
-CUTS = horzcat(St_cut,M_cuts',length(mic_data{i}));
+CUTS = horzcat(St_cut,M_cuts',length(mic_data));
 clear St_cut;
 else 
-    CUTS = horzcat(St_cut,length(mic_data{i}));
+    CUTS = horzcat(St_cut,length(mic_data));
 end
 
 % } = mic_data{i}(St_cut:M_cuts(1));
@@ -98,10 +96,7 @@ a_extended = cellfun(@(x) [x zeros(1, max_length - length(x))], a, 'UniformOutpu
 a_matrix = cat(1, a_extended{:});
 clear Tally
 Tally = a_matrix;
-
-cd(DIR);
 end
-
 
 %figure(); imagesc(Tally(1:10000));
 

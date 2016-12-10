@@ -18,14 +18,14 @@ hold on;
 envelope = abs(hilbert(mic_data));
 yupper = tsmovavg(envelope','s',10)*10000;
 %plot((1:length(yupper))/fs,yupper,'b','linewidth',2);
-plot((sorted_syllable{3}*((N-NOVERLAP)*DOWNSAMPLE)-N)/fs+0.6,ones(length(sorted_syllable{3})),'b*');
+plot((sorted_syllable*((N-NOVERLAP)*DOWNSAMPLE)-N)/fs+0.6,ones(length(sorted_syllable)),'b*');
 
 
 
-figure(); plot((1:length(yupper)),yupper);
-hold on;
-
-plot(sorted_syllable{3}*fs,1:length(sorted_syllable{3}),'b*');
+% figure(); plot((1:length(yupper)),yupper);
+% hold on;
+% 
+% plot(sorted_syllable{122}*fs,1:length(sorted_syllable{122}),'b*');
 
 % [pk,lk] = findpeaks(yupper,'MinPeakHeight',100,'MinPeakProminence',1000);
 
