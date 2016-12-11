@@ -43,7 +43,7 @@ St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N);
           continue
      end
     
-GG = find(diff(sorted_syllable{i})>300);
+GG = find(diff(sorted_syllable{i})>400);
 GG = GG+1;
 
 % try

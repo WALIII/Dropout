@@ -14,9 +14,9 @@ end
 
 
 % linkage
-Tally3 = Tally2(1:size(Tally2,1),100:end-4.1e5);% 1.5e5
+Tally3 = Tally2(1:size(Tally2,1),100:end-3.5e5);% 1.5e5
 
-l = linkage(Tally3, 'ward', 'correlation');
+l = linkage(Tally3, 'average', 'correlation');
 % find clusters
 clusters = cluster(l, 'maxclust', 20);
 
