@@ -1,5 +1,5 @@
 
-function Tally = FS_Motif_split()
+function [Tally, C] = FS_Motif_split()
 
 % run in exreaction directory
 
@@ -14,6 +14,7 @@ DIR = pwd;
 load(fullfile(DIR,'cluster_results.mat'),'sorted_syllable');
 load(fullfile(DIR,'cluster_data.mat'),'filenames');
 counter = 1;
+counter2 = 1;
 % Tally = zeros(10,100000);
 
 
@@ -44,7 +45,7 @@ St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N);
      end
     
 GG = find(diff(sorted_syllable{i})>400);
-GG = GG+1;
+GG = GG+1; % cut infront of the next block.
 
 % try
 % if St_cut == GG(1);
@@ -62,6 +63,9 @@ else
     CUTS = horzcat(St_cut,length(mic_data{i}));
 end
 
+C{1,counter2} = CUTS;
+C{2,counter2} = mov_listing{i};
+counter2 = counter2+1;
 % } = mic_data{i}(St_cut:M_cuts(1));
 % %Tally(counter,1:size(})) = };
 % Tally{counter} = };
