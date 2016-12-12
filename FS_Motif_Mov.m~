@@ -31,16 +31,8 @@ for i = 1: length(C);
           temp2(:,:,:,:) = video.frames(:,:,:,CUTS(ii-1):CUTS(ii));
           temp(:,:,:,:) = cat(4,temp,temp2);
         end
-        
-        % Keep track of where in the matrix the breaks are...
-        if counter == 1;
-             Ticks(counter) = 1+CUTS(ii)-CUTS(ii-1);
-             counter = counter+1;
-        else 
-             Ticks(counter) = Ticks(counter-1)+1+(CUTS(ii)-CUTS(ii-1));
-             counter = counter+1;
-        end
-        
+    Ticks(counter) = CUTS(ii)-CUTS(ii-1);
+    counter = counter+1;
     end
     
     if isempty(ConcVid)
