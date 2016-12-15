@@ -1,4 +1,4 @@
-function Tally2 = hilbert_FS(Tally);
+function [Tally2 idx] = hilbert_FS(Tally);
 
 for i = 1: size(Tally);
     

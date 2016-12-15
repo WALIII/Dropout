@@ -12,8 +12,8 @@ for i = 1: length(C);
     % index into the videos
     load(C{2,i},'video')
 
-    idx1=C{1,1}/48000; %time in seconds
-    
+    idx1=C{1,i}/48000; %time in seconds
+   clear CUTS;
     for iii = 1:size(idx1,2)
     [~, CUTS_t] = min(abs(video.times-idx1(iii))); %what is the closest time in frames, using time index
     CUTS(iii)= CUTS_t;
@@ -29,7 +29,10 @@ for i = 1: length(C);
             temp(:,:,:,:) = video.frames(:,:,:,CUTS(ii-1):CUTS(ii));
         else  
           temp2(:,:,:,:) = video.frames(:,:,:,CUTS(ii-1):CUTS(ii));
-          temp(:,:,:,:) = cat(4,temp,temp2);
+          temp3(:,:,:,:) = cat(4,temp,temp2);
+          temp = temp3;
+          clear temp2;
+          clear temp3;
         end
         
         % Keep track of where in the matrix the breaks are...
