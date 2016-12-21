@@ -1,10 +1,10 @@
 function [Tally2 idx] = hilbert_FS(Tally);
 
 for i = 1: size(Tally);
-    
-envelope = abs(hilbert(Tally(i,:)'));
+Tally_f = FS_audio_filter(Tally(i,:));
+envelope = abs(hilbert(Tally_f'));
 yupper = tsmovavg(envelope','s',100);
-
+clear Tally_f;
 Tally2(i,:) = yupper;
 
 clear envelope;
@@ -14,7 +14,7 @@ end
 
 
 % linkage
-Tally3 = Tally2(1:size(Tally2,1),100:end-1.5e5);% 1.5e5
+Tally3 = Tally2(1:size(Tally2,1),100:end);% 1.5e5
 
 l = linkage(Tally3, 'ward', 'correlation');
 % find clusters
