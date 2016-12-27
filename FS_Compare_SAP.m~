@@ -1,0 +1,98 @@
+function FS_Compare_SAP(F1,F2);
+% compare SAP scores for direct vs undirected song
+
+% F1 = directed
+% F2 = Undirected
+
+if gt(size(F2,2),size(F1,2)) ==1;
+
+for i = 1:size(F1,2);
+  % AM
+  AM1(i) = mean(F1{i}.AM);
+  AM2(i) = mean(F2{i}.AM);
+  % FM
+  FM1(i) = mean(F1{i}.FM);
+  FM2(i) = mean(F2{i}.FM);
+  % Entropy
+  Ent1(i) = mean(F1{i}.entropy);
+  Ent2(i) = mean(F2{i}.entropy);
+
+ % Pitch Goodness
+  PC1(i) = mean(F1{i}.pitch_goodness);
+  PC2(i) = mean(F2{i}.pitch_goodness);
+
+  % Pitch
+  P1(i) = mean(F1{i}.pitch);
+  P2(i) = mean(F2{i}.pitch);
+end;
+
+else
+
+for i = 1:size(F2,2);
+  % AM
+  Dat.AM1(i) = mean(F1{i}.AM);
+  Dat.AM2(i) = mean(F2{i}.AM);
+  % FM
+  Dat.FM1(i) = mean(F1{i}.FM);
+  Dat.FM2(i) = mean(F2{i}.FM);
+  % Entropy
+  Dat.Ent1(i) = mean(F1{i}.entropy);
+  Dat.Ent2(i) = mean(F2{i}.entropy);
+
+ % Pitch Goodness
+  Dat.PG1(i) = mean(F1{i}.pitch_goodness);
+  Dat.PG2(i) = mean(F2{i}.pitch_goodness);
+
+  % Pitch
+  Dat.P1(i) = mean(F1{i}.pitch);
+  Dat.P2(i) = mean(F2{i}.pitch);
+
+
+end;
+end
+
+figure();
+
+subplot(1,5,1);
+histogram(Dat.AM1,15);
+hold on;
+histogram(Dat.AM2,15);
+title('AM')
+
+subplot(1,5,2);
+histogram(Dat.FM1,15);
+hold on;
+histogram(Dat.FM2,15);
+title('FM')
+
+subplot(1,5,3);
+histogram(Dat.Ent1,15);
+hold on;
+histogram(Dat.Ent2,15);
+title('Entropy')
+
+subplot(1,5,4);
+histogram(Dat.PG1,15);
+hold on;
+histogram(Dat.PG2,15);
+title('Pitch Goodness')
+
+subplot(1,5,5);
+histogram(Dat.P1,15);
+hold on;
+histogram(Dat.P2,15);
+title('Pitch ')
+legend('Direccted','Undiected')
+
+
+figure(); 
+plot3(Dat.PG1,Dat.P1,FM1,'b*');
+xlabel('Entropy');
+ylabel('Entropy');
+zlabel('Entropy');
+hold on;
+plot3(PG2,P2,FM2,'c*');
+
+title('scatter ')
+legend('Direccted','Undiected')
+grid on;
