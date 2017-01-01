@@ -18,7 +18,7 @@ Tally3 = Tally2(1:size(Tally2,1),100:end);% 1.5e5
 
 l = linkage(Tally3, 'ward', 'correlation');
 % find clusters
-clusters = cluster(l, 'maxclust', 20);
+clusters = cluster(l, 'maxclust', 8);
 
 
 [~, idx] = sort(clusters);

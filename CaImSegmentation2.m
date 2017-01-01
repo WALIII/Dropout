@@ -85,7 +85,7 @@ height = d2;
 K = maxNeurons;                       % number of components to be found
 tau = estNeuronSize/2;                  % std of gaussian kernel (size of neuron)
 p = AR_p;                                % order of autoregressive system (p = 0 no dynamics, p=1 just decay, p = 2, both rise and decay)
-merge_thr = 0.80;                      % merging threshold
+merge_thr = 0.99;                      % merging threshold
 
 options = CNMFSetParms(...
     'd1',d1,'d2',d2,...  % dimensions of datasets

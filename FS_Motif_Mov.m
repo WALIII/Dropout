@@ -26,9 +26,9 @@ for i = 1: length(C);
     for ii = 2:size(CUTS,2)
         
         if ii==2;
-            temp(:,:,:,:) = video.frames(:,:,:,CUTS(ii-1):CUTS(ii));
+            temp(:,:,:,:) = imresize(video.frames(:,:,:,CUTS(ii-1):CUTS(ii)),0.25);
         else  
-          temp2(:,:,:,:) = video.frames(:,:,:,CUTS(ii-1):CUTS(ii));
+          temp2(:,:,:,:) = imresize(video.frames(:,:,:,CUTS(ii-1):CUTS(ii)),0.25);
           temp3(:,:,:,:) = cat(4,temp,temp2);
           temp = temp3;
           clear temp2;

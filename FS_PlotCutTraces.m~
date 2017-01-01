@@ -2,7 +2,7 @@ function FS_PlotCutTraces(SortedCell,idx,Tally2,cell)
 % Context Dependance prototype function  
 
 
-figure(); 
+
 for i = 1:100
     hold on;
  
