@@ -44,7 +44,7 @@ St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N);
           continue
      end
     
-GG = find(diff(sorted_syllable{i})>5000);
+GG = find(diff(sorted_syllable{i})>500);
 GG = GG+1; % cut infront of the next block.
 
 % try
