@@ -1,4 +1,4 @@
-function [F P G] = FS_SAP_scores(WAV)
+function [F P] = FS_SAP_scores(WAV)
 
 % run:
 % >> CY_Get_wav

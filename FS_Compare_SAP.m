@@ -51,6 +51,34 @@ for i = 1:size(F2,2);
 end;
 end
 
+
+
+
+% general graphics, this will apply to any figure you open
+% (groot is the default figure object).
+set(groot, ...
+'DefaultFigureColor', 'w', ...
+'DefaultAxesLineWidth', 0.5, ...
+'DefaultAxesXColor', 'k', ...
+'DefaultAxesYColor', 'k', ...
+'DefaultAxesFontUnits', 'points', ...
+'DefaultAxesFontSize', 8, ...
+'DefaultAxesFontName', 'Helvetica', ...
+'DefaultLineLineWidth', 1, ...
+'DefaultTextFontUnits', 'Points', ...
+'DefaultTextFontSize', 8, ...
+'DefaultTextFontName', 'Helvetica', ...
+'DefaultAxesBox', 'off', ...
+'DefaultAxesTickLength', [0.02 0.025]);
+ 
+% set the tickdirs to go out - need this specific order
+set(groot, 'DefaultAxesTickDir', 'out');
+set(groot, 'DefaultAxesTickDirMode', 'manual');
+
+
+
+
+
 figure();
 bin = 10;
 
@@ -87,14 +115,14 @@ legend('Direccted','Undiected')
 
 
 hold on;
-figure(5); 
-plot3(dat.PG1,Dat.P1,Dat.FM1,'*','Color',[0.7 .2 0.7]);%[0.7 .5 0.5]
-xlabel('Entropy');
+figure(); 
+plot3(Dat.PG1,Dat.Ent1,Dat.FM1,'*','Color',[0.1 .7 0.1]);%[0.7 .5 0.5]
+xlabel('Pitch Goodness');
 ylabel('Entropy');
-zlabel('Entropy');
+zlabel('Frequency Modulation');
 hold on;
-plot3(Dat.PG2,Dat.P2,Dat.FM2,'*','Color',[0.1 .7 0.1]); %[0.5 .7 0.5]
+plot3(Dat.PG2,Dat.Ent2,Dat.FM2,'*','Color',[0.7 .2 0.7]); %[0.5 .7 0.5]
 
-title('scatter ')
+title('Differences in Directed vs. Undirected Song')
 legend('Direccted','Undiected')
 grid on;

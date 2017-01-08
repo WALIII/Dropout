@@ -3,14 +3,14 @@ function FS_PlotCutTraces(SortedCell,idx,Tally2,cell)
 
 
 figure(); 
-for i = 1:100
+for i = cell
     hold on;
  
-SCell = SortedCell{i}.^2;
+SCell = SortedCell{i};
 
 
-S2 = abs(SCell(idx, 1:end-round((1.5e5/48000)*30)));
-S1 = Tally2(idx, 1:end-1.5e5);
+S2 = abs(SCell(idx, 1:end));
+S1 = Tally2(idx, 1:end);
 % figure(); 
 ax1 = subplot(1,11,1:5);
 imagesc(S1);
