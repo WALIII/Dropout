@@ -95,9 +95,9 @@ counter = counter-1;
  
 
  figure();
- shadedErrorBar(x,Cell_1,{@mean,@std},'g',1);
+ shadedErrorBar(x,Cell_1,{@mean,@std},'g',0);
  hold on;
- shadedErrorBar(x,Cell_2,{@mean,@std},'b',1);
+ shadedErrorBar(x,Cell_2,{@mean,@std},'b',0);
 %  shadedErrorBar(x,Cell_3,{@mean,@std},'b',1);
 %  shadedErrorBar(x,Cell_4,{@mean,@std},'c',1);
 

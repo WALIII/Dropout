@@ -7,26 +7,29 @@ function FS_Move(directed, undirected)
 mkdir('undirected')
 mkdir('directed')
 
-for i = 1:size(directed,2)
+mov_listing=dir(fullfile(pwd,'*.tif'));
+filenames={mov_listing(:).name};
+
+
+for i=1:length(filenames)
     
-    filename = [directed{i}(1:end-4) '_STD.tif'];
+    for ii = 1:(size(directed,2))
+     if filenames{i}(1:17) == directed{ii}(1:17)
+    copyfile(filenames{i},'directed')
+     else
+         continue
+     end
+    end
     
-    copyfile(filename,'directed')
-    clear filename;
+     for ii = 1:(size(undirected,2))
+     if filenames{i}(1:17) == undirected{ii}(1:17)
+    copyfile(filenames{i},'undirected')
+     else
+         continue
+     end
+    end
+    
+    
    
 end
 
-for i = 1:size(undirected,2)
-    
-    filename = [undirected{i}(1:end-4) '_STD.tif'];
-    
-    copyfile(filename,'undirected')
-    clear filename;
-   
-end
-
-    
-
-
-    
-    

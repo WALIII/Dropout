@@ -17,10 +17,14 @@ files = convn(out_mov, single(reshape([1 1 1] / 3, 1, 1, [])), 'same'); % Smooth
 
 
 disp('Extracting ROIS');
-cells = 30
+cells = 100
 size = 7
+AR = 2; % Autoregressive process
 
-[SpatMap,CaSignal,width,height,contour,Json] = CaImSegmentation2(files,cells,size,4,1);
+[SpatMap,CaSignal,width,height,contour,Json] = CaImSegmentation2(files,cells,size,AR,1);
+
+
+[SortedCell] = FS_TickCuts(CaSignal,Ticks);
 
 
 
