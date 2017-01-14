@@ -33,9 +33,9 @@ end
 
 
 
-figure(); 
- n = 4;
-%  
+% figure(); 
+n = 4;
+% %  
  % Cell 1
 for i = 1:15; plot(zscore(SCell(idx(i),:))+counter*n,'g'); hold on; 
 Cell_1(c1,:) = (SCell(idx(i),:));
@@ -53,12 +53,12 @@ for i = 16:27; plot(zscore(SCell(idx(i),:))+counter*n,'b'); hold on;
 Cell_2(c2,:) = zscore(SCell(idx(i),:));
 c2 = c2+1;
 end
-
-for i = 57:67; plot(zscore(SCell(idx(i),:))+counter*n,'b'); hold on;
-Cell_2(c2,:) = (SCell(idx(i),:));
-c2 = c2+1;
-end
-counter = counter-1;
+% 
+% for i = 57:67; plot(zscore(SCell(idx(i),:))+counter*n,'b'); hold on;
+% Cell_2(c2,:) = (SCell(idx(i),:));
+% c2 = c2+1;
+% end
+% counter = counter-1;
 % 
 % % Cell 3
 % for i = 38:47; plot(zscore(SCell(idx(i),:))+counter*n,'r'); hold on; 
@@ -82,22 +82,22 @@ counter = counter-1;
 % c4 = c4+1;
 % end
 
-counter = counter-1;
-
-
-
-
-
-%  y = Cell_1;
- x = 1:length(Cell_1);
- 
- 
- 
-
- figure();
- shadedErrorBar(x,Cell_1,{@mean,@std},'g',1);
- hold on;
- shadedErrorBar(x,Cell_2,{@mean,@std},'b',1);
+% counter = counter-1;
+% 
+% 
+% 
+% 
+% 
+% %  y = Cell_1;
+%  x = 1:length(Cell_1);
+%  
+%  
+%  
+% 
+%  figure();
+%  shadedErrorBar(x,Cell_1,{@mean,@std},'g',1);
+%  hold on;
+%  shadedErrorBar(x,Cell_2,{@mean,@std},'b',1);
 %  shadedErrorBar(x,Cell_3,{@mean,@std},'b',1);
 %  shadedErrorBar(x,Cell_4,{@mean,@std},'c',1);
 
