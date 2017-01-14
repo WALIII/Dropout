@@ -9,7 +9,9 @@ GG{1} = (zscore(G(1:Ticks(1)))); for i = 2:size(Ticks,2); GG{i} = (zscore(G(Tick
 
 
 % NO ZSCORE
-%%GG{1} = ((G(1:Ticks(1)))); for i = 2:size(Ticks,2); GG{i} = ((G(Ticks(i-1):Ticks(i)))); end;
+
+%GG{1} = ((G(1:Ticks(1)))); for i = 2:size(Ticks,2); GG{i} = ((G(Ticks(i-1):Ticks(i)))); end;
+>>>>>>> origin/master
 
 
 % very simple example
