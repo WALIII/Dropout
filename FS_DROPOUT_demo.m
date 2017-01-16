@@ -1,4 +1,4 @@
-function [SortedCell, Ticks, Tally2, idx, SpatMap,CaSignal] = FS_DROPOUT_demo();
+function [SortedCell, Ticks, Tally2, idx, SpatMap,CaSignal, CaSpikes] = FS_DROPOUT_demo();
 
 %DROPOUT START HERE
 
@@ -16,17 +16,17 @@ disp('clustering audio...')
 cd('../');
 disp('extracting and formatting video..')
 [ConcVid Ticks] = FS_Motif_Mov(C);
-[out_mov, n] = FS_Format(ConcVid,1); % format
+[files, n] = FS_Format(ConcVid,1); % format
 
 disp('smoothing video..')
-files = convn(out_mov, single(reshape([1 1 1] / 3, 1, 1, [])), 'same'); % Smooth
+%files = convn(files, single(reshape([1 1 1] / 3, 1, 1, [])), 'same'); % Smooth
 
 
 disp('Extracting ROIS');
 cells = 80
 size = 7
 
-[SpatMap,CaSignal,width,height,contour,Json] = CaImSegmentation2(files,cells,size,4,1);
+[SpatMap,CaSignal,width,height,contour,Json,CaSpikes] = CaImSegmentation2(files,cells,size,4,1);
 
 [SortedCell] = FS_TickCuts(CaSignal,Ticks);
 

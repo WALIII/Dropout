@@ -1,0 +1,51 @@
+Brain mechanisms for communication must establish a correspondence between sensory and motor codes used to represent the signal. 
+
+One idea is that premotor networks encode a timing signal, that is decoded later downstream 
+
+The zebra finch, for example, sings a highly stereotyped song that is 
+
+ innervating descending motor or basal ganglia pathways are essential in the learn- ing, planning, and execution of complex movements. 
+
+
+planning and sensory guidance of motor behavior. 
+
+However, it is unknown to what extent these premotor networks encode future action 
+
+
+ innervating descending motor  pathways are essential in the learning, planning, and execution of complex movements. 
+
+Although vocal signals including human languages are composed of a finite number of acoustic elements, 
+
+
+These different types of syntactic information are frequently integrated within the activity of single neurons, suggesting that syntactic attributes of the individual neurons are not programmed as a basic cellular subtype in advance but acquired in the course of vocal learning and maturation. 
+
+
+
+
+complex and diverse motor behaviors can be created from combinations of simple, stereotyped elements, linked together by syntactic rules. To enable such syntactic vocal behaviors, neural systems must extract the sequence patterns from auditory information and establish syntactic rules to generate motor commands for vocal organs. However, the neural basis of syntactic processing of learned vocal signals remains largely unknown
+
+Here we report that the
+
+These observations offer a principle of motor stability
+
+
+
+We show that as a population, HVC can predict song start and termination, as well as 
+
+this correspondence is established at the level of single neurons that are active when the individual performs a particular gesture or observes a similar gesture performed by another individual. Although neurons that display a precise auditory–vocal correspondence could facilitate vocal communication, they have yet to be identified. Here we report that a certain class of neurons in the swamp sparrow forebrain displays a precise auditory–vocal correspondence. We show that these neurons respond in a temporally precise fashion to auditory presentation of certain note sequences in this songbird’s repertoire and to similar note sequences in other birds’ songs. These neurons display nearly identical patterns of activity when the bird sings the same sequence, and disrupting auditory feedback does not alter this singing-related activity, indicating it is motor in nature. Furthermore, these neurons innervate striatal structures important for song learning, raising the possibility that singing-related activity in these cells is compared to auditory feedback to guide vocal learning.
+
+
+
+
+ complex and diverse vocal patterns can be created from combinations of these elements
+
+
+* Playback transitions?
+
+
+ mammalian subjects also learn to create complex and diverse behavioral sequences from combinations of elemental movements
+
+
+In the primate supplementary motor area, some neurons exhibit activity shortly before and during the execution of a specific movement in the course of sequential tasks (Tanji and Shima, 1994) and others become active during the transition from a specific movement to another specific one (Tanji and Shima, 1994), similar to avian HVCX neurons displaying syllable and transition selectivity, respectively. 
+
+
