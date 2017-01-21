@@ -1,5 +1,7 @@
-function [ConcVid Ticks] = FS_Motif_Mov(C);
+function [ConcVid Ticks] = FS_Motif_Mov(C,DS);
 % run in directory with mat files.
+
+% DS is the downsampling
 
 fs = 48000; %audio frame rate
 vfs = 30; %video frame rate
@@ -26,9 +28,9 @@ for i = 1: length(C);
     for ii = 2:size(CUTS,2)
         
         if ii==2;
-            temp(:,:,:,:) = imresize(video.frames(:,:,:,CUTS(ii-1):CUTS(ii)),0.25);
+            temp(:,:,:,:) = imresize(video.frames(:,:,:,CUTS(ii-1):CUTS(ii)),DS);
         else  
-          temp2(:,:,:,:) = imresize(video.frames(:,:,:,CUTS(ii-1):CUTS(ii)),0.25);
+          temp2(:,:,:,:) = imresize(video.frames(:,:,:,CUTS(ii-1):CUTS(ii)),DS);
           temp3(:,:,:,:) = cat(4,temp,temp2);
           temp = temp3;
           clear temp2;

@@ -11,8 +11,8 @@ close all;
 figure(); plot(SortedCell(:,:,1)');
 
 
-startT = 20;
-endT = 40;
+startT = 5;
+endT = 30;
 cells = size(SortedCell,3);
 trials = size(SortedCell,1);
 
@@ -80,10 +80,10 @@ title('unsorted covariance matrix');
 colorbar
 
 
-l = linkage(CVC, 'ward', 'correlation');
+l = linkage(CVC, 'average', 'correlation');
 
 subplot(3,1,3)
-c=cluster(l,'maxclust',4);
+c=cluster(l,'maxclust',20);
 [aa,bb]=sort(c);
 CVC2=cov(D(:,bb));
 imagesc(CVC2);

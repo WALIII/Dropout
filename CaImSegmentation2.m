@@ -72,7 +72,7 @@ addpath(genpath('utilities'));
 % nam = VideoFileName; % insert path to tiff stack here
 % startFrame=1; % user input: first frame to read (optional, default 1)
 
-[Y, n] = FS_Format(data,17);
+[Y, n] = FS_Format(data,1);
 Y = Y - min(Y(:));
 if ~isa(Y,'double');    Y = double(Y);  end         % convert to double
 

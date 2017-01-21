@@ -1,4 +1,4 @@
-function [SortedCell, Ticks, Tally2, idx, SpatMap,CaSignal, CaSpikes] = FS_DROPOUT_demo();
+function [SortedCell, Ticks, Tally2, idx, CaSignal ] = FS_DROPOUT_demo();
 
 %DROPOUT START HERE
 
@@ -22,11 +22,13 @@ disp('smoothing video..')
 %files = convn(files, single(reshape([1 1 1] / 3, 1, 1, [])), 'same'); % Smooth
 
 
-disp('Extracting ROIS');
-cells = 80
-size = 7
-
-[SpatMap,CaSignal,width,height,contour,Json,CaSpikes] = CaImSegmentation2(files,cells,size,4,1);
+% disp('Extracting ROIS');
+% cells = 80
+% size = 7
+% 
+% [SpatMap,CaSignal,width,height,contour,Json,CaSpikes] = CaImSegmentation2(files,cells,size,4,1);
+[neuron] = FS_cnmfe(files);
+CaSignal = neuron.C_raw;
 
 [SortedCell] = FS_TickCuts(CaSignal,Ticks);
 
