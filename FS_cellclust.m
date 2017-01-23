@@ -11,8 +11,8 @@ close all;
 figure(); plot(SortedCell(:,:,1)');
 
 
-startT = 5;
-endT = 30;
+startT = 1;
+endT = 50;
 cells = size(SortedCell,3);
 trials = size(SortedCell,1);
 
@@ -45,7 +45,7 @@ title('MEAN')
 q=sum(C');
 j=1;
 for(k=1:trials),
-if(q(k)<200), % 140 seems resonable for minimum
+if(q(k)<140), % 140 seems resonable for minimum
     D(j,:)=C(k,:);
     D2(j,:)=C2(k,:);
     j=j+1;
@@ -75,7 +75,7 @@ xlabel('Cells');
 title(' STD matrix for all ROIs');
 subplot(3,1,2)
 CVC=cov(D,1);
-imagesc(CVC);
+imagesc(CVC,[0.5 1]);
 title('unsorted covariance matrix');
 colorbar
 
@@ -83,11 +83,12 @@ colorbar
 l = linkage(CVC, 'average', 'correlation');
 
 subplot(3,1,3)
-c=cluster(l,'maxclust',20);
+c=cluster(l,'maxclust',30);
 [aa,bb]=sort(c);
 CVC2=cov(D(:,bb));
-imagesc(CVC2);
+imagesc(CVC2, [0.5 1]);
 title('Sorted Covariance matrix')
+% colormap(hot)
 colorbar
 
 
@@ -108,7 +109,6 @@ title('random permutation of STD matrix');
 colorbar
 
 subplot(3,1,2);
-% colormap(jet)
 CVCR=cov(RC);
 imagesc(CVCR);
 title('covariance');
@@ -117,7 +117,7 @@ colorbar
 
 l = linkage(CVCR, 'ward', 'correlation');
 subplot(3,1,3)
-c=cluster(l,'maxclust',5);
+c=cluster(l,'maxclust',40);
 [aa,bb2]=sort(c);
 CVCR=cov(RC(:,bb2));
 imagesc(CVCR);
