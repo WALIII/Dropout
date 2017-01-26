@@ -12,7 +12,7 @@ figure(); plot(SortedCell(:,:,1)');
 
 
 startT = 1;
-endT = 50;
+endT = 30;
 cells = size(SortedCell,3);
 trials = size(SortedCell,1);
 
@@ -75,7 +75,7 @@ xlabel('Cells');
 title(' STD matrix for all ROIs');
 subplot(3,1,2)
 CVC=cov(D,1);
-imagesc(CVC,[0.5 1]);
+imagesc(CVC);
 title('unsorted covariance matrix');
 colorbar
 
@@ -86,7 +86,7 @@ subplot(3,1,3)
 c=cluster(l,'maxclust',30);
 [aa,bb]=sort(c);
 CVC2=cov(D(:,bb));
-imagesc(CVC2, [0.5 1]);
+imagesc(CVC2);
 title('Sorted Covariance matrix')
 % colormap(hot)
 colorbar

@@ -1,4 +1,4 @@
-function [SortedCell, Ticks, Tally2, idx, CaSignal ] = FS_DROPOUT_demo()
+function [SortedCell, Ticks, Tally2, idx, CaSignal,files ] = FS_DROPOUT_demo()
 
 %DROPOUT START HERE
 
@@ -20,7 +20,7 @@ disp('extracting and formatting video..')
 [files, n] = FS_Format(ConcVid,1); % format
 
 disp('smoothing video..')
-%files = convn(files, single(reshape([1 1 1] / 3, 1, 1, [])), 'same'); % Smooth
+files = convn(files, single(reshape([1 1 1] / 3, 1, 1, [])), 'same'); % Smooth
 
 
 % disp('Extracting ROIS');

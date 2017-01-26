@@ -15,7 +15,7 @@ filenames={mov_listing(:).name};
 for i=1:length(filenames)
 
     for ii = 1:(size(directed,2))
-     if filenames{i}(1:17) == directed{ii}(1:17)
+     if filenames{i}(1:19) == directed{ii}(1:19)
     copyfile(filenames{i},'directed')
      else
          continue
@@ -23,7 +23,7 @@ for i=1:length(filenames)
     end
 
      for ii = 1:(size(undirected,2))
-     if filenames{i}(1:17) == undirected{ii}(1:17)
+     if filenames{i}(1:19) == undirected{ii}(1:19)
     copyfile(filenames{i},'undirected')
      else
          continue
