@@ -2,7 +2,7 @@ function  FS_plot(data)
 counter = 1;
 
 
-mxCl = 50; % max cell
+mxCl = 44; % max cell
 counter = 1;
 
 for i = 1:mxCl;

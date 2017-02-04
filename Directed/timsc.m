@@ -1,6 +1,7 @@
+function timsc(data);
 
-
-for(i=1:40),
+cel = size(data.undirected,3);
+for(i=1:cel),
    
 a=corrcoef((data.directed(:,:,i))')
 [q,r]=size(a);
@@ -8,7 +9,7 @@ md(:,i)=(a(1:q*r))';
 
 end
 
-for(i=1:40),
+for(i=1:cel),
    
 a=corrcoef((data.undirected(:,:,i))')
 [q,r]=size(a);

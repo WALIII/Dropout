@@ -1,18 +1,19 @@
 function FS_schnitz(data)
 
+Cel = 40; %size(data.directed,3);
 index_ref = cat(1,data.directed,data.undirected);
 
-for i = 1:45;
+for i = 1:Cel;
     R(i,:) = (var(index_ref(:,:,i),1));
 end
 
 
 clear G;
-for i = 1:51;
+for i = 1:Cel;
     G(i,:) = (mean(data.directed(:,:,i),1));
 end
 
-for i = 1:51;
+for i = 1:Cel;
     G2(i,:) = (mean(data.undirected(:,:,i),1));
 end
 
