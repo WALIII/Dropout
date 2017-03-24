@@ -1,6 +1,6 @@
 function indX = FS_schnitz(data)
 
-Cel =  40; %size(data.directed,3);
+Cel =  size(data.directed,3);
 index_ref = cat(1,data.directed,data.undirected);
 
 for i = 1:Cel;

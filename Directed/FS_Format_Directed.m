@@ -6,13 +6,16 @@ function [data] = FS_Format_Directed(Directed, Undirected)
 
 
 % Format Directed Data data.directed(trial,time,cell)
+counter = 1;
 for trial = 1:size(Directed.interp_dff,2); 
+    
     for cell = 1:size(Directed.interp_dff,1);
         %temp =  Directed.interp_dff{cell,trial}; 
-        temp =  tsmovavg(Directed.interp_dff{cell,trial},'s',2); 
-        data.directed(trial,:,cell) = zscore(temp(:,3:end));
+        temp =  tsmovavg(Directed.interp_dff{cell,trial},'s',4); 
+        data.directed(counter,:,cell) = zscore(temp(:,4:end-10));
         clear temp;
     end;
+    counter = counter+1;
 end;
 
 % Format Undirected Data (data.undirected)
@@ -20,8 +23,8 @@ end;
 for trial = 1:size(Undirected.interp_dff,2); 
     for cell = 1:size(Undirected.interp_dff,1);  
         %temp = Undirected.interp_dff{cell,trial};
-        temp =  tsmovavg(Undirected.interp_dff{cell,trial},'s',2); 
-        data.undirected(trial,:,cell) = zscore(temp(:,3:end));
+        temp =  tsmovavg(Undirected.interp_dff{cell,trial},'s',4); 
+        data.undirected(trial,:,cell) = zscore(temp(:,4:end-10));
         clear temp;
     end;
 end;
