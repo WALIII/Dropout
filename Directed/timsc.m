@@ -1,9 +1,9 @@
 function [mu md] = timsc(data);
 
-cel = size(data.undirected,3);
+cel = 20%size(data.undirected,3);
 for(i=1:cel),
    
-a=corrcoef((data.directed(:,10:end-20,i))');
+a=corrcoef((data.directed(:,5:end-5,i))');
 [q,r]=size(a);
 md(:,i)=(a(1:q*r))';
 
@@ -11,13 +11,13 @@ end
 
 for(i=1:cel),
    
-a=corrcoef((data.undirected(:,10:end-20,i))');
+a=corrcoef((data.undirected(:,5:end-5,i))');
 [q,r]=size(a);
 mu(:,i)=(a(1:q*r))';
 
 end
 
-figure(3)
+figure()
 hold on
 
 subplot(3,1,1)

@@ -3,7 +3,7 @@ function FS_2semPlot(Dat) % index
 % use 'data'from [data] = FS_Format_Directed(directed, undirected)
 figure(); 
 
-for i = 1:40; 
+for i = 1:15; 
 cell = i;%index(i);
 hold on;
 

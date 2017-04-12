@@ -5,14 +5,14 @@ function FS_cellclust(SortedCell)
 % modified by WAL3
 % d011517
 
-close all;
+%close all;
 
 
 figure(); plot(SortedCell(:,:,1)');
 
 
-startT = 1;
-endT = 30;
+startT = 7;
+endT = size(SortedCell,2)-5;
 cells = size(SortedCell,3);
 trials = size(SortedCell,1);
 
@@ -67,7 +67,7 @@ D=D3;
 % D=D4;
 
 
-figure(2)
+figure()
 subplot(3,1,1)
 imagesc(D);
 ylabel('Trials');
@@ -83,7 +83,7 @@ colorbar
 l = linkage(CVC, 'average', 'correlation');
 
 subplot(3,1,3)
-c=cluster(l,'maxclust',30);
+c=cluster(l,'maxclust',4);
 [aa,bb]=sort(c);
 CVC2=cov(D(:,bb));
 imagesc(CVC2);
@@ -117,7 +117,7 @@ colorbar
 
 l = linkage(CVCR, 'ward', 'correlation');
 subplot(3,1,3)
-c=cluster(l,'maxclust',40);
+c=cluster(l,'maxclust',4);
 [aa,bb2]=sort(c);
 CVCR=cov(RC(:,bb2));
 imagesc(CVCR);
