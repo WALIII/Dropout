@@ -1,4 +1,4 @@
-function indX = FS_schnitz(data)
+function [indX,B,C] = FS_schnitz(data)
 
 Cel =  size(data.directed,3);
 index_ref = cat(1,data.directed,data.undirected);
@@ -20,12 +20,12 @@ end
 
 [maxA, Ind] = max(G, [], 2);
 [dummy, index] = sort(Ind);
- 
+
 B  = (G(index, :));
 C  = (G2(index, :));
 % D =  (R(index, :));
 indX = index;
-figure(); 
+figure();
 
 subplot(1,2,1)
 imagesc(B, [0, 3]);
@@ -55,29 +55,24 @@ XX =  (X(index, :));
 
 
 
-figure(); 
+figure();
 imagesc(XX,[-2 2]);
 %colormap(fireice);
 colorbar;
 
-% figure(); 
-% 
+% figure();
+%
 % subplot(1,2,1)
 % imagesc(B);
 % title('Directed Trials');
 % ylabel('ROIs');
 % xlabel('Frames');
-% 
+%
 % subplot(1,2,2)
-% 
+%
 % imagesc(C);
-% 
+%
 % title('UnDirected Trials');
 % ylabel('ROIs');
 % xlabel('Frames');
 % % colormap(hot);
-
-
-
-
-
