@@ -1,4 +1,4 @@
-function [WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d] = FS_warp_song(WAV_d, WAV_u)
+function [WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d,GG2_d,GG2_u] = FS_warp_song(WAV_d, WAV_u)
 % FS_warp_song.m
 
 % For getting info on dynamic time warping of song data.
@@ -16,7 +16,7 @@ function [WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d] = FS_warp
 
 counter = 1;
 fs = 48000; % sampling rate
-template = WAV_d{5}(0.3*fs:end-0.3*fs); % pick a song to be the template
+template = WAV_d{5}(0.25*fs:end-0.75*fs); % pick a song to be the template
 
 %directed
 for i = 1:size(WAV_d,2);

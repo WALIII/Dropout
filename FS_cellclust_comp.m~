@@ -14,18 +14,19 @@ startT = 2;
 endT = size(SortedCell,2);
 cells = size(SortedCell,3);
 trials = size(SortedCell,1);
-clim = [-.3 0.8];
+clim = [-0.5 0.8];
 
-MM_C2 = mean(SortedCell(:,startT:endT,:),3);
+MM_C2 = mean(SortedCell(:,startT:endT,:),1);
 
 for cell = 1:cells % cells;
 for trial = 1:trials % trials;
 
    % C(i,cell)=(max(ROI_data_cleansed{day}.raw_dat{cell,i})-median(ROI_data_cleansed{day}.raw_dat{cell,i}));
-    C(trial,cell)=std(SortedCell(trial,startT:endT,cell));
+    C4(trial,cell)=std(SortedCell(trial,startT:endT,cell));
     C2(trial,cell)=mean(SortedCell(trial,startT:endT,cell));
 
-    C3(trial,cell)=mean(SortedCell(trial,startT:endT,cell));
+    C3(trial,cell)= mean(MM_C2(:,:,cell)) - mean(SortedCell(trial,startT:endT,cell));
+    C(trial,cell)= std(MM_C2(:,:,cell)) - std(SortedCell(trial,startT:endT,cell));
 
 
 end;
@@ -117,6 +118,9 @@ for trial = 1:trials % trials;
    % C(i,cell)=(max(ROI_data_cleansed{day}.raw_dat{cell,i})-median(ROI_data_cleansed{day}.raw_dat{cell,i}));
     C(trial,cell)=std(SortedCell2(trial,startT:endT,cell));
     C2(trial,cell)=mean(SortedCell2(trial,startT:endT,cell));
+    C3(trial,cell)= mean(MM_C2(:,:,cell)) - mean(SortedCell(trial,startT:endT,cell));
+    C(trial,cell)= std(MM_C2(:,:,cell)) - std(SortedCell(trial,startT:endT,cell));
+
 
 end;
 %C(:,cell)=(C(:,cell)-mean(C(:,cell)))/(std(C(:,cell)));

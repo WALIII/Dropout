@@ -5,8 +5,8 @@ function [data] = FS_Format_Dropout(roi_ave, directed,undirected, motif)
 
 %PARAMS
 startT = 10; %12;
-finalT = 20; %28;%
-smooth = 2;%4
+finalT = 28; %28;%
+smooth = 4;%4
 
 
 % FORMAT: data.undirected(trial,time,cell)
@@ -39,26 +39,26 @@ DirectedTrials = G2(2:end);
 % Format Directed Data data.directed(trial,time,cell)
 counter = 1;
 for trial = DirectedTrials %
-  %  if roi_ave.motif{trial} == motif;
+ %  if roi_ave.motif{trial} == motif;
     for cell = 1:size(roi_ave.interp_dff,1);
-        %temp =  Directed.interp_dff{cell,trial}; 
-        temp =  tsmovavg(roi_ave.interp_dff{cell,trial},'s',smooth); 
+        %temp =  Directed.interp_dff{cell,trial};
+        temp =  tsmovavg(roi_ave.interp_dff{cell,trial},'s',smooth);
         data.directed(counter,:,cell) = zscore(temp(:,startT:end-finalT));
         clear temp;
     end;
     counter = counter+1;
-  %  end;
+  % end;
 
 end;
 
 
 % Format Undirected Data (data.undirected)
 counter = 1;
-for trial = UnDirectedTrials; 
- %   if roi_ave.motif{trial} == motif;
-    for cell = 1:size(roi_ave.interp_dff,1);  
+for trial = UnDirectedTrials;
+  %  if roi_ave.motif{trial} == motif;
+    for cell = 1:size(roi_ave.interp_dff,1);
         %temp = Undirected.interp_dff{cell,trial};
-        temp =  tsmovavg(roi_ave.interp_dff{cell,trial},'s',smooth); 
+        temp =  tsmovavg(roi_ave.interp_dff{cell,trial},'s',smooth);
         data.undirected(counter,:,cell) = zscore(temp(:,startT:end-finalT));
         clear temp;
     end;
@@ -75,4 +75,3 @@ end;
 % data.undirected = data.undirected(:,:,index);
 
 % [~, srt] = sort(max(neuron.C, [], 2), 'descend');
-
