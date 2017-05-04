@@ -4,9 +4,9 @@ function [data] = FS_Format_Dropout(roi_ave, directed,undirected, motif)
 % format and smooth data to work with pre-existing functions
 
 %PARAMS
-startT = 10; %12;
-finalT = 28; %28;%
-smooth = 4;%4
+startT = 4; %12;
+finalT = 4; %28;%
+smooth =2;%4
 
 
 % FORMAT: data.undirected(trial,time,cell)
@@ -39,7 +39,7 @@ DirectedTrials = G2(2:end);
 % Format Directed Data data.directed(trial,time,cell)
 counter = 1;
 for trial = DirectedTrials %
- %  if roi_ave.motif{trial} == motif;
+  %if roi_ave.motif{trial} == motif;
     for cell = 1:size(roi_ave.interp_dff,1);
         %temp =  Directed.interp_dff{cell,trial};
         temp =  tsmovavg(roi_ave.interp_dff{cell,trial},'s',smooth);
@@ -47,7 +47,7 @@ for trial = DirectedTrials %
         clear temp;
     end;
     counter = counter+1;
-  % end;
+  %end;
 
 end;
 
@@ -55,7 +55,7 @@ end;
 % Format Undirected Data (data.undirected)
 counter = 1;
 for trial = UnDirectedTrials;
-  %  if roi_ave.motif{trial} == motif;
+   %if roi_ave.motif{trial} == motif;
     for cell = 1:size(roi_ave.interp_dff,1);
         %temp = Undirected.interp_dff{cell,trial};
         temp =  tsmovavg(roi_ave.interp_dff{cell,trial},'s',smooth);
@@ -63,7 +63,7 @@ for trial = UnDirectedTrials;
         clear temp;
     end;
     counter = counter+1;
-  %  end
+   %end
 
 end;
 

@@ -1,4 +1,4 @@
-function [WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d,GG2_d,GG2_u] = FS_warp_song(WAV_d, WAV_u)
+function [WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d,Index,GG2_d,GG2_u] = FS_warp_song(WAV_d, WAV_u)
 % FS_warp_song.m
 
 % For getting info on dynamic time warping of song data.
@@ -27,10 +27,11 @@ for i = 1:size(WAV_d,2);
 GG_d = WARPED_TIME_d{counter}(1,:)-WARPED_TIME_d{counter}(2,:); %differences in timing
 GG2_d(counter,:) = diff(GG_d); % Take the derivative of the vector, to get moments of change
    counter = counter+1;
-    catch
-    end;
-    
+Index(i,1) = i;
+catch
+Index(i,1) = []; 
 end;
+end
 
 counter = 1;
 %undirected
@@ -42,9 +43,17 @@ try
 GG_u = WARPED_TIME_u{counter}(1,:)-WARPED_TIME_u{counter}(2,:);
 GG2_u(counter,:) = diff(GG_u);
 counter = counter+1;
+Index(i,2) = i;
 catch
+Index(i,2) = 0; 
 end
+
 end;
+
+
+
+
+
 
 nn = 50;
 %directed

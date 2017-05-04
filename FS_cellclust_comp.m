@@ -15,6 +15,7 @@ endT = size(SortedCell,2);
 cells = size(SortedCell,3);
 trials = size(SortedCell,1);
 clim = [-.3 0.8];
+maxlag_samps=round(25*.02);
 
 MM_C2 = mean(SortedCell(:,startT:endT,:),3);
 
@@ -22,14 +23,23 @@ for cell = 1:cells % cells;
 for trial = 1:trials % trials;
 
    % C(i,cell)=(max(ROI_data_cleansed{day}.raw_dat{cell,i})-median(ROI_data_cleansed{day}.raw_dat{cell,i}));
-    C(trial,cell)=std(SortedCell(trial,startT:endT,cell));
+    C4(trial,cell)=std(SortedCell(trial,startT:endT,cell));
     C2(trial,cell)=mean(SortedCell(trial,startT:endT,cell));
 
     C3(trial,cell)=mean(SortedCell(trial,startT:endT,cell));
 
-
 end;
 %C(:,cell)=(C(:,cell)-mean(C(:,cell)))/(std(C(:,cell)));
+end
+
+data.total = cat(1, SortedCell,SortedCell2)
+data.directed = SortedCell;
+data.undirected = SortedCell2;
+AVG_Trace = squeeze(mean(data.total,1));
+for cell = 1:cells
+  for trial = 1:trials;
+    C(trial,cell) = max(xcorr(data.directed(trial,:,cell),AVG_Trace(:,cell),maxlag_samps,'coeff'))/max(xcorr(data.directed(trial,:,cell),(data.directed(trial,:,cell)),maxlag_samps,'coeff'));
+  end
 end
 
 figure()
@@ -120,6 +130,13 @@ for trial = 1:trials % trials;
 
 end;
 %C(:,cell)=(C(:,cell)-mean(C(:,cell)))/(std(C(:,cell)));
+end
+
+
+for cell = 1:size(data.undirected,3)
+  for trial = 1:trials;
+    C(trial,cell) = max(xcorr(data.undirected(trial,:,cell),AVG_Trace(:,cell),maxlag_samps,'coeff'))/max(xcorr(data.undirected(trial,:,cell),(data.undirected(trial,:,cell)),maxlag_samps,'coeff'));
+  end
 end
 
 % figure()
