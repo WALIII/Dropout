@@ -15,13 +15,17 @@ for i = 1:1:size(data_peaks.DirPeaks{1},2) % for each cell
     
     data_peaks.DirLocs{cell};
    Ymean =  data_peaks.DirMean(:,cell);
-    G = tsmovavg(squeeze(data.directed(i,2:end,cell)),'s',3);
-    y = G(4:end);%+abs(min(Ymean));
+    G = data.directed(i,:,cell);
+    y = G;%+abs(min(Ymean));
     [M2 I2] = max(data_peaks.DirPeaks{cell}{i}); % largest Peak in data
     LL2 = data_peaks.DirLocs{cell}{i}(I2); %index into location of peak
    
-
+try
     N = A-y(B);% difference in peak at mean peak location
+catch
+    disp('?')
+end
+
     N2 = LL1-LL2-2;% difference in max peak location 
 
     D_HDif = horzcat(D_HDif,N);
@@ -38,7 +42,7 @@ U_TDif = 0;
 %undirected
 for cell = 1:size(data_peaks.UnDirMeanPk,2) % for each cell
 for i = 1:size(data_peaks.UnDirPeaks{1},2) % for each cell
-    cell
+    
    A =  data_peaks.UnDirMeanPk{cell}; % mean height, compare to this
    
    B = data_peaks.UnDirMeanLoc{cell}; % mean location, extract from trials
@@ -47,8 +51,8 @@ for i = 1:size(data_peaks.UnDirPeaks{1},2) % for each cell
     
     data_peaks.UnDirLocs{cell};
    Ymean =  data_peaks.UnDirMean(:,cell);
-    G = tsmovavg(squeeze(data.undirected(i,2:end,cell)),'s',3);
-    y = G(4:end);%+abs(min(Ymean));
+    G = data.undirected(i,:,cell);
+    y = G;%+abs(min(Ymean));
     [M2 I2] = max(data_peaks.UnDirPeaks{cell}{i}); % largest Peak in data
     LL2 = data_peaks.UnDirLocs{cell}{i}(I2); %index into location of peak
    

@@ -11,10 +11,10 @@ hold on;
 
 G = Dat.undirected;
 
-data = squeeze(G(:,3:end,cell));
+data = squeeze(G(:,1:end,cell));
 L = size(data,2)
 se = std(data)/2;%sqrt(length(data));
-mn = mean(data)+i*2;
+mn = mean(data)+i*5;
 
 plot(mn,'m');
 h = fill([1:L L:-1:1],[mn-se fliplr(mn+se)],'m'); alpha(.5)
@@ -23,10 +23,10 @@ hold on;
 
 
 G = Dat.directed;
-data = squeeze(G(:,3:end,cell));
+data = squeeze(G(:,1:end,cell));
 L = size(data,2)
 se = std(data)/2;%/sqrt(length(data));
-mn = mean(data)+i*2;
+mn = mean(data)+i*5;
 
 hold on;
 plot(mn,'g');

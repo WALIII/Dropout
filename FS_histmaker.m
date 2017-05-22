@@ -2,7 +2,7 @@ function  FS_histmaker(data_peaks)
 
 n_CT = 0;
 n_CT2 = 0;
-nn = 40%size(data_peaks.DirMeanLoc,2); % for each cell,
+nn = size(data_peaks.DirMeanLoc,2); % for each cell,
 for i = 1:nn;%size(data_peaks.DirMeanLoc,2);
 cell(:,i) = size(data_peaks.DirMeanLoc{i},2); % get number of peaks
 end
@@ -34,15 +34,19 @@ end
 
 G = cell-avg_C;
 G2 = cell2-avg_C2;
-map = brewermap(2,'Set1');
+% map = brewermap(2,'Set1');
 
 figure(); 
 
 
 subplot(131)
-histogram(G2,7,'facecolor','m','facealpha',.5)%,'edgecolor','none')
+h12 = histogram(G2,7,'facecolor','m','facealpha',.5);%,'edgecolor','none')
 hold on;
-histogram(G,7,'facecolor','g','facealpha',.5)%,'edgecolor','none')
+h22 = histogram(G,7,'facecolor','g','facealpha',.5);%,'edgecolor','none')
+h12.Normalization = 'probability';
+h12.BinWidth = 1;
+h22.Normalization = 'probability';
+h22.BinWidth = 1;
 legend('undirected','direcetd');
 xlabel(' Difference in peak# compared to avg');
 ylabel('count (ROI)');
@@ -58,15 +62,18 @@ ylabel(' Difference in peak# compared to avg');
 
 
 subplot(133)
-histogram(n_CT2,'facecolor','m','facealpha',.5)%,'edgecolor','none')
+h11 =histogram(n_CT2,'facecolor','m','facealpha',.5);%,'edgecolor','none')
 hold on;
-histogram(n_CT,'facecolor','g','facealpha',.5)%,'edgecolor','none')
+h21 =histogram(n_CT,'facecolor','g','facealpha',.5);%,'edgecolor','none')
+
+h11.Normalization = 'probability';
+h11.BinWidth = 1;
+h21.Normalization = 'probability';
+h21.BinWidth = 1;
 legend('undirected','direcetd');
 xlabel(' Difference in peak# compared to avg');
 ylabel('count (ROI)');
 
-
-figure(); 
 
 
 
