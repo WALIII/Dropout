@@ -6,7 +6,7 @@ function FS_MOVE_FILES(directed, undirected)
 % WALIII
 % 04/01/17
 
-type = '.mat'
+type = '.tif'
 
 
 % Index into the right trials
@@ -17,14 +17,14 @@ directed2 = regexprep(directed, '.mov', '');
 
 % Look into the current dir
 
-mov_listing=dir(fullfile(pwd,'*.mat'));
+mov_listing=dir(fullfile(pwd,'*.tif'));
 mov_listing={mov_listing(:).name};
 filenames=mov_listing;
 
 
 
 
-FN = regexprep(filenames, '.mat', '');
+FN = regexprep(filenames, '.tif', '');
 for i = 1:size(undirected2,2)
 startIndex = regexp(FN,undirected2{i});
 G = find(~cellfun(@isempty,startIndex));
