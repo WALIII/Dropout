@@ -1,9 +1,9 @@
 function [mu md] = timsc(data);
 
-cel = 20%size(data.undirected,3);
+cel = size(data.undirected,3);
 for(i=1:cel),
    
-a=corrcoef((data.directed(:,5:end-5,i))');
+a=corrcoef((data.directed(:,1:end,i))');
 [q,r]=size(a);
 md(:,i)=(a(1:q*r))';
 
@@ -11,7 +11,7 @@ end
 
 for(i=1:cel),
    
-a=corrcoef((data.undirected(:,5:end-5,i))');
+a=corrcoef((data.undirected(:,1:end,i))');
 [q,r]=size(a);
 mu(:,i)=(a(1:q*r))';
 

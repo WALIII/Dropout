@@ -44,9 +44,8 @@ for i = 1:length(mov_listing);
     end
 
      try
-St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i}-fs/3;
+St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i};
      if St_cut<1
-         clear St_cut
          continue
      end
          
@@ -69,7 +68,7 @@ GG = GG+1; % cut infront of the next block.
 
 
 if size(GG,1) >= 1;
-M_cuts = (sorted_syllable{i}(GG)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i}-fs/3;
+M_cuts = (sorted_syllable{i}(GG)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i};
  
 % remove bits on end of pad...
 indices = find(M_cuts>length(mic_data{i}));

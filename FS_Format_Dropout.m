@@ -4,9 +4,9 @@ function [data] = FS_Format_Dropout(roi_ave, directed,undirected, motif)
 % format and smooth data to work with pre-existing functions
 
 %PARAMS
-startT = 7; %12;
-finalT = 2; %28;%
-smooth =4;%4
+startT = 12; %12;
+finalT = 28; %28;%
+smooth =5;%4
 
 
 % FORMAT: data.undirected(trial,time,cell)
@@ -136,7 +136,7 @@ data.undirected = undirected_2;
 data.directed2 = directed_3;
 data.undirected2 = undirected_3;
 
-plot(data.directed(:,:,5)','r');
+plot(data.directed(:,:,1)','r');
 
 % sort by max quality...
 G =  mean(data.directed(:,:,:),1);

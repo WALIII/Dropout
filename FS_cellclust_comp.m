@@ -14,7 +14,7 @@ startT = 2;
 endT = size(SortedCell,2);
 cells = size(SortedCell,3);
 trials = size(SortedCell,1);
-clim = [-.3 0.8];
+clim = [-.1 0.6];
 maxlag_samps=round(25*.02);
 
 MM_C2 = mean(SortedCell(:,startT:endT,:),3);

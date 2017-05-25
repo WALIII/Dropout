@@ -4,7 +4,7 @@ function [ConcVid Ticks] = FS_Motif_Mov(C,DS);
 % DS is the downsampling
 
 fs = 48000; %audio frame rate
-vfs = 30; %video frame rate
+vfs = 25; %video frame rate
 ConcVid = [];
 Ticks = [];
 counter = 1;

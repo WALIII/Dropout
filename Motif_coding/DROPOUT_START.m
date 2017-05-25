@@ -5,7 +5,7 @@
 
 [Tally2 idx] = hilbert_FS(Tally);
 
-[ConcVid Ticks] = FS_Motif_Mov(C);
+
 
 % go into .mat folder
 cd('../');
