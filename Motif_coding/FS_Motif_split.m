@@ -44,7 +44,7 @@ for i = 1:length(mov_listing);
     end
 
      try
-St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i}-fs/3;
+St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i};
      if St_cut<1
          clear St_cut
          continue
@@ -56,7 +56,7 @@ St_cut = abs(sorted_syllable{i}(1)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i}-fs/3;
      end
     
 
-GG = find(diff(sorted_syllable{i})>5);
+GG = find(diff(sorted_syllable{i})>2000);
 
 GG = GG+1; % cut infront of the next block.
 
@@ -69,7 +69,7 @@ GG = GG+1; % cut infront of the next block.
 
 
 if size(GG,1) >= 1;
-M_cuts = (sorted_syllable{i}(GG)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i}-fs/3;
+M_cuts = (sorted_syllable{i}(GG)*((N-NOVERLAP)*DOWNSAMPLE)-N)+OFFSET{i};
  
 % remove bits on end of pad...
 indices = find(M_cuts>length(mic_data{i}));
@@ -82,13 +82,15 @@ clear indices;
 
 % rconcat end;
 CUTS = horzcat(St_cut,M_cuts',length(mic_data{i}));
+C2 = horzcat(St_cut,M_cuts'-OFFSET{i},length(mic_data{i}));
 clear St_cut;
 else 
     CUTS = horzcat(St_cut,length(mic_data{i}));
+    C2 = horzcat(St_cut,length(mic_data{i}));
     clear St_cut;
 end
 
-C{1,counter2} = CUTS;
+C{1,counter2} = C2;
 C{2,counter2} = mov_listing{i};
 counter2 = counter2+1;
 % } = mic_data{i}(St_cut:M_cuts(1));

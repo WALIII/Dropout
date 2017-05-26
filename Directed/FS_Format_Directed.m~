@@ -31,10 +31,9 @@ for trial = 1:size(Undirected.interp_dff,2);
         temp =  tsmovavg(Undirected.interp_raw{cell,trial},'s',4); 
         temp = temp(:,4:end-1);
         temp = temp-mean(temp);
-        data.undirected(counter,:,cell) = (temp);
+        data.undirected(trial,:,cell) = (temp);
         clear temp;
     end;
-        counter = counter+1;
 end
 end;
 
