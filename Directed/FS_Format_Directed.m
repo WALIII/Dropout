@@ -38,6 +38,38 @@ for trial = 1:size(Undirected.interp_dff,2);
 end
 end;
 
+
+
+% CLEAN DATA (mean subtraction)
+for ii = 1:size(data.directed,1)
+H = mean(squeeze(mean(data.directed(ii,:,:),1)),2)';
+for i = 1:size(data.directed,3)
+    hold on; 
+    directed_2(ii,:,i) = (data.directed(ii,:,i) - H); 
+    %directed_3(ii,:,i) = directed_2(ii,:,i)-mean(data.directed_2(:,:,i)',2)';
+end
+end
+
+% CLEAN DATA (mean subtraction)
+for ii = 1:size(data.undirected,1)
+H = mean(squeeze(mean(data.undirected(ii,:,:),1)),2)';
+for i = 1:size(data.undirected,3)
+    hold on; 
+    undirected_2(ii,:,i) = (data.undirected(ii,:,i) - H);
+   % undirected_3(ii,:,i) = undirected_2(ii,:,i)-mean(data.undirected_2(:,:,i)',2)';
+end
+end
+
+
+data.directed = directed_2;
+data.undirected = undirected_2;
+
+
+
+
+
+
+
 %sort by max quality...
 G =  mean(data.directed(:,:,:),1);
 G1 = squeeze(G);

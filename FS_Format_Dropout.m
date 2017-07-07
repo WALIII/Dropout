@@ -4,9 +4,9 @@ function [data] = FS_Format_Dropout(roi_ave, directed,undirected, motif)
 % format and smooth data to work with pre-existing functions
 
 %PARAMS
-startT = 12; %12;
-finalT = 28; %28;%
-smooth =5;%4
+startT = 1; %12;
+finalT = 1; %28;%
+smooth =3;%4
 
 
 % FORMAT: data.undirected(trial,time,cell)

@@ -1,4 +1,4 @@
-function [GG3_u,GG3_d, Ca_score_u, Ca_score_d] = FS_Comparison(roi_ave,directed,undirected,motif)
+function [Ddir,Udir] = FS_Comparison(roi_ave,directed,undirected,motif)
 % FS_Compariosn.m
 
 % d050217
@@ -19,7 +19,7 @@ disp( ' Formatting WAV Data...')
 
 % Warp Song
 disp( ' Warping WAV Data...')
-[WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d,Index,GG2_d,GG2_u] = FS_warp_song(WAV_d, WAV_u);
+[WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d,Index,Ddir.T,Udir.T] = FS_warp_song(WAV_d, WAV_u);
 
 
 % Compare Calcium data, taking the Xcorr ( Dot product) of each cell to average
@@ -71,10 +71,17 @@ for i = Y';
 counter = counter+1;
 end
 
+% Undirected aggregate
+Udir.T
+Udir.score = Ca_score_u;
+Udir.Ca_Xcorr_u = Ca_Xcorr_u;
 
-
+% Directed aggregate
+Ddir.T
+Ddir.score = Ca_score_d;
+Ddir.Ca_Xcorr_d = Ca_Xcorr_d;
 %Plot data
-GG3_u = (mean(abs(GG2_u),2));
-GG3_d = (mean(abs(GG2_d),2));
+% GG3_u = (mean(abs(GG2_u),2));
+% GG3_d = (mean(abs(GG2_d),2));
 
-figure(); plot(GG3_u,Ca_score_u,'m*'); hold on; plot(GG3_d,Ca_score_d,'g*');
+% figure(); plot(GG3_u,Ca_score_u,'m*'); hold on; plot(GG3_d,Ca_score_d,'g*');
