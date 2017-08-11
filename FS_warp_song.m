@@ -14,9 +14,9 @@ function [WARPED_TIME_u, WARPED_TIME_d, WARPED_audio_u,WARPED_audio_d,Index,GG2_
 % >> [Gconsensus_d,F,T] = CY_Get_Consensus(WARPED_audio_d)
 % >> [Gconsensus_u,F,T] = CY_Get_Consensus(WARPED_audio_u)
 
-im1 = mean(Gconsensus_d{1},3);
-im2 = mean(Gconsensus_u{1},3);
-XMASS_song(flipdim(im1(:,:),1),flipdim(im2(:,:),1),flipdim(im2(:,:),1));
+% im1 = mean(Gconsensus_d{1},3);
+% im2 = mean(Gconsensus_u{1},3);
+% XMASS_song(flipdim(im1(:,:),1),flipdim(im2(:,:),1),flipdim(im2(:,:),1));
 
 counter = 1;
 fs = 48000; % sampling rate
