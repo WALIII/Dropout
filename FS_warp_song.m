@@ -63,6 +63,8 @@ end;
 
 
 
+
+
 nn = 50;
 %directed
 GG3_u = mean(GG2_u);
