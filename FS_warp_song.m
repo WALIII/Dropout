@@ -35,7 +35,8 @@ GG2_d(counter,:) = diff(GG_d); % Take the derivative of the vector, to get momen
    counter = counter+1;
 Index(i,1) = i;
 catch
- Index(i,1) = []; 
+    disp('Pass')
+Index(i,1) = 0; 
 end;
 end
 
