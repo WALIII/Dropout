@@ -1,4 +1,4 @@
-function [IMAGE, T]= FS_Spectrogram(mic_data,fs);
+function [IMAGE, T,F]= FS_Spectrogram(mic_data,fs);
 % Make spectrogram of mic data
 
 

@@ -65,7 +65,7 @@ end;
 
 
 
-nn = 50;
+nn = 10;
 %directed
 GG3_u = mean(GG2_u);
 GG4_u = tsmovavg(abs(GG3_u),'s',nn);
