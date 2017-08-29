@@ -1,10 +1,26 @@
-function scrapPlot(data1,data2)
+function scrapPlot(data)
 
-x = 1:size(data1,2);
+figure();
+D = {'r','g','b','c','y','m','k'};
+for i = 1:size(data,2);
 
- shadedErrorBar(x,data1,{@mean,@std},'g',0);
+ x = 1:size(data{i}',2);
  hold on;
- shadedErrorBar(x,data2,{@mean,@std},'m',0);
+ shadedErrorBar(x,data{i}',{@mean,@std},D{i},0.5);
+
+end
+
+figure();
+for i = 1:size(data,2)
+
+ x = 1:size(data{i}',2);
+ hold on;
+ plot(x,mean(data{i},2),D{i});
+
+end
+
+
+
  
  
  

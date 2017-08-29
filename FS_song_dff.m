@@ -13,7 +13,12 @@ function [sim_score, vector_score] = FS_song_dff(consensus)
 %==============================================%
 % Convert if in the freedomsScope format.
 
-
+if iscell(consensus)==1
+   for i = 1:size(consensus,2)
+        consensus2(:,:,i) = consensus{i};
+   end
+    consensus = consensus2;
+end
 
 clear sim_score; clear Mean_c;
 
