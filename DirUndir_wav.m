@@ -40,10 +40,24 @@ XMASS_song(im1(:,:),im2(:,:),im3(:,:),F,T);
 DataD.WARPED_TIME = WARPED_TIME;
 DataD.WARPED_audio = WARPED_audio;
 DataD.Gconsensus = Gconsensus;
+  for i = 1:size(WARPED_audio,2)
+  if i == 1
+      c_agg = Gconsensus{1,i}{1};
+  else
+      c_agg = cat(3,c_agg,Gconsensus{1,i}{1});
+   end
+  end
+
     else
 DataU.WARPED_TIME = WARPED_TIME;
 DataU.WARPED_audio = WARPED_audio;
-DataU.Gconsensus = Gconsensus;   
+DataU.Gconsensus = Gconsensus; 
+  for i = 1:size(WARPED_audio,2)
+      c_agg = cat(3,c_agg,Gconsensus{1,i}{1});
+  end
+
+
+
     end
     
 end
@@ -52,11 +66,15 @@ end
 % TO DO: aggregate all concensus images 
 
 % Get timing and spectral data
-[DataD.sim_score, DataD.vector_score, DataD.A_diff,DataD.S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus);
+
+
+   
+  
+[DataD.sim_score, DataD.vector_score, DataD.A_diff,DataD.S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg);
 
 
 % Get timing and spectral data
-[DataU.sim_score, DataU.vector_score, DataU.A_diff,DataU.S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus);
+[DataU.sim_score, DataU.vector_score, DataU.A_diff,DataU.S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg);
 
 
 
