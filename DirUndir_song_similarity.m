@@ -40,3 +40,5 @@ for i = 4
   scatter(Fin1(1,:),Fin1(2,:),[],'m','Marker','*');
   scatter(Fin2(1,:),Fin2(2,:),[],'g','Marker','o');
 end
+
+Fin = 0;
