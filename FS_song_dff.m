@@ -1,7 +1,7 @@
 
 
 
-function [sim_score, vector_score] = FS_song_dff(consensus)
+function [sim_score, vector_score] = FS_song_dff(consensus, consensus_agg)
 % FSA3_Get_Mean_Scores
 %
 % Created: 05/20/16
@@ -11,8 +11,13 @@ function [sim_score, vector_score] = FS_song_dff(consensus)
 % Use for freedomscope birds. Wrapper is 'Plot_SDI_Comparison'
 
 %==============================================%
-% Convert if in the freedomsScope format.
 
+% if there is no comparison:
+if nargin < 2
+consensus_agg =  consensus_agg;
+end
+
+% Convert if in the freedomsScope format.
 if iscell(consensus)==1
    for i = 1:size(consensus,2)
         consensus2(:,:,i) = consensus{i};
@@ -23,8 +28,7 @@ end
 clear sim_score; clear Mean_c;
 
 % Get Mean of mic data ( similar to spectral density image)
-Mean_c = mean(consensus,3);
-Mean_c2 = mean(consensus,3);
+Mean_c2 = mean(consensus_agg,3);
 
 % Compare to the days's contour to the SDI
 for i = 1:size(consensus,3)
