@@ -2,8 +2,8 @@ function DirUndir_Plot(DataD,DataU)
 
 
 im1 = mean(DataD.Gconsensus{1}{1},3);
-im2 = mean(DataD.Gconsensus{4}{1},3);
-im3 = mean(DataD.Gconsensus{3}{1},3);
+im2 = mean(DataD.Gconsensus{3}{1},3);
+im3 = mean(DataD.Gconsensus{4}{1},3);
 figure(1);
 subplot(2,1,1);
 XMASS_song(im1(:,:),im2(:,:),im3(:,:));
@@ -18,8 +18,8 @@ scrapPlot(DataU.A_diff)
 figure(1);
 subplot(2,1,2);
 im4 = mean(DataU.Gconsensus{1}{1},3);
-im5 = mean(DataU.Gconsensus{4}{1},3);
-im6 = mean(DataU.Gconsensus{3}{1},3);
+im5 = mean(DataU.Gconsensus{3}{1},3);
+im6 = mean(DataU.Gconsensus{4}{1},3);
 XMASS_song(im4(:,:),im5(:,:),im6(:,:));
 
 figure();
