@@ -41,4 +41,16 @@ for i = 4
   scatter(Fin2(1,:),Fin2(2,:),[],'g','Marker','o');
 end
 
+
+
+figure();
+hold on;
+histogram(Fin1(1,:));
+histogram(Fin2(1,:));
+
+figure();
+hold on;
+histogram(Fin1(2,:));
+histogram(Fin2(2,:));
+
 Fin = 0;

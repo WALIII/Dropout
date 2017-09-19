@@ -1,7 +1,7 @@
 function [DataD, DataU] = DirUndir_wav(WAVd,WAVu,TEMPLATE);
 % Compaer Audio  data from Directed and Undirected song.
 
-for ii = 1:2
+for ii = 1:2;
     
     if ii ==1
         WAV6 = WAVd;
@@ -47,6 +47,7 @@ DataD.Gconsensus = Gconsensus;
       c_agg = cat(3,c_agg,Gconsensus{1,iii}{1});
    end
   end
+   
 
     else
 DataU.WARPED_TIME = WARPED_TIME;
@@ -56,11 +57,11 @@ DataU.Gconsensus = Gconsensus;
       c_agg = cat(3,c_agg,Gconsensus{1,iii}{1});
   end
 
-
+end
 
     end
     
-end
+
 
 
 % TO DO: aggregate all concensus images 
@@ -70,10 +71,10 @@ end
 
    
   
-[DataD.sim_score, DataD.vector_score, DataD.A_diff,DataD.S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg);
+[DataD.sim_score, DataD.vector_score, DataD.A_diff,DataD.S_diff] = FS_PreMotor_FeaturePlot(DataD.WARPED_TIME,DataD.WARPED_audio,DataD.Gconsensus,c_agg);
 
 % Get timing and spectral data
-[DataU.sim_score, DataU.vector_score, DataU.A_diff,DataU.S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg);
+[DataU.sim_score, DataU.vector_score, DataU.A_diff,DataU.S_diff] = FS_PreMotor_FeaturePlot(DataU.WARPED_TIME,DataU.WARPED_audio,DataU.Gconsensus,c_agg);
 
 
 
