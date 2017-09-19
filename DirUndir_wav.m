@@ -25,7 +25,7 @@ for ii = 1:2
 
 % Spectral Density Image
 for iii = 1:size(WARPED_audio,2)
-[Gconsensus{i},F,T] = CY_Get_Consensus(WARPED_audio{i});
+[Gconsensus{iii},F,T] = CY_Get_Consensus(WARPED_audio{iii});
 end
 
 % Get Average consensus images, and plot them!
