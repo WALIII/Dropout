@@ -2,27 +2,32 @@
 function Fin = DirUndir_song_similarity(DataD,DataU)
 % Get Sim Scores
 
-ii = 4;
+counter = 1;
+for ii = 1:4;
 for i = 1:size(DataD.WARPED_TIME{ii},2) % for all trials
 %   Audio Stretch formating
 GG_d = DataD.WARPED_TIME{ii}{i}(1,:)-DataD.WARPED_TIME{ii}{i}(2,:); %differences in timing
 %GG2_d(counter,:) = diff(GG_d); % Take the derivative of the vector, to get moments of change
-GG2_d2(:,i) = (sum(abs(GG_d)));
-
+GG2_d2(:,counter) = (sum(abs(GG_d)));
+counter = counter+1;
 end;
+end
 Fin1(1,:) = GG2_d2; % timing difference vector
 Fin1(2,:) = DataD.sim_score{ii}; % spectral difference vector
 
-ii = 4;
+counter = 1;
+for ii = 1:4
 for i = 1:size(DataU.WARPED_TIME{ii},2) % for all trials
 %   Audio Stretch formating
 GG_d = DataU.WARPED_TIME{ii}{i}(1,:)-DataU.WARPED_TIME{ii}{i}(2,:); %differences in timing
 %GG2_d(counter,:) = diff(GG_d); % Take the derivative of the vector, to get moments of change
-GG2_d2(:,i) = (sum(abs(GG_d)));
-
+GG2_d2(:,counter) = (sum(abs(GG_d)));
+counter = counter+1;
 end;
+end;
+
 Fin2(1,:) = GG2_d2; % timing difference vector
-Fin2(2,:) = DataU.sim_score{ii}; % spectral difference vector
+Fin2(2,:) = cat(2,DataU.sim_score{1:4}); % spectral difference vector
 
 
 
@@ -36,7 +41,21 @@ end
 figure();
 hold on;
 g = colormap(hsv(10));
-for i = 1
-  scatter(Fin1{i}(1,:),Fin1{i}(2,:),[],g(i*2,:),'Marker','*');
-  scatter(Fin2{i}(1,:),Fin2{i}(2,:),[],g(i*2-1,:),'Marker','o');
+for i = 4
+  scatter(Fin1(1,:),Fin1(2,:),[],'m','Marker','*');
+  scatter(Fin2(1,:),Fin2(2,:),[],'g','Marker','o');
 end
+
+
+
+figure();
+hold on;
+histogram(Fin1(1,:));
+histogram(Fin2(1,:));
+
+figure();
+hold on;
+histogram(Fin1(2,:));
+histogram(Fin2(2,:));
+
+Fin = 0;

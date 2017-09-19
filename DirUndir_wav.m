@@ -12,7 +12,7 @@ for ii = 1:2;
     end
     
 % Align Spectrograms
-[song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV6,TEMPLATE(1:end));
+[song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV6,TEMPLATE(1:end),5590);
 
 % Check Alignment
 % FS_Premotor_WavPlot(song,align)
