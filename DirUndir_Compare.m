@@ -1,5 +1,7 @@
 %DirUndir_Compare 01
 
+% Compare activity btw the two cases
+
 
 rule1 = find( Motif_ind(3,:) ==  0);% Undirected song
 rule2 = find( Motif_ind(3,:) ==  1);% Directed song
