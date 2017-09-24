@@ -3,8 +3,8 @@
 % Compare activity btw the two cases
 
 
-rule1 = find( Motif_ind(3,:) ==  0);% Undirected song
-rule2 = find( Motif_ind(3,:) ==  1);% Directed song
+rule1 = find( Motif_ind(3,:) ==  0 & Motif_ind(1,:) ==  Motif_ind(2,:)-1 );% Undirected soedit ScrapHeng
+rule2 = find( Motif_ind(3,:) ==  1 & Motif_ind(1,:) ==  Motif_ind(2,:)-1);% Directed song
 
 [idx1, calcium1, song1] = FS_PreMotor_plot2(song,calcium,align,33,Motif_ind,rule1);
 
