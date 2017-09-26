@@ -2,7 +2,7 @@ function V = ScrapHeight(calcium,Motif_ind, align,WARPED_TIME,WARPED_audio,Gcons
 % Height of data, and plot it
 
 % cell = 1;
-range = (align-20:align+30);
+range = (align+50:align+80);
 prange = ((align):(align+30));
 counter1 =1;
 counter2 = 1;
@@ -16,8 +16,8 @@ VV{1} = sum(((A_diff{1})));
 
 for cell = 1:size(calcium,2) % for every cell
 % find the peak in the average trace
-d = mean(calcium{cell}(:,range),1);
-d2 = mean(calcium{cell}(:,prange),1);
+d = mean(calcium{cell}(:,range),1); % mean trace
+d2 = mean(calcium{cell}(:,prange),1); 
 Ym = prctile(d2,1);
 % [pks,locs] = max(d);
 pks = mean(d);
@@ -41,6 +41,7 @@ for i = 1:size(calcium{cell},1) % for every trial
     vTD(4,counter1) = time_score{1}(i);
     vTD(5,counter1) = Motif_ind(4,i); % when?
     vTD(6,counter1) = i; % trial
+%     vTD(7,counter1) = abs(
     
     counter1 = counter1+1;
     else
