@@ -24,25 +24,25 @@ Y = TEMPLATE; % add zeros to pad
 
 
 %% Design a bandpass filter that filters out between 700 to 12000 Hz
-% fs = 48000;
-% n = 7;
-% beginFreq = 700 / (fs/2);
-% endFreq = 12000 / (fs/2);
-% [b,a]= butter(n, [beginFreq, endFreq], 'bandpass');
+fs = 48000;
+n = 7;
+beginFreq = 700 / (fs/2);
+endFreq = 12000 / (fs/2);
+[b,a]= butter(n, [beginFreq, endFreq], 'bandpass');
 
 %% Filter the signal
 % Consensus
 % Spectral Density Image
-% counter = 1;
-% iii = 1;
-% [Gconsensus{iii},F,T] = CY_Get_Consensus(WARPED_audio{1});
-% for ii = 1:size(WARPED_audio{iii},2)
-% [IMAGE(:,:,ii), T2,F2]= FS_Spectrogram(WARPED_audio{iii}(:,ii),48000);
-% fOut = filter(b, a, WARPED_audio{iii}(:,ii));
-% audioVect(:,counter) = downsample(tsmovavg(rms(abs(fOut),2),'s',500,1),100);
-% audioVectT(:,counter) = fOut;
-% counter = counter+1;
-% end
+counter = 1;
+iii = 1;
+[Gconsensus{iii},F,T] = CY_Get_Consensus(WARPED_audio{1});
+for ii = 1:size(WARPED_audio{iii},2)
+[IMAGE(:,:,ii), T2,F2]= FS_Spectrogram(WARPED_audio{iii}(:,ii),48000);
+fOut = filter(b, a, WARPED_audio{iii}(:,ii));
+audioVect(:,counter) = downsample(tsmovavg(rms(abs(fOut),2),'s',500,1),100);
+audioVectT(:,counter) = fOut;
+counter = counter+1;
+end
 
 % audioVect(isnan(audioVect)) = 0;
 
@@ -74,4 +74,4 @@ Y = TEMPLATE; % add zeros to pad
 
 
 % Sim Score
-%[sim_score, vector_score, A_diff,S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg)
+[sim_score, vector_score, A_diff,S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus)

@@ -1,4 +1,4 @@
-function [stats] = DU_Prominence(data)
+function [stats, amp_data] = DU_Prominence(data)
 % DU_Prominence.m
 
 % d09/29/2017
@@ -18,7 +18,7 @@ counterX = 1;
 
 
 
-GG =  B(1:40,2)';
+GG =  B(:,2)';
 for i = 1:size(data.directed,1) %trials
 for cell = GG
 % sum of variance
@@ -92,6 +92,9 @@ h1.BinWidth = 0.75;
 h2.Normalization = 'probability';
 h2.BinWidth = 0.75;
 
+[~,stats.ROI_all2all] = ttest(pVU(1:1000), pVD(1:1000));
+[stats.ROI_all2all_ranksum,~] = ranksum(pVU(1:1000), pVD(1:1000));
+
 
 
 
@@ -114,31 +117,14 @@ h2.BinWidth = 0.75;
 y = [0 9];
 line(x,y,'Color','red','LineStyle','--')
 
+[~,stats.ROI_mean_p] = ttest(UCa, DCa);
+[stats.ROI_mean_p_ranksum,~] = ranksum(UCa, DCa);
 
+%Export Data
 
+amp_data.MeanROI(1,:) = DCa;
+amp_data.MeanROI(2,:) = UCa;
+amp_data.Prom_D = pVD;
+amp_data.Prom_U = pVU;
 
-
-   Tx = (std(data.all(:,:,:),[], 1));
-    X =  (std(data.directed(:,:,:),[], 1));
-    X2 = ((squeeze(mean(X,2))-squeeze(mean(Tx))))-mean((squeeze(mean(X,2))-squeeze(mean(Tx))))
-    DCb = X2;
-    
-    X = (std(data.undirected(:,:,:),[], 1));
-    X2 = (squeeze(mean(X,2))-squeeze(mean(Tx)))-mean((squeeze(mean(X,2))-squeeze(mean(Tx))))
-    UCb = X2;
-    
-    figure();
-    title('Variance Difference')
-    hold on;
-    scatter(UCb,DCb);
- x = [-0.2 0.2];
- y = [-0.2 0.2];
-line(x,y,'Color','red','LineStyle','--')
-
-figure();
-
-Ta = cat(1,UCa,DCa);
-Tb = cat(1,UCb,DCb);
-
-stats = 0;
 
