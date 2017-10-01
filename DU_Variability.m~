@@ -71,7 +71,6 @@ figure(); scatter(sM(1,:),sM(2,:))
 line(x,y,'Color','red','LineStyle','--')
 
 xlim([ 0 1]);
-ylim([ 0 1]);
 
 figure();
 histogram(sM(1,:)-sM(2,:));
