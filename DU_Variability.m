@@ -6,6 +6,9 @@ function [stats var_data] =  DU_Variability(data)
 % d09/29/2017
 % WAL3
 
+
+trialA = 1;
+trialB = 1;
 % Take the all-to-all pearson corrleation of ROIs
 for cell = 1:size(data.directed,3);
 GGD = squeeze((data.directed(:,:,cell)'-min(data.directed(:,:,cell)')));
@@ -18,8 +21,19 @@ sM(1,cell) = median(mtxU(:)); % mean for each cell
 sM(2,cell) = median(mtxD(:));
 
 
-[~,HH(cell)] = ranksum(mtxU(:), mtxD(:),'alpha', 0.00001*51);
+[~,HH(cell)] = ranksum(mtxU(:), mtxD(:),'alpha', 0.00001);
 
+if HH(cell)
+    U_seg(trialA,:) = mtxU(:);
+    D_seg(trialA,:) = mtxD(:);
+    trialA = trialA+1;
+else
+    U_seg2(trialB,:) = mtxU(:);
+    D_seg2(trialB,:) = mtxD(:);
+    trialB = trialB+1;
+end
+
+    
 % figure();
 % hold on;
 % histogram(mtxD(1:1000));
@@ -42,15 +56,25 @@ end
 
 
 % % %%+++++ FIGURE 02 +++++++%%
-% % Plot population Histogram
-% figure();
-% hold on;
-% h2 = histogram(sumU(:),'FaceColor','m')
-% h1 = histogram(sumD(:),'FaceColor','g')
-% h1.Normalization = 'probability';
-% h1.BinWidth = 0.1;
-% h2.Normalization = 'probability';
-% h2.BinWidth = 0.1;
+% Plot population Histogram
+figure();
+subplot(121)
+hold on;
+h2 = histogram(U_seg(:),'FaceColor','m')
+h1 = histogram(D_seg(:),'FaceColor','g')
+h1.Normalization = 'probability';
+h1.BinWidth = 0.1;
+h2.Normalization = 'probability';
+h2.BinWidth = 0.1;
+
+subplot(122)
+hold on;
+h2 = histogram(U_seg2(:),'FaceColor','m')
+h1 = histogram(D_seg2(:),'FaceColor','g')
+h1.Normalization = 'probability';
+h1.BinWidth = 0.1;
+h2.Normalization = 'probability';
+h2.BinWidth = 0.1;
 
 
 %% % %%+++++ FIGURE 03 +++++++%%

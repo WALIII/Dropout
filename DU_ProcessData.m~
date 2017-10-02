@@ -34,9 +34,11 @@ for i=1:length(mov_listing)
 if i == 1 % if the first time in the loop,
 pooled.mean_roi = amp_data{i}.MeanROI;
 pooled.var_roi = var_data{i}.MeanPearsonScores;
+pooled.varCells = var_data{i}.Stat_Difference;
 else
 pooled.mean_roi = cat(2,pooled.mean_roi,amp_data{i}.MeanROI);% concat data
 pooled.var_roi = cat(2,pooled.mean_roi,var_data{i}.MeanPearsonScores);% concat data
+pooled.varCells = cat(2,pooled.varCells,var_data{i}.Stat_Difference;
 end
 clear data;
 end
@@ -51,9 +53,9 @@ A2 = FS_bootstrap(pooled.mean_roi(2,:),B);
 
 B = 1000;
 V1 = FS_bootstrap(pooled.var_roi(1,:),B);
-V2 = FS_bootstrap(pooled.mea_roi(2,:),B);
+V2 = FS_bootstrap(pooled.var_roi(2,:),B);
 % take 10,000 bootstrap estimates for the statistic)
-[pooled.stats_amp,~] = ranksum(V1(1:10000), V2(1:10000));
+[pooled.stats_var,~] = ranksum(V1(1:10000), V2(1:10000));
 
 
 

@@ -34,9 +34,11 @@ for i=1:length(mov_listing)
 if i == 1 % if the first time in the loop,
 pooled.mean_roi = amp_data{i}.MeanROI;
 pooled.var_roi = var_data{i}.MeanPearsonScores;
+pooled.varCells = var_data{i}.Stat_Difference;
 else
 pooled.mean_roi = cat(2,pooled.mean_roi,amp_data{i}.MeanROI);% concat data
 pooled.var_roi = cat(2,pooled.mean_roi,var_data{i}.MeanPearsonScores);% concat data
+pooled.varCells = cat(2,pooled.varCells,var_data{i}.Stat_Difference);
 end
 clear data;
 end
@@ -56,6 +58,13 @@ V2 = FS_bootstrap(pooled.var_roi(2,:),B);
 [pooled.stats_var,~] = ranksum(V1(1:10000), V2(1:10000));
 
 
+figure(); 
+XX = pooled.varCells;
+X = [sum(double(XX)) size(XX,2)-sum(double(XX))];
+ explode = [0 1];
+labels = {'variance difference' 'no difference'};
+pie(X,explode,labels)
+title('Significant variance; p < 1e-5 Wilcox rank-sum ')
 
 
 

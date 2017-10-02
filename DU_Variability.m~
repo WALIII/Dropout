@@ -20,6 +20,17 @@ sM(2,cell) = median(mtxD(:));
 
 [~,HH(cell)] = ranksum(mtxU(:), mtxD(:),'alpha', 0.00001*51);
 
+if HH;
+    U_seg(trialA,:) = mtxU(:);
+    D_seg(trialA,:) = mtxU(:);
+    trialA = trialA+1;
+else
+    U_seg2(trialB,:) = mtxU(:);
+    D_seg2(trialB,:) = mtxU(:);
+    trialB = trialB+1;
+end
+
+    
 % figure();
 % hold on;
 % histogram(mtxD(1:1000));
@@ -42,15 +53,15 @@ end
 
 
 % % %%+++++ FIGURE 02 +++++++%%
-% % Plot population Histogram
-% figure();
-% hold on;
-% h2 = histogram(sumU(:),'FaceColor','m')
-% h1 = histogram(sumD(:),'FaceColor','g')
-% h1.Normalization = 'probability';
-% h1.BinWidth = 0.1;
-% h2.Normalization = 'probability';
-% h2.BinWidth = 0.1;
+% Plot population Histogram
+figure();
+hold on;
+h2 = histogram(sumU(:),'FaceColor','m')
+h1 = histogram(sumD(:),'FaceColor','g')
+h1.Normalization = 'probability';
+h1.BinWidth = 0.1;
+h2.Normalization = 'probability';
+h2.BinWidth = 0.1;
 
 
 %% % %%+++++ FIGURE 03 +++++++%%
@@ -71,6 +82,7 @@ figure(); scatter(sM(1,:),sM(2,:))
 line(x,y,'Color','red','LineStyle','--')
 
 xlim([ 0 1]);
+ylim([ 0 1]);
 
 figure();
 histogram(sM(1,:)-sM(2,:));
