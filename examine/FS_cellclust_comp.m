@@ -1,6 +1,6 @@
 
-function [eig1,eig2,sorting]= FS_cellclust_comp(SortedCell,SortedCell2)
-% Make covariance matirx for imaging data input format: SortedCell(trial,time,cell)
+function [eig1,eig2,sorting]= FS_cellclust_comp(data)
+% Make covariance matirx for imaging data input format: data.directed(trial,time,cell)
 % TG
 % modified by WAL3
 % d011517
@@ -8,37 +8,37 @@ function [eig1,eig2,sorting]= FS_cellclust_comp(SortedCell,SortedCell2)
 %close all;
 
 
-% figure(); plot(SortedCell(:,:,1)');
+% figure(); plot(data.directed(:,:,1)');
 
-startT = 2;
-endT = size(SortedCell,2);
-cells = size(SortedCell,3);
-trials = size(SortedCell,1);
+startT = 1;
+endT = size(data.directed,2);
+cells = size(data.directed,3);
+trials = size(data.directed,1);
 clim = [-.1 0.6];
-maxlag_samps=round(25*.02);
+maxlag_samps=1;%round(25*.02);
 
-MM_C2 = mean(SortedCell(:,startT:endT,:),3);
+MM_C2 = mean(data.directed(:,startT:endT,:),3);
 
 for cell = 1:cells % cells;
 for trial = 1:trials % trials;
 
    % C(i,cell)=(max(ROI_data_cleansed{day}.raw_dat{cell,i})-median(ROI_data_cleansed{day}.raw_dat{cell,i}));
-    C4(trial,cell)=std(SortedCell(trial,startT:endT,cell));
-    C2(trial,cell)=mean(SortedCell(trial,startT:endT,cell));
-
-    C3(trial,cell)=mean(SortedCell(trial,startT:endT,cell));
+    C4(trial,cell)=std(data.directed(trial,startT:endT,cell));
+    C2(trial,cell)=mean(data.directed(trial,startT:endT,cell));
+    C3(trial,cell)=mean(data.directed(trial,startT:endT,cell));
 
 end;
 %C(:,cell)=(C(:,cell)-mean(C(:,cell)))/(std(C(:,cell)));
 end
 
-data.total = cat(1, SortedCell,SortedCell2)
-data.directed = SortedCell;
-data.undirected = SortedCell2;
-AVG_Trace = squeeze(mean(data.total,1));
+% data.total = cat(1, data.directed,data.undirected)
+% data.directed = data.directed;
+% data.undirected = data.undirected;
+AVG_Trace = squeeze(mean(data.all,1));
 for cell = 1:cells
   for trial = 1:trials;
     C(trial,cell) = max(xcorr(data.directed(trial,:,cell),AVG_Trace(:,cell),maxlag_samps,'coeff'))/max(xcorr(data.directed(trial,:,cell),(data.directed(trial,:,cell)),maxlag_samps,'coeff'));
+ 
   end
 end
 
@@ -55,6 +55,7 @@ ylabel('trials');
 title('MEAN')
 
 
+% clean up data
 q=sum(C');
 j=1;
 for(k=1:trials),
@@ -65,7 +66,6 @@ if(q(k)<140), % 140 seems resonable for minimum
 end
 end
 
-
 for(cell=1:cells),
 D3(:,cell)=(D(:,cell)-mean(D(:,cell)))/std(D(:,cell));
 end
@@ -73,7 +73,9 @@ D=D3;
 
 [cleantrials, c]=size(D);
 
-%
+
+
+% Mean subtraction
 % for(trial=1:trials),
 % D4(trial,:)=D(trial,:)./mean(D(trial,:));
 % end
@@ -116,8 +118,8 @@ clear D3;
 %%%% part 2
 
 
-cells = size(SortedCell2,3);
-trials = size(SortedCell2,1);
+cells = size(data.undirected,3);
+trials = size(data.undirected,1);
 
 
 
@@ -125,8 +127,8 @@ for cell = 1:cells % cells;
 for trial = 1:trials % trials;
 
    % C(i,cell)=(max(ROI_data_cleansed{day}.raw_dat{cell,i})-median(ROI_data_cleansed{day}.raw_dat{cell,i}));
-    C(trial,cell)=std(SortedCell2(trial,startT:endT,cell));
-    C2(trial,cell)=mean(SortedCell2(trial,startT:endT,cell));
+    C(trial,cell)=std(data.undirected(trial,startT:endT,cell));
+    C2(trial,cell)=mean(data.undirected(trial,startT:endT,cell));
 
 end;
 %C(:,cell)=(C(:,cell)-mean(C(:,cell)))/(std(C(:,cell)));

@@ -39,7 +39,10 @@ DirUndir_Plot(DataD,DataU) % plotting and basic visuals
 
 %    ** Time of day analysis **
 
+[stats] = DU_CorrMatrix(data)
+
 %% [stats] = DU_TimeOfDay(data)
+
 
 
 
