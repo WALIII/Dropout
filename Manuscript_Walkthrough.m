@@ -2,6 +2,7 @@
 % Directed/Undirected paper walkthrough and statistics aggregator
 
 % d09/29/17
+% d10/21/17
 % WAL3
 
 
@@ -37,9 +38,12 @@ DirUndir_Plot(DataD,DataU) % plotting and basic visuals
 [stats] = DU_variability(data)
 % TO DO: Add stats
 
-%    ** Time of day analysis **
+
+%    ** ROI correlation Matrix **
 
 [stats] = DU_CorrMatrix(data)
+
+%    ** Time of day analysis **
 
 %% [stats] = DU_TimeOfDay(data)
 

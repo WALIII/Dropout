@@ -58,7 +58,7 @@ V2 = FS_bootstrap(pooled.var_roi(2,:),B);
 [pooled.stats_var,~] = ranksum(V1(1:10000), V2(1:10000));
 
 
-figure(); 
+figure();
 XX = pooled.varCells;
 X = [sum(double(XX)) size(XX,2)-sum(double(XX))];
  explode = [0 1];
