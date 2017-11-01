@@ -16,11 +16,10 @@ GGD = squeeze((data.directed(:,:,cell)'-min(data.directed(:,:,cell)')));
 GGU = squeeze((data.undirected(:,:,cell)'-min(data.undirected(:,:,cell)')));
 mtxU = corr(GGU);
 mtxD = corr(GGD);
-sumU(cell,:) = mtxU(:); % everything is doubled, but thats OK.
-sumD(cell,:) = mtxD(:);
-sM(1,cell) = median(mtxU(:)); % mean for each cell
-sM(2,cell) = median(mtxD(:));
-
+% sumU(cell,:) = mtxU(:); % everything is doubled, but thats OK.
+% sumD(cell,:) = mtxD(:);
+% sM(1,cell) = median(mtxU(:)); % mean for each cell
+% sM(2,cell) = median(mtxD(:));
 sumU2(cell,:,:) = mtxU(); % everything is doubled, but thats OK.
 sumD2(cell,:,:) = mtxD();
 
@@ -30,7 +29,7 @@ end
 % How many cells
 cells = size(data.undirected,3);
 
-
+% Take the correlation of each cell across trials
 for ii = 1:cells;
 GX(:,ii) = squeeze(mean(sumD2(ii,:,:),3));
 end
@@ -39,7 +38,7 @@ for ii = 1:cells;
 GX2(:,ii) = squeeze(median(sumU2(ii,:,:),3));
 end
 
-%clean up the data by notmallizing to the variance
+%clean up the data by normalizing to the variance
 
 for(cell=1:cells),
 GX(:,cell)=(GX(:,cell)-mean(GX(:,cell)))./std(GX(:,cell));
@@ -62,20 +61,29 @@ c=cluster(l,'maxclust',10);
 
 
 bb = sorting;
-CVC_D=corr(GX(:,bb));
-CVC_U=corr(GX2(:,bb));
+CVC_D=cov(GX(:,bb));
+CVC_U=cov(GX2(:,bb));
 % Plot the cov matrix
 clim = [-0.2 0.8];
-figure(); 
+figure();
 subplot(121)
 imagesc(CVC_D,clim);
 subplot(122)
 imagesc(CVC_U,clim);
 colorbar;
 
-figure(); 
+figure();
 hold on;
-histogram(CVC_U(:),10,'FaceColor','m');
-histogram(CVC_D(:),10,'FaceColor','g');
+h1 = histogram(abs(CVC_U(:)),20,'FaceColor','m');
+h2 = histogram(abs(CVC_D(:)),20,'FaceColor','g');
+h1.Normalization = 'probability';
+h2.Normalization = 'probability';
 
+figure();
+hold on;
+plot((CVC_U(:)),(CVC_D(:)),'o');
+plot(zeros(3,1),-1:1,'r--');
+plot(-1:1,zeros(3,1),'r--');
+xlim([-0.5 1]);
+ylim([-0.5 1]);
 stats = 0;
