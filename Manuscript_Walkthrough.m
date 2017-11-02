@@ -2,7 +2,7 @@
 % Directed/Undirected paper walkthrough and statistics aggregator
 
 % d09/29/17
-% d10/21/17
+% d11/01/17
 % WAL3
 
 
