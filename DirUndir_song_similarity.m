@@ -65,10 +65,12 @@ xlim([ 0 150])
 figure();
 hold on;
 
+% optional Cutoff
+T1 = Fin1(Fin1(2,:)<=0.4) = [])
+T2 = Fin2(Fin1(2,:)<=0.4) = [])
 
-
-h3 = histogram(Fin1(2,:));
-h4 = histogram(Fin2(2,:));
+h3 = histogram(T1);
+h4 = histogram(T2);
 
 h3.Normalization = 'probability';
 h3.BinWidth = 0.025;
