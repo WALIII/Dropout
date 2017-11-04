@@ -75,6 +75,6 @@ h3.BinWidth = 0.025;
 h4.Normalization = 'probability';
 h4.BinWidth = 0.025;
 
-xlim([ 0.2 0.7])
+xlim([ 0.4 0.7])
 
 Fin = 0;
