@@ -6,7 +6,7 @@ for i = 1:size(data,2);
 
  x = 1:size(data{i}',2);
  hold on;
- shadedErrorBar(x,data{i}',{@mean,@std},D{i},0.5);
+ shadedErrorBar(x,data{i}',{@mean,@std},D{i},0);
 
 end
 

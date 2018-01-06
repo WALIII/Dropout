@@ -12,8 +12,9 @@
 
 DirUndir_Compare % Basic data vizualizations
 
-[data] = FS_Data(calcium,align,Motif_ind,5,25); % cut it out of the datastructure
 
+  % cut it out of the datastructure
+[data] = FS_Data(calcium,align,Motif_ind2,5,25);
 
 
 %--------=======[ Song Analysis ]=======--------%
@@ -35,7 +36,7 @@ DirUndir_Plot(DataD,DataU) % plotting and basic visuals
 
 %    ** ROI Variability analysis **
 
-[stats] = DU_variability(data)
+[stats] = DU_Variability(data)
 % TO DO: Add stats
 
 
@@ -43,9 +44,9 @@ DirUndir_Plot(DataD,DataU) % plotting and basic visuals
 
 [stats] = DU_CorrMatrix(data)
 
-%    ** Time of day analysis **
+%    ** Audio Correlations and of day analysis **
 
-%% [stats] = DU_TimeOfDay(data)
+%% [stats] = DU_CalAud(data)
 
 
 

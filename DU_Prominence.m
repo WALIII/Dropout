@@ -111,13 +111,13 @@ end
     UCa = X2;
 
 % %%+++++ FIGURE 02 +++++++%%
-%     figure();
-%     title('difference in amp')
-%     hold on;
-%     scatter(UCa,DCa);
-%    x = [0 9];
-% y = [0 9];
-% line(x,y,'Color','red','LineStyle','--')
+    figure();
+    title('difference in amp')
+    hold on;
+    scatter(UCa,DCa);
+   x = [0 9];
+y = [0 9];
+line(x,y,'Color','red','LineStyle','--')
 
 [~,stats.ROI_mean_p] = ttest(UCa, DCa);
 

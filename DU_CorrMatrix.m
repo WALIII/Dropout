@@ -1,4 +1,4 @@
-function [stats] =  DU_CorrMatrix(data)
+function [stats bb] =  DU_CorrMatrix(data)
 % DU_CorrMatrix.m
 
 % Get correlation matrix from data
@@ -72,6 +72,20 @@ subplot(122)
 imagesc(CVC_U,clim);
 colorbar;
 
+
+figure(); 
+clim = [-1.5 1.5];
+colormap(fireice)
+XX1 = CVC_D-CVC_U;
+
+imagesc(XX1,clim);
+
+
+
+
+
+colorbar
+
 figure();
 hold on;
 h1 = histogram(abs(CVC_U(:)),20,'FaceColor','m');
@@ -81,9 +95,10 @@ h2.Normalization = 'probability';
 
 figure();
 hold on;
-plot((CVC_U(:)),(CVC_D(:)),'o');
+plot(mean(CVC_U),mean(CVC_D),'o');
 plot(zeros(3,1),-1:1,'r--');
 plot(-1:1,zeros(3,1),'r--');
+plot([0 1], [0 1],'b--');
 xlim([-0.5 1]);
 ylim([-0.5 1]);
 stats = 0;
