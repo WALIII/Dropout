@@ -65,8 +65,7 @@ CVC = cov(GX);
 [eig1,eig2,sorting]= FS_cellclust_comp(data);
 
 % Sort by mean...
-VV = [GX' GX2']';
-CVC=cov(VV);
+CVC=cov([GX' GX2']');
 
 l = linkage(CVC, 'average', 'correlation');
 c=cluster(l,'maxclust',8);
@@ -75,7 +74,6 @@ c=cluster(l,'maxclust',8);
 
 CVC_D=cov(GX(:,bb));
 CVC_U=cov(GX2(:,bb));
-CVC=cov(VV(:,bb));
 output.A = CVC_U;
 output.B = CVC_D;
 
@@ -83,14 +81,12 @@ output.B = CVC_D;
 if FIG ==1;
     
  % Plot the cov matrix
-clim = [-0.1 0.7];
+clim = [-0.1 0.8];
 figure();
 subplot(131)
 imagesc(CVC_D,clim);
 subplot(132)
 imagesc(CVC_U,clim);
-subplot(133)
-imagesc(CVC,clim);
 colorbar;
 
 

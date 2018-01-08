@@ -15,7 +15,7 @@ endT = size(data.directed,2);
 cells = size(data.directed,3);
 trials = size(data.directed,1);
 clim = [-.1 0.6];
-maxlag_samps=1;%round(25*.02);
+maxlag_samps=3;%round(25*.02);
 
 MM_C2 = mean(data.directed(:,startT:endT,:),3);
 
@@ -38,7 +38,7 @@ AVG_Trace = squeeze(mean(data.all,1));
 for cell = 1:cells
   for trial = 1:trials;
     C(trial,cell) = max(xcorr(data.directed(trial,:,cell),AVG_Trace(:,cell),maxlag_samps,'coeff'))/max(xcorr(data.directed(trial,:,cell),(data.directed(trial,:,cell)),maxlag_samps,'coeff'));
- 
+
   end
 end
 
