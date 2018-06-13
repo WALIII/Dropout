@@ -12,6 +12,9 @@
 
 DirUndir_Compare % Basic data vizualizations
 
+[audioVect,audioVect2] =  DirUndir_Compare02(song_r,align,TEMPLATE); % Basic data vizualizations
+
+Scrap_finalfig(audioVect2,Motif_ind) % check audio alignments
 
   % cut it out of the datastructure
 [data] = FS_Data(calcium,align,Motif_ind2,5,25);

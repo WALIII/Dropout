@@ -1,4 +1,4 @@
-%DirUndir_Compare02
+function [audioVect,audioVectT,Index] =  DirUndir_Compare02(song_r,align,TEMPLATE)
 
 % streatch Wavs and calcium
 
@@ -6,7 +6,7 @@
 counter = 1;
 for i = 1: size(song_r,1)
 % WAVcell{1}{counter} = song_r(i,(align-5)/25*48000:(5+align)/25*48000+size(TEMPLATE,1))';
-WAVcell{1}{counter} = song_r(i,(align)/25*48000:(align+25)/25*48000)';
+WAVcell{1}{counter} = song_r(i,(align-120)/25*48000:(align+120)/25*48000)';
 
 counter = counter+ 1;
 end
@@ -16,10 +16,10 @@ counter = 1;
 % counter = counter+1;
 % end
 
-% Y = cat(1,zeros(1000,1), TEMPLATE, zeros(1000,1)); % add zeros to pad
+%Y = cat(1,zeros(1000,1), TEMPLATE, zeros(1000,1)); % add zeros to pad
 
 Y = TEMPLATE; % add zeros to pad
-[WARPED_TIME, WARPED_audio, Index,startT,endT] = FS_PreMotor_Warp(WAVcell,Y);
+[WARPED_TIME, WARPED_audio_true, Index,startT,endT,WARPED_audio] = FS_PreMotor_Warp(WAVcell,Y);
 
 
 
@@ -35,7 +35,7 @@ endFreq = 12000 / (fs/2);
 % Spectral Density Image
 counter = 1;
 iii = 1;
-[Gconsensus{iii},F,T] = CY_Get_Consensus(WARPED_audio{1});
+%[Gconsensus{iii},F,T] = CY_Get_Consensus(WARPED_audio{1});
 for ii = 1:size(WARPED_audio{iii},2)
 [IMAGE(:,:,ii), T2,F2]= FS_Spectrogram(WARPED_audio{iii}(:,ii),48000);
 fOut = filter(b, a, WARPED_audio{iii}(:,ii));
@@ -74,4 +74,4 @@ end
 
 
 % Sim Score
-[sim_score, vector_score, A_diff,S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus)
+%[sim_score, vector_score, A_diff,S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus)

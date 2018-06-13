@@ -7,7 +7,7 @@ function [stats, output] =  DU_CorrMatrix(data,FIG)
 % d10/05/2017
 % WAL3
 
-if nargin<2 
+if nargin<2
 FIG = 1;
 end
 
@@ -81,7 +81,7 @@ output.B = CVC_D;
 
 
 if FIG ==1;
-    
+
  % Plot the cov matrix
 clim = [-0.1 0.7];
 figure();
@@ -94,7 +94,7 @@ imagesc(CVC,clim);
 colorbar;
 
 
-figure(); 
+figure();
 clim = [-1.5 1.5];
 colormap(fireice);
 XX1 = CVC_D-CVC_U;
@@ -129,5 +129,141 @@ xlim([-0.5 1]);
 ylim([-0.5 1]);
 
 end
+
+output.CVC_U = CVC_U;
+output.CVC_U = CVC_D;
+
+
+%%%%%%%=======================%%%%%%%%
+%       Final Figure Plotting        %
+%%%%%%%=======================%%%%%%%%
+
+
+CC = cov(GX);
+CC(CC> 0.9) = 0;
+
+[M1 I1] = max(CC); % max of row, and index.
+
+% Sort
+[M3 I3] =sort(M1,'descend');
+
+I2 = I3(1);
+%[M2 I2] = max(M1)%
+
+
+Cell1 = I2;
+Cell2 = I1(I2);
+
+
+RHO1 = corr(data.directed(:,:,Cell1)');
+RHO2 = corr(data.directed(:,:,Cell2)');
+C1 = mean(RHO1);
+C2 = mean(RHO2);
+
+RHO3 = corr(data.undirected(:,:,Cell1)');
+RHO4 = corr(data.undirected(:,:,Cell2)');
+C3 = mean(RHO3);
+C4 = mean(RHO4);
+
+figure(); hold on; plot(C1); plot(C2);
+figure(); hold on; plot(C3); plot(C4);
+
+% plot offsets
+figure();
+
+subplot(121);
+hold on;
+thresh = 0.4;
+for i = 1: size(data.directed,1);
+    if C1(i)<thresh;
+        HH = 'r';
+    else
+        HH = 'b';
+    end
+
+    plot(squeeze(data.directed(i,:,Cell1)')+i*4,HH);
+end
+subplot(122)
+hold on;
+for i = 1:size(data.directed,1);
+        if C2(i)<thresh;
+        HH = 'r';
+    else
+        HH = 'b';
+    end
+    plot(squeeze(data.directed(i,:,Cell2)')+i*4,HH);
+end
+
+
+%--- Plot Undireceted
+
+% plot offsets
+figure();
+
+subplot(121);
+hold on;
+thresh = 0.5;
+for i = 1: size(data.undirected,1);
+    if C3(i)<thresh;
+        HH = 'r';
+    else
+        HH = 'b';
+    end
+
+    plot(squeeze(data.undirected(i,:,Cell1)')+i*4,HH);
+end
+subplot(122)
+hold on;
+for i = 1:size(data.undirected,1)
+        if C4(i)<thresh;
+        HH = 'r';
+    else
+        HH = 'b';
+    end
+    plot(squeeze(data.undirected(i,:,Cell2)')+i*4,HH);
+end
+
+
+
+
+
+%% Find latent Factors
+
+Ga = data.directed;
+Gb = data.undirected;
+for i = 1: 40
+   G1= squeeze(Ga(i,:,:))';
+   G2= squeeze(Gb(i,:,:))';
+[dim_to_use1, result1] = findzdim(G1);
+[dim_to_use2, result2] = findzdim(G2);
+pool1(:,i) = result1.line;
+pool2(:,i) = result2.line;
+end
+
+figure(); hold on; plot(pool1,'g'); plot(pool2,'m');
+
+
+
+%
+% figure();
+% subplot(121)
+% imagesc(squeeze(data.directed(:,:,1)))
+% subplot(122)
+% imagesc(squeeze(data.directed(:,:,4)))
+
+
+
+
+% % cell 1;
+% figure();
+% subplot(121)
+% plot(squeeze(data.directed(:,:,Cell1)'));
+% title('directed');
+% subplot(122)
+% plot(squeeze(data.directed(:,:,Cell2)'));
+% title('undirected');
+
+
+
 
 stats = 0;
