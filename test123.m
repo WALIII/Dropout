@@ -1,5 +1,5 @@
 
-function [T, F, coefficients_spec] = test123(data,Gconsensus2,cell,f,t)
+function [T, F, coefficients_spec] = test123(data,Gconsensus2,cell,f,t,TOD)
 % Example code for analysis of neural correlate with spectral differences.
 % This looks at differences in spectral power (but will not uncover
 % relationships between neural activity and timing differences, as all that
@@ -92,7 +92,7 @@ trials = size(spectrograms, 3);
 % independent variables (what to regress out), include a column of ones,
 % before assessing the relationship between our cell of interest and the
 % spectral bins
-other_factors = [];
+other_factors = TOD;
 X_other = [ones(trials, 1) other_factors'];
 
 % reshape peak_dff to be a column vector
@@ -101,8 +101,8 @@ X = reshape(peak_dff, [], 1);
 % get spectral columns of interests
 % F_idx = F >= freq_range(1) & F <= freq_range(2);
 % T_idx = T >= time_range(1) & T <= time_range(2);
-T_idx = [1:2350];
-F_idx = [1:510];
+T_idx = [1:size(t,2)];
+F_idx = [1:size(f,1)];
 
 
 Y = spectrograms(F_idx, T_idx, :);
@@ -113,21 +113,25 @@ Y = reshape(Y, [], trials)'; % reshape, so rows of Y correspond with song
 spectral_bins = size(Y, 2);
 coefficients = zeros(1, spectral_bins);
 p_values = zeros(1, spectral_bins);
+
+% for each spectral bin
+spectral_bins = size(Y, 2);
+coefficients = zeros(1, spectral_bins);
+p_values = zeros(1, spectral_bins);
 for i = 1:spectral_bins
-    % regress out other components
-    b = X_other \ Y(:, i);
-    resid = Y(:, i) - X_other * b;
+    % perform a linear regression on the spectral bin, building a linear
+    % model combining a constant (y-intercept), any other factors and the
+    % peak df/f for the cell of interest
+    mdl = fitlm([X_other X], Y(:, i));
     
-    % resid now contains the residuals for the spectral bin that are not
-    % accounted for by variables in X_other and are not consistent across
-    % trials (since X_other contains a column of 1s)
-    warning off
-    [b, b_conf, ~, ~, stats] = regress(resid, X);
-    
-    % store coefficient and p value
-    coefficients(i) = b;
-    p_values(i) = stats(3);
+    % store coefficient and p value (the last ones returned)
+    coefficients(i) = mdl.Coefficients.Estimate(end);
+    p_values(i) = mdl.Coefficients.pValue(end);
 end
+
+
+
+
 
 % false discovery rate correction for multiple tests
 % requires FDH_BH from file exchange
