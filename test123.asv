@@ -1,5 +1,5 @@
 
-function [T, F, coefficients_spec, coefficients, h, p_values] = test123(data,Gconsensus2,cell,f,t,TOD)
+function [T, F, coefficients_spec] = test123(data,Gconsensus2,cell,f,t,TOD)
 % Example code for analysis of neural correlate with spectral differences.
 % This looks at differences in spectral power (but will not uncover
 % relationships between neural activity and timing differences, as all that
@@ -93,7 +93,7 @@ trials = size(spectrograms, 3);
 % before assessing the relationship between our cell of interest and the
 % spectral bins
 other_factors = TOD;
-X_other = other_factors';
+X_other = [ones(trials, 1) other_factors'];
 
 % reshape peak_dff to be a column vector
 X = reshape(peak_dff, [], 1);
@@ -114,8 +114,11 @@ spectral_bins = size(Y, 2);
 coefficients = zeros(1, spectral_bins);
 p_values = zeros(1, spectral_bins);
 
-
-    f = waitbar(0, 'Processing...');
+% for each spectral bin
+spectral_bins = size(Y, 2);
+coefficients = zeros(1, spectral_bins);
+p_values = zeros(1, spectral_bins);
+    f = waitbar(o, 'Processing...');
 for i = 1:spectral_bins
    waitbar((i/spectral_bins),f, 'Processing...');
     % perform a linear regression on the spectral bin, building a linear
