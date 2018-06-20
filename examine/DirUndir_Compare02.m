@@ -1,4 +1,4 @@
-function [audioVect,audioVectT,Index] =  DirUndir_Compare02(song_r,align,TEMPLATE)
+function [audioVect,audioVectT,Index,WARPED_TIME] =  DirUndir_Compare02(song_r,align,TEMPLATE)
 
 % streatch Wavs and calcium
 
