@@ -1,52 +1,46 @@
 function [FS_ROI_Data] = FS_regression_preprocessing()
 
 
-ogfn = pwd;
 % Check to see if directory exists:
-fn = 'extraction';
-fn2 = 'extraction/processed';
+fn = 'extraction'
  if exist(fn, 'dir')
    warning('folder exist...')
 else
   mkdir(fn)
-  mkdir(fn2)
+
 
 
 % \\ load TEMPLATE, roi_ave1... roi_ave2...
 load('template_data.mat'); % load template data
 
-S = dir(fullfile(pwd,'*.mat')); % load roi data
+S = dir(fullfile(D,'*.mat')); % load roi data
 %
-counter = 1;
 for k = 1:numel(S)
     N = S(k).name;
     disp(N)
-    R = regexp(N,'ave_roi');
-    if R ==1;
-        filename{counter} = N;
-        counter = counter+1;
-    end
+    R = regexp(N,'roi_ave','match','once');
 end
 
-for i = 1:size(filename) % run through all roi sets
-cd(ogfn)
-    load(filename{i})
+for i = 1: length(R) % run through all roi sets
+load(R(i))
 
-disp(['loading  ',filename{i}]);
 [calcium, DATA_D, song_r, song, align, Motif_ind, BGD, stretch] =  FS_PreMotor(roi_ave,TEMPLATE);
 
 % save data
-
-save([filename{i},'_extrected'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch');
-
 end
 
- end
 
-disp('Processing extracted data...');
+cd(fn);
 
+% Check to see if directory exists:
+fn2 = 'processed'
+ if exist(fn2, 'dir')
+   warning('foldera exist...')
+else
+  mkdir(fn)
 
-S = dir(fullfile(pwd,'*.mat')); % load roi data
+clear S;
+S = dir(fullfile(D,'*.mat')); % load roi data
 
 
 for i = 1:length(S)
@@ -70,7 +64,6 @@ end
 
 
 FS_ROI_Data = data;
- end
 
 % check song data
 
