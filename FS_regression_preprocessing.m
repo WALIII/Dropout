@@ -28,7 +28,7 @@ for k = 1:numel(S)
     end
 end
 
-for i = 1:size(filename) % run through all roi sets
+for i = 1:size(filename,2) % run through all roi sets
 cd(ogfn)
     load(filename{i})
 
@@ -43,22 +43,24 @@ end
 
  end
 
+
+ %%
+
 disp('Processing extracted data...');
 
 
 S = dir(fullfile(pwd,'*.mat')); % load roi data
 
 
-for i = 1:length(S)
+for i = 1:length(S,2)
   load(S(i))
-[data(:,:,i)] = FS_Data(calcium,align,Motif_ind,0,35);
+[data{i}] = FS_Data(calcium,align,Motif_ind,0,35);
 
 %to do ( get the song data out!)
-data.Motif_ind(:,i) = Motif_ind;
+data{i}.Motif_ind(:,i) = Motif_ind;
 song_align = 30*48000;
-data.song_r(:,:,i) = 0;
-data.song(:,:,i) = 0;
-
+data{i}.song_r(:,:,i) = 0;
+data{i}.song(:,:,i) = 0;
 
 end
 
