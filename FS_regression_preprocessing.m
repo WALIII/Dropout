@@ -37,7 +37,7 @@ disp(['loading  ',filename{i}]);
 
 % save data
 
-save([filename{i},'_extrected'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch');
+save(['extraction/',filename{i}(1:end-4),'_extrected.m'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch');
 
 end
 
