@@ -35,9 +35,10 @@ cd(ogfn)
 disp(['loading  ',filename{i}]);
 [calcium, DATA_D, song_r, song, align, Motif_ind, BGD, stretch] =  FS_PreMotor(roi_ave,TEMPLATE);
 
-% save data
 
-save(['extraction/',filename{i}(1:end-4),'_extrected.m'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch');
+
+% save data
+save(['extraction/',filename{i}(1:end-4),'_extrected.m'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch','-v7.3');
 
 end
 
@@ -54,16 +55,34 @@ S = dir(fullfile(pwd,'*.mat')); % load roi data
 
 for i = 1:length(S)
   load(S(i).name);
-[data{i}] = FS_Data(calcium,align,Motif_ind,0,35);
+  min_dat = 0;
+  max_dat = 35;
+[data{i}] = FS_Data(calcium,align,Motif_ind,min_dat,max_dat);
+
+% make a time vector
+% Make timevector
+tv_calcium = 0:.333:max_dat/30;
+
+% extract song
+pad = .25 % seconds
+pad_s = pad*48000 % samples
+
+tv_song_r = pad:48000:max_dat/30;
+% Song start and end
+s_st = (align/30)*48000)-pad_s;
+s_end =  (align/30)*48000)+ (max_dat/30)*48000 + pad_s;
 
 %to do ( get the song data out!)
 data{i}.Motif_ind = Motif_ind;
-song_align = 30*48000;
-data{i}.song_r(:,:,i) = 0;
-data{i}.song(:,:,i) = 0;
+song_align = (align/30)*48000;
+data{i}.song_r = song_r(s_st:s_end,:);
+data{i}.song = song;
 
 end
 
+
+for i = 1:size(data)
+  if i = 1;
 
 
 % concat calcium and song data ( and keep motif data )
