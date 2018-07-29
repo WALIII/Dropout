@@ -48,16 +48,16 @@ end
 
 disp('Processing extracted data...');
 
-
+cd(fn);
 S = dir(fullfile(pwd,'*.mat')); % load roi data
 
 
-for i = 1:length(S,2)
-  load(S(i))
+for i = 1:length(S)
+  load(S(i).name);
 [data{i}] = FS_Data(calcium,align,Motif_ind,0,35);
 
 %to do ( get the song data out!)
-data{i}.Motif_ind(:,i) = Motif_ind;
+data{i}.Motif_ind = Motif_ind;
 song_align = 30*48000;
 data{i}.song_r(:,:,i) = 0;
 data{i}.song(:,:,i) = 0;
