@@ -8,7 +8,7 @@ fs = 48000;
 
 counter = 1;
 disp(' Time warping data')
-for i = 1:100%size(D.song_r,1)
+for i = 1:size(D.song_r,1)
 
     try
         [song_start, song_end, score_d(counter,:)] = find_audio(D.song_r(i,:)', template, fs, 'match_single', true,'constrain_length', 0.25);
