@@ -39,7 +39,7 @@ disp(' Sorting data...')
         D2.song_r = D2.song_r(I,:);
         D2.song_w = D2.song_w(I,:);
         D2.unsorted = D2.unsorted(I,:,:);
-        D2.warped_time = WARPED_TIME{I};
+        D2.warped_time = D2.warped_time{I};
         
         
 disp(' Getting Gcon')
