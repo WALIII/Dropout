@@ -38,7 +38,7 @@ disp(['loading  ',filename{i}]);
 
 
 % save data
-save(['extraction/',filename{i}(1:end-4),'_extrected.m'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch','-v7.3');
+save(['extraction/',filename{i}(1:end-4),'_extrected.mat'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch','-v7.3');
 
 end
 
@@ -64,8 +64,8 @@ for i = 1:length(S)
 tv_calcium = 0:.333:max_dat/30;
 
 % extract song
-pad = .25 % seconds
-pad_s = pad*48000 % samples
+pad = .25; % seconds
+pad_s = pad*48000; % samples
 
 tv_song_r = pad:48000:max_dat/30;
 % Song start and end
@@ -75,24 +75,46 @@ s_end =  ((align/30)*48000)+ (max_dat/30)*48000 + pad_s;
 %to do ( get the song data out!)
 data{i}.Motif_ind = Motif_ind;
 song_align = (align/30)*48000;
-data{i}.song_r = song_r(s_st:s_end,:);
-data{i}.song = song;
+data{i}.song_r = song_r(:,s_st:s_end);
+data{i}.song = song(:,round(s_st/1000):round(s_end/1000));
 
+clear calcium DATA_D song_r song align Motif_ind BGD stretch
 end
 
 
-for i = 1:size(data)
+for i = 1:size(data,2)
   if i == 1;
-
-
+D.song = data{i}.song;
+D.song_r = data{i}.song_r;
+D.unsorted = data{i}.unsorted;
+data{i}.Motif_ind(5,:) =  ones(1,size(data{1}.Motif_ind,2))*i;
+D.Motif_ind = data{i}.Motif_ind;
+D.Motif_ind(5,:);
+  else
+      
+D.song = cat(1,D.song,data{i}.song);
+ D.song_r = cat(1,D.song_r,data{i}.song_r);
+ D.unsorted = cat(1,D.unsorted,data{i}.unsorted);
+ data{i}.Motif_ind(5,:) =  ones(1,size(data{i}.Motif_ind,2))*i;
+ D.Motif_ind = cat(2,D.Motif_ind,data{i}.Motif_ind);
 % concat calcium and song data ( and keep motif data )
 
 %% Data Cleaning
 
 
-FS_ROI_Data = data;
   end
+
 end
+
+D.tv = tv_song_r;
+save('processed/Combined_data.mat','D','-v7.3');
+  
+
+
+FS_ROI_Data = D;
+
+%% Data Cleaning
+
 
 % check song data
 
