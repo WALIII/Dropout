@@ -43,6 +43,6 @@ disp(' Sorting data...')
         
         
 disp(' Getting Gcon')
-%[Gconsensus3,f,t] = CY_Get_Consensus(WARPED_audio,fs);
+[Gconsensus3,f,t] = CY_Get_Consensus(D2.song_w,fs);
 %D2.Gcon = Gconsensus3;
 %figure(); imagesc(mean(Gconsensus3{1},3));
