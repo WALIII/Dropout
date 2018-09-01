@@ -8,15 +8,15 @@ fs = 48000;
 
 counter = 1;
 disp(' Time warping data')
-for i = 1:size(D.song_r,1)
+for i = 1:3%size(D.song_r,1)
 
     try
         [song_start, song_end, score_d(counter,:)] = find_audio(D.song_r(i,:)', template, fs, 'match_single', true,'constrain_length', 0.25);
-        [WARPED_TIME(:,:,counter) WARPED_audio(:,counter)]  = warp_audio(D.song_r(i,song_start*fs:song_end*fs), template, fs,[]);
+        [WARPED_TIME WARPED_audio(:,counter)]  = warp_audio(D.song_r(i,song_start*fs:song_end*fs), template, fs,[]);
         
         idex(:,counter) = i; % trial number
         disp(['Finished warping ' num2str(counter), 'of ', num2str(size(D.song_r,1))]);
-        
+        WARPED_T{counter} = WARPED_TIME;
       counter = counter+1;
     catch
         disp(['failure. on trial  ', num2str(i)]);
@@ -28,10 +28,7 @@ disp(' Sorting data...')
         D2.song_r = D.song_r(idex,:);
         D2.song_w = WARPED_audio';
         D2.unsorted = D.unsorted(idex,:,:);
-        D2.warped_time = WARPED_TIME;
-        D2.index = idex;
-        D2.motif_ind = D.motif_ind(:,idex);
-        
+        D2.warped_time = WARPED_T;
 
         % smooth data:
         C = downsample(smoothdata(D2.song_w.^2,2,'gaussian',1000)',1000)';
@@ -44,8 +41,8 @@ disp(' Sorting data...')
         D2.song_w = D2.song_w(I,:);
         D2.song_wds = C(I,:);
         D2.unsorted = D2.unsorted(I,:,:);
-        
-        D2.warped_time = D2.warped_time(:,:,I);
+        for i = I
+        D2.warped_time = D2.warped_time{I};
         
         
 disp(' Getting Gcon')
