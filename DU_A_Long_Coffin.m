@@ -16,25 +16,137 @@
 [Gconsensus3,CalciumDat,WARPED_TIME,WARPED_audio,idex,f,t] =  Inscopix_regression(ROI_data_cleansed);
 
 % FREEDOMSCOPE DATA
- %  ** TO DO **
+[FS_ROI_Data] = FS_regression_preprocessing()
+
+% Get SDI
+% Check Spectrogram:
+figure(); FS_Spectrogram(D2.song_r(1,fs*0.25:end-(fs*0.50)),48000);
+
+% Get Gconsensus
+disp(' Getting Gcon');
+fs = 48000;
+[Gconsensus3,f,t] = CY_Get_Consensus(D2.song_w(:,fs*0.25:end-(fs*0.50))',fs);
+% get warped time on same timescale..
+interval = median(diff(D2.warped_time(1,:,1)));
+
+WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.75,:);
+% Start time at zero:
+WT2(1,:,:) = WT(1,:,:)-(WT(1,1,:));
+WT2(2,:,:) = WT(2,:,:)-(WT(2,1,:));
+
+% Make difference vector:
+WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
+% Plot the time vector
+figure(); plot((1:size(WT3))*interval,WT3);
 
 
 % Identify peaks and putaive spike times in Ca data usein deconvolveCa.m, to constrict where to look
 % For regression
 
-  % Method 1: Use average of Ca (~Long Lab) [peak times/window and heights]
 
-  % Method 2: Build histogram of all trials, then threshold this value. [peak times/window and heights]
+  for i = 1:size(D2.unsorted,3);
+[    c(:,i), s(:,i), options(:,i)] = deconvolveCa(mean(D2.unsorted(:,:,i),1));
+  end
+
+% check it
+  figure();
+    for i = 1: 40;
+      hold on;
+      plot(mean(D2.unsorted(:,:,i),1)); hold on; plot(c(:,i)); plot(s(:,i));
+      pause();
+      clf;
+    end
 
 
 
-% ** Run a basic regression from the the 'song similarity' in this window [peak times/window and heights]
+
+  clear DffHeight ChoppedGcon
+      % cut out df/f differences at infered burst moments\
+      counter = 1;
+      % bounds
+      mx = 100;
+      mn =  20;
+      for i = 1: 40; % for every cell
+        clear idx sidx Tidx Gidx
+        [pk,idx] = findpeaks(s(:,i)); % find spike  frame
+
+        for ii = 1:size(idx);
+          sidx = idx(ii)./30; % convert spike to 'time'
+          [cx Gidx] = min(abs(sidx-(t+0.25))); % find the closest index into the Gconsensus
+
+          try
+              %[c Tidx] = min(abs(sidx+0.25-(D2.warped_time(2,:)))); % find the closest index into the Time Vector
+          ChoppedGcon(:,:,:,counter) = Gconsensus3{1}(:,Gidx-30:Gidx+30,:);
+
+          catch
+
+              disp('cutting close on the song...');
+          continue
+          end
+
+          %f1 = D2.warped_time(:,Tidx-20:Tidx+10);
+          %ChoppedSongTime(:,counter) = (f1(1,1)-f1(1,end))-  (f1(2,1)-f1(2,end));
+          try
+            DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+10,i))');
+          catch
+            disp('too close to the end, no pad...');
+            DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):end,i))');
+          end
+         GIndex(1,counter) = i;
+         GIndex(2,counter) = ii;
+
+          counter = counter+1;
 
 
-% ** Run a basic regression from the the 'song timing change' in this window [peak times/window and heights]
+        end
+      end
 
 
-% Run a basic regression on the spectrograms, constrained by the spike window [peak times/window and heights]
+
+      % Sim_score = (ID'd peak * all_song_spectrograms)
+  for ii = 1:size(ChoppedGcon,4); % for every example group
+    Mean_c2 = squeeze(mean(ChoppedGcon(:,:,:,ii),3)); % get the mean for this example
+    for i = 1:size(ChoppedGcon,3) % calc the sim score
+        %sim_score(i)=norm(consensus(:,:,i).*Mean_c)/sqrt(norm(consensus(:,:,i)).*norm(Mean_c));
+        sim_score(ii,i)= sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).*Mean_c2))./sqrt(sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).^2)).*sum(sum(Mean_c2.^2)));
+        %vector_score(:,i) =  (sum(consensus(:,:,i).*Mean_c2))./sqrt((sum(consensus(:,:,i).^2)).*(sum(Mean_c2.^2)));
+    end
+  end
+
+
+
+  %
+  figure();
+
+  for cl = 1:size(ChoppedGcon,4)
+      clf
+  A = sim_score(cl,:)-nanmean(sim_score(cl,:));
+  B = DffHeight(1:500,cl)-nanmean(DffHeight(1:500,cl));
+  subplot(121)
+  plot(A,B,'*');
+  lm = fitlm(A,B,'linear')
+  title(['Cell ', num2str(cl)]);
+  b = find(A>0);
+  b2 = b;
+  b3{cl} = b2;
+  b = find(A<0);
+  b2 = b;
+  b4{cl} = b2;
+  subplot(122)
+  plot(mean(D2.unsorted(:,:,GIndex(1,cl)),1)); hold on;  plot(s(:,cl));
+
+  pause()
+
+  end
+
+
+
+   X2 = mean(Gconsensus3{1}(:,:,b3{5}),3);
+   X1 = mean(Gconsensus3{1}(:,:,b4{5}),3);
+   figure(); XMASS_song(X1,X2,X1);
+
+
+
 
 
 % Are there any correlations across days in the changes in spectorgrams? Do these match changes in Ca?

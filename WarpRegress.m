@@ -11,6 +11,7 @@ disp(' Time warping data')
 for i = 1:size(D.song_r,1)
 
     try
+        
         [song_start, song_end, score_d(counter,:)] = find_audio(D.song_r(i,:)', template, fs, 'match_single', true,'constrain_length', 0.25);
         [WARPED_TIME(:,:,counter) WARPED_audio(:,counter)]  = warp_audio(D.song_r(i,song_start*fs:song_end*fs), template, fs,[]);
         
