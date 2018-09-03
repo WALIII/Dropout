@@ -31,11 +31,14 @@ disp(' Sorting data...')
         D2.unsorted = D.unsorted(idex,:,:);
         D2.warped_time = WARPED_TIME;
         D2.index = idex;
-        D2.motif_ind = D.motif_ind(:,idex);
+        D2.motif_ind = D.Motif_ind(:,idex);
         
 
         % smooth data:
-        C = downsample(smoothdata(D2.song_w.^2,2,'gaussian',1000)',1000)';
+        temp1 = zftftb_rms(D2.song_w',48000);
+        temp2 = downsample(temp1,1000);
+        C = temp2';
+        clear temp1 temp2
         % find outliers:
         TF = isoutlier(C(:,10:40),1);
         I = find(mean(TF')<0.3);
