@@ -26,6 +26,8 @@ counter = counter+1;
 end;
 end;
 
+
+
 Fin2(1,:) = GG2_d2; % timing difference vector
 Fin2(2,:) = cat(2,DataU.sim_score{1:4}); % spectral difference vector
 
