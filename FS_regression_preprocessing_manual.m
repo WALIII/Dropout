@@ -58,6 +58,8 @@ ogfn = pwd;
 
 disp('Processing extracted data...');
 
+FrameRate = 25;
+
 % cd(fn);
 % S = dir(fullfile(pwd,'*.mat')); % load roi data
 
@@ -70,20 +72,20 @@ i = 1;
 
 % make a time vector
 % Make timevector
-tv_calcium = 0:.333:max_dat/30;
+tv_calcium = 0:.333:max_dat/FrameRate;
 
 % extract song
 pad = .25; % seconds
 pad_s = pad*48000; % samples
 
-tv_song_r = pad:48000:max_dat/30;
+tv_song_r = pad:48000:max_dat/FrameRate;
 % Song start and end
-s_st = ((S.align/30)*48000)-pad_s;
-s_end =  ((S.align/30)*48000)+ (max_dat/30)*48000 + pad_s;
+s_st = ((S.align/FrameRate)*48000)-pad_s;
+s_end =  ((S.align/FrameRate)*48000)+ (max_dat/FrameRate)*48000 + pad_s;
 
 %to do ( get the song data out!)
 data{i}.Motif_ind = S.Motif_ind;
-song_align = (S.align/30)*48000;
+song_align = (S.align/FrameRate)*48000;
 data{i}.song_r = S.song_r(:,s_st:s_end);
 data{i}.song = S.song(:,round(s_st/1000):round(s_end/1000));
 
@@ -113,6 +115,17 @@ D.song = cat(1,D.song,data{i}.song);
   end
 
 end
+
+% extract undirected songs only:
+disp('extracting ONLY undirected songs...') % comment out for all songs...
+NID = find(D.Motif_ind(3,:) ==0);
+
+D.song = D.song(NID,:);
+D.song_r = D.song_r(NID,:);
+D.unsorted = D.unsorted(NID,:,:);
+D.Motif_ind = D.Motif_ind(:,NID);
+
+
 
 D.tv = tv_song_r;
 % save('processed/Combined_data.mat','D','-v7.3');

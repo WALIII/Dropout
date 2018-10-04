@@ -35,7 +35,10 @@ disp(' Sorting data...')
         
 
         % smooth data:
-        C = downsample(smoothdata(D2.song_w.^2,2,'gaussian',1000)',1000)';
+        temp1 = zftftb_rms(D2.song_w',48000);
+        temp2 = downsample(temp1,1000);
+        C = temp2';
+        clear temp1 temp2
         % find outliers:
         TF = isoutlier(C(:,10:40),1);
         I = find(mean(TF')<0.3);
