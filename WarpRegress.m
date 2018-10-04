@@ -1,8 +1,28 @@
-function D2 = WarpRegress(D);
+function D2 = WarpRegress(D,varargin);
 %load('Combined_data.mat')
 warning off
 
-template = D.song_r(65,:)'; % add zeros to pad
+
+nparams=length(varargin);
+
+if mod(nparams,2)>0
+	error('Parameters must be specified as parameter/value pairs');
+end
+
+
+template = D.song_r(1,:)'; % add zeros to pad
+
+for i=1:2:nparams
+	switch lower(varargin{i})
+		case 'template'
+			template=varargin{i+1};
+		case 'sono_colormap'
+			sono_colormap=varargin{i+1};
+    end
+end
+
+            
+            
 fs = 48000;
 
 
