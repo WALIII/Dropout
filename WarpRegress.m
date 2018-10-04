@@ -2,7 +2,7 @@ function D2 = WarpRegress(D);
 %load('Combined_data.mat')
 warning off
 
-template = D.song_r(1,:)'; % add zeros to pad
+template = D.song_r(65,:)'; % add zeros to pad
 fs = 48000;
 
 
@@ -12,7 +12,7 @@ for i = 1:size(D.song_r,1)
 
     try
         
-        [song_start, song_end, score_d(counter,:)] = find_audio(D.song_r(i,:)', template, fs, 'match_single', true,'constrain_length', 0.25);
+        [song_start, song_end, score_d(counter,:)] = find_audio(D.song_r(i,:)', template, fs, 'match_single', true,'constrain_length', 0.4);
         [WARPED_TIME(:,:,counter) WARPED_audio(:,counter)]  = warp_audio(D.song_r(i,song_start*fs:song_end*fs), template, fs,[]);
         
         idex(:,counter) = i; % trial number
@@ -31,7 +31,7 @@ disp(' Sorting data...')
         D2.unsorted = D.unsorted(idex,:,:);
         D2.warped_time = WARPED_TIME;
         D2.index = idex;
-        D2.motif_ind = D.motif_ind(:,idex);
+        D2.motif_ind = D.Motif_ind(:,idex);
         
 
         % smooth data:
