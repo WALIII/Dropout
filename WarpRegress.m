@@ -30,7 +30,7 @@ counter = 1;
 disp(' Time warping data')
 
 % Pre alocate warped audio
-for i = 1:10%size(D.song_r,1)
+for i = 1:size(D.song_r,1)
 
     try
         

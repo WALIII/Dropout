@@ -12,11 +12,11 @@
 
 % Load in data, and get the relevant features.
 
-% INSCOPIX DATA
-[Gconsensus3,CalciumDat,WARPED_TIME,WARPED_audio,idex,f,t] =  Inscopix_regression(ROI_data_cleansed);
+%% INSCOPIX DATA
+%[Gconsensus3,CalciumDat,WARPED_TIME,WARPED_audio,idex,f,t] =  Inscopix_regression(ROI_data_cleansed);
 
 % FREEDOMSCOPE DATA
-[FS_ROI_Data] = FS_regression_preprocessing() % for new, FS data...
+[FS_ROI_Data] = FS_regression_preprocessing() % for new, FS data..., run in folder with extrated data
 
 [FS_ROI_Data] = FS_regression_preprocessing_manual();  % for already extracted data
 
@@ -26,28 +26,29 @@ D2 = WarpRegress(FS_ROI_Data);
 
 % Get SDI
 % Check Spectrogram:
-  figure(); FS_Spectrogram(D2.song_r(1,fs*0.25:end-(fs*0.50)),48000);
+fs = 48000;
+  figure(); FS_Spectrogram(D2.song_r(1,fs*0.25:end-(fs*0.50)),fs);
 
 % Get Gconsensus
   disp(' Getting Gcon');
   fs = 48000;
-  [Gconsensus3,f,t] = CY_Get_Consensus(D2.song_w(:,fs*0.25:end-(fs*0.50))',fs);
+  [Gconsensus3,f,t] = CY_Get_Consensus(D2.song_w(:,fs*0.25:end-(fs*0.50))',48000);
 % get warped time on same timescale..
-  interval = median(diff(D2.warped_time(1,:,1)));
+  % interval = median(diff(D2.warped_time(1,:,1)));
 
-  WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.75,:);
-% Start time at zero:
-    WT2(1,:,:) = WT(1,:,:)-(WT(1,1,:));
-    WT2(2,:,:) = WT(2,:,:)-(WT(2,1,:));
-
-% Make difference vector:
-    WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
-% Plot the time vector
-  figure(); plot((1:size(WT3))*interval,WT3);
+  % WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.75,:);
+% % Start time at zero:
+%     WT2(1,:,:) = WT(1,:,:)-(WT(1,1,:));
+%     WT2(2,:,:) = WT(2,:,:)-(WT(2,1,:));
+%
+% % Make difference vector:
+%     WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
+% % Plot the time vector
+%   figure(); plot((1:size(WT3))*interval,WT3);
 
 
 % Identify peaks and putaive spike times in Ca data usein deconvolveCa.m, to constrict where to look
-% For regression
+% For regression. Repeat for every day independantly.
   for i = 1:size(D2.unsorted,3);
 [    c(:,i), s(:,i), options(:,i)] = deconvolveCa(mean(D2.unsorted(:,:,i),1)-min(mean(D2.unsorted(:,:,i),1)));
   end
@@ -63,7 +64,9 @@ D2 = WarpRegress(FS_ROI_Data);
 
 
 % Make boxplots ( work in progress...)
+% TO DO: we want the 'height' as well as area under curve...
 tempScrap(s,c,Gconsensus3,D2,t);
+
 
 
 

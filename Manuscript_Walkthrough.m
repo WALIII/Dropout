@@ -30,7 +30,7 @@ DirUndir_Plot(DataD,DataU) % plotting and basic visuals
 
 
 %--------=======[  ROI Analysis ]=======--------%
-
+ %% this is what will go in the paper...
 
 %    ** ROI Amplitude analysis **
 
