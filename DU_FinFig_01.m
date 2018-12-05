@@ -45,31 +45,31 @@ load('input_data.mat');
 
 
 
-[out{k}] = tempScrap(s,c,Gconsensus3,D2,t);
+[out{i}] = tempScrap(s,c,Gconsensus3,D2,t);
 
 
 cd(START_DIR_ROOT);
   end
 
-for i = 1: size(out)
+for i = 1: size(out,2)
+    
+        out2 =  Block_Sort(out{i}.sim_score,out{i}.DffHeight,out{i}.ChoppedAvect,out{i}.DffIntegrate,out{i}.amplitude_score, out{i}.ChoppedGcon);
+
 if i ==1;
-sim_score = out{i}.sim_score;
-DffHeight = out{i}.DffHeight;
-ChoppedAvect = out{i}.ChoppedAvect;
-DffIntegrate = out{i}.DffIntegrate;
-amplitude_score = out{i}.amplitude_score;
-ChoppedGcon = out{i}.ChoppedGcon;
+At = out2.At;
+Bt = out2.Bt;
+Ct = out2.Ct;
+Dt = out2.Dt;
+Et = out2.Et;
 else
-  sim_score = [sim_score,out{i}.sim_score]
-  DffHeight = [DffHeight,out{i}.DffHeight];
-  ChoppedAvect = [ChoppedAvect,out{i}.ChoppedAvect];
-  DffIntegrate = [DffIntegrate. out{i}.DffIntegrate];
-  amplitude_score = [amplitude_score, out{i}.amplitude_score];
-  ChoppedGcon = [ChoppedGcon,out{i}.ChoppedGcon];
+At = cat(2,At, out2.At);
+Bt = cat(2,Bt, out2.Bt);
+Ct = cat(2,Ct,out2.Ct);
+Dt = cat(2,Dt,out2.Dt);
+Et = cat(2,E2,out2.Et);
 end
 end
 
- Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);
 
 
   %Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);
