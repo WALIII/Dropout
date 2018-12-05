@@ -1,4 +1,4 @@
-function Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);
+function [out] = Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);
 
 
 %% Split data into boxplots...
@@ -146,7 +146,12 @@ hold on;
 errorbar(1:length(Bxv),Bxv,err)
 errorbar(1:length(Bxv2),Bxv2,err2)
     
-    
-% 
+  
+out.At = At;
+out.Bt = Bt;
+out.Ct = Ct;
+out.Dt = Dt;
+out.Et = Et;
+
 % hold on;
 % end
