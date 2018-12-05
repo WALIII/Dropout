@@ -41,13 +41,39 @@ pad_after = 0;
     disp(['entering folder  ', char(subFolders(i).name)])
     cd([subFolders(i).name,'/processed'])
 
-load('input_data.mat')
+load('input_data.mat');
 
-[out] = tempScrap(s,c,Gconsensus3,D2,t);
+
+
+[out{k}] = tempScrap(s,c,Gconsensus3,D2,t);
 
 
 cd(START_DIR_ROOT);
   end
+
+for i = 1: size(out)
+if i ==1;
+sim_score = out{i}.sim_score;
+DffHeight = out{i}.DffHeight;
+ChoppedAvect = out{i}.ChoppedAvect;
+DffIntegrate = out{i}.DffIntegrate;
+amplitude_score = out{i}.amplitude_score;
+ChoppedGcon = out{i}.ChoppedGcon;
+else
+  sim_score = [sim_score,out{i}.sim_score]
+  DffHeight = [DffHeight,out{i}.DffHeight];
+  ChoppedAvect = [ChoppedAvect,out{i}.ChoppedAvect];
+  DffIntegrate = [DffIntegrate. out{i}.DffIntegrate];
+  amplitude_score = [amplitude_score, out{i}.amplitude_score];
+  ChoppedGcon = [ChoppedGcon,out{i}.ChoppedGcon];
+end
+end
+
+ Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);
+
+
+  %Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);
+
 
 
   % Save figures, and output functions with params concatnated

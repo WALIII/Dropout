@@ -99,9 +99,9 @@ end
 
 out.sim_score = sim_score;
 out.DffHeight = DffHeight;
-out.ChoppedAvect = ChoppedAvect;
-out.DffIntegrate = DffIntegrate;
-out.amplitude_score = amplitude_score;
+out.ChoppedAvect = ChoppedAvect
+out.DffIntegrate = DffIntegrate
+out.amplitude_score = amplitude_score
 out.ChoppedGcon = ChoppedGcon;
 
 
