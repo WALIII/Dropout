@@ -33,12 +33,12 @@ cd(ogfn)
     load(filename{i})
 
 disp(['loading  ',filename{i}]);
-[calcium, DATA_D, song_r, song, align, Motif_ind, BGD, stretch] =  FS_PreMotor(roi_ave,TEMPLATE);
+[calcium, DATA_D, song_r, song, align, Motif_ind, BGD] =  FS_PreMotor(roi_ave,TEMPLATE);
 
 
 
 % save data
-save(['extraction/',filename{i}(1:end-4),'_extrected.mat'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD', 'stretch','-v7.3');
+save(['extraction/',filename{i}(1:end-4),'_extrected.mat'],'calcium', 'DATA_D', 'song_r', 'song', 'align', 'Motif_ind', 'BGD','-v7.3');
 
 end
 

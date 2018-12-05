@@ -98,7 +98,11 @@ disp(' Sorting data...')
         D2.unsorted = D2.unsorted(I,:,:);
         
         D2.warped_time = D2.warped_time(:,:,I);
-        
+        try % legacy
+        D2.motif_ind = D.Motif_ind(:,I);
+        catch
+        D2.motif_ind = D.motif_ind(:,I);
+        end
         
 disp(' Getting Gcon')
 %[Gconsensus3,f,t] = CY_Get_Consensus(D2.song_w,fs);

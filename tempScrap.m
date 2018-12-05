@@ -6,14 +6,15 @@ function [out] = tempScrap(s,c,Gconsensus3,D2,t);
 
     % cut out df/f differences at infered burst moments\
     counter = 1;
+    fs = 48000;
     % bounds
-    mx = 100;
-    mn =  20;
-    fr = 25 % 25 fps
+time_window = 0.001;% 33 ms
+    fr = 30; % 25 fps
+    frames = 5;
     
 % Get audio difference vector: 
 interval = median(diff(D2.warped_time(1,:,1)));
-WT = D2.warped_time(:,(1/interval)*0.01:end-(1/interval)*0.01,:);
+WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.5,:);
 % Start time at zero:
 WT2(1,:,:) = WT(1,:,:)-(WT(1,1,:));
 WT2(2,:,:) = WT(2,:,:)-(WT(2,1,:));
@@ -22,21 +23,26 @@ WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
 aVect = (1:size(WT3))*interval;
 clear WT2 WT% free up memory
 
+% Build windows ( ~ 1 frame)
+    mx = 50;
+    mn = 50;%time_window/mean(diff(aVect));
 
 
-    for i = 1: 20; % for every cell
+    for i = 1:size(s,2); % for every cell
       clear idx sidx Tidx Gidx
-      [pk,idx] = findpeaks(s(:,i)); % find spike  frame
+      [pk,idx] = findpeaks(s(:,i),'MinPeakProminence',0.1); % find spike  frame
 
       for ii = 1:size(idx);
         sidx = idx(ii)./fr; % convert spike to 'time'
         [cx Gidx] = min(abs(sidx-(t))); % find the closest index into the Gconsensus
         [ax Aidx] = min(abs(sidx-(aVect))); % find the closest index into the Gconsensus
+        %[Tx Tidx] = min(abs(sidx-(aVect))); % find the closest index into the audio
 
         try
             %[c Tidx] = min(abs(sidx+0.25-(D2.warped_time(2,:)))); % find the closest index into the Time Vector
-        ChoppedGcon(:,:,:,counter) = Gconsensus3{1}(:,Gidx-150:Gidx,:);
-        ChoppedAvect(:,counter) = sum(diff(WT3(Aidx-20:Aidx,:)-WT3(Aidx-20,:))); % get sum of timing diffetence in this window
+        ChoppedGcon(:,:,:,counter) = Gconsensus3{1}(:,Gidx-mx:Gidx,:);
+        ChoppedAvect(:,counter) = sum(diff(WT3(Aidx-mn:Aidx,:)-WT3(Aidx-mn,:))); % get sum of timing diffetence in this window
+        AudioVect(:,:,counter) = D2.song_w(:,(0.25*fs+sidx*fs-+0.10*fs):(0.25*fs+sidx*fs)+0.033*fs); % get audio chopped out...
         catch
             
             disp('cutting close on the song...');
@@ -46,10 +52,10 @@ clear WT2 WT% free up memory
         %f1 = D2.warped_time(:,Tidx-20:Tidx+10);
         %ChoppedSongTime(:,counter) = (f1(1,1)-f1(1,end))-  (f1(2,1)-f1(2,end));
         try
-          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+10,i))')-min(squeeze(D2.unsorted(:,:,i))');
+          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+frames,i))')-min(squeeze(D2.unsorted(:,:,i))');
           
-                for a = 1:size(D2.unsorted(:,idx(ii):idx(ii)+10,i),1);
-                   x1 = (squeeze(D2.unsorted(a,idx(ii):idx(ii)+10,i))'-min(squeeze(D2.unsorted(a,:,i))'));
+                for a = 1:size(D2.unsorted(:,idx(ii):idx(ii)+frames,i),1);
+                   x1 = (squeeze(D2.unsorted(a,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(a,:,i))'));
                    DffIntegrate(a,counter) = trapz(1:length(x1),x1);
                 end
 
@@ -75,10 +81,18 @@ disp( 'Getting the Similarity Score');
     % Sim_score = (ID'd peak * all_song_spectrograms)
 for ii = 1:size(ChoppedGcon,4); % for every example group
   Mean_c2 = squeeze(mean(ChoppedGcon(:,:,:,ii),3)); % get the mean for this example
+  Mean_amp = mean(squeeze(mean(abs(AudioVect(:,:,ii)),2)));
   for i = 1:size(ChoppedGcon,3) % calc the sim score
       %sim_score(i)=norm(consensus(:,:,i).*Mean_c)/sqrt(norm(consensus(:,:,i)).*norm(Mean_c));
-      sim_score(ii,i)= sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).*Mean_c2))./sqrt(sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).^2)).*sum(sum(Mean_c2.^2)));
+      sim_score(ii,i)= sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).*Mean_c2))./sqrt(sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).^2)).*sum(sum(Mean_c2.^2))+.1);
+      amplitude_score(ii,i) = mean(squeeze(abs(AudioVect(:,i,ii))))-Mean_amp;
       %vector_score(:,i) =  (sum(consensus(:,:,i).*Mean_c2))./sqrt((sum(consensus(:,:,i).^2)).*(sum(Mean_c2.^2)));
+ if sum(sum(isnan(sim_score))) >1;
+     sim_score(isnan(sim_score))=0;
+     disp('warning! Nans are afoot');
+ end
+ 
+         
   end
 end
 
@@ -91,22 +105,24 @@ end
 figure(); 
 
 clear g I Chl Ahl At Ct
-sz = size(sim_score,2);
-for cl = 1:size(ChoppedGcon,4); % for every song segment
+trials = size(sim_score,2);
+for ROI_Peak = 1:size(ChoppedGcon,4); % for every song segment
     clf
-A = zscore(sim_score(cl,:));
-B = zscore(DffHeight(1:sz,cl));%-nanmean(DffHeight(1:500,cl));
-C = abs(ChoppedAvect(1:sz,cl)-nanmean(ChoppedAvect(1:sz,cl)));
-D = zscore(DffIntegrate(1:sz,cl));%-nanmean(DffHeight(1:500,cl));
-
+A = zscore(sim_score(ROI_Peak,:));
+B = zscore(DffHeight(1:trials,ROI_Peak))-nanmin(zscore(DffHeight(1:trials,ROI_Peak)));
+C = abs(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak))); % sound difference
+D = zscore(DffIntegrate(1:trials,ROI_Peak))-nanmin(zscore(DffHeight(1:trials,ROI_Peak)));
+E = zscore(amplitude_score(ROI_Peak,:));
 % consolidate data..
-Aa(:,cl) = A;
-Ba(:,cl) = B;
-Ca(:,cl) = C;
-Da(:,cl) = D;
+Aa(:,ROI_Peak) = A;
+Ba(:,ROI_Peak) = B;
+Ca(:,ROI_Peak) = C;
+Da(:,ROI_Peak) = D;
+Ea(:,ROI_Peak) = E;
 %C = abs(zscore(ChoppedAvect(1:400,cl)));
+% B = (B - min(B)) / ( max(B) - min(B) );\
 
-% B = (B - min(B)) / ( max(B) - min(B) );
+
 
 
 siz = 4; % cut data into even blocks, in time, based on the time vect
@@ -115,23 +131,34 @@ g = floor(size(C,1)/siz);
 
 for i = 1:(siz-1); %val * group
     if i ==1;
-Chl(:,i) = B(I(1:g));
+
 Ahl(:,i) = A(I(1:g));
+Bhl(:,i) = B(I(1:g));
+Chl(:,i) = C(I(1:g));
 Dhl(:,i) = D(I(1:g));
+Ehl(:,i) = E(I(1:g));
+SplitGcon(:,:,i,ROI_Peak) = mean(squeeze(ChoppedGcon(:,:,I(1:g),ROI_Peak)),3);
     else
 
-Chl(:,i) = B(I(g*i+1:g*(i+1)));
+Chl(:,i) = C(I(g*i+1:g*(i+1)));
 Ahl(:,i) = A(I(g*i+1:g*(i+1)));
+Bhl(:,i) = B(I(g*i+1:g*(i+1)));
 Dhl(:,i) = D(I(g*i+1:g*(i+1)));
+Ehl(:,i) = E(I(g*i+1:g*(i+1)));
+SplitGcon(:,:,i,ROI_Peak) = mean(squeeze(ChoppedGcon(:,:,I(g*i+1:g*(i+1)),ROI_Peak)),3);
+
     end
 end
 
 % mean of the dff for each time section ( eventually, every dot is the mean
 % ROI df/f for the 1-33%, 34-67% and 68-99% most streached songs)
 
-Ct(cl,:) = mean(Chl,1); 
-At(cl,:) = mean(Ahl,1);
-Dt(cl,:) = mean(Dhl,1);
+
+At(ROI_Peak,:) = mean(Ahl,1); % mean dff for this segment
+Bt(ROI_Peak,:) = mean(Bhl,1); 
+Ct(ROI_Peak,:) = mean(Chl,1); 
+Dt(ROI_Peak,:) = mean(Dhl,1);
+Et(ROI_Peak,:) = mean(Ehl,1);
 
 % all values:
 % for iii = 1:3
@@ -157,8 +184,10 @@ end
 
 % Normalize data- output is mean dff (across the quartile) for each
 % 'event'
-NDATA = mat2gray(Ct);
-NDATA2 = mat2gray(Dt);
+NDATA = mat2gray(Dt);
+NDATA2 = mat2gray(At);
+NDATA3 = mat2gray(Et);
+
 figure();
 boxplot(NDATA,'Notch','on');
 title('df/f as a function of applied time warping');
@@ -169,13 +198,61 @@ boxplot(NDATA2,'Notch','on');
 title('Normalized Song Similarity as a function of warping');
 ylabel('Song Similarity');
 
+
+figure();
+boxplot(NDATA3,'Notch','on');
+title('Normalized Song Amplitude as a function of warping');
+ylabel('Song Similarity');
+
+
 figure(); 
-subplot(121);
+subplot(131);
 plotSpread(NDATA);
 title('df/f as a function of applied time warping');
-subplot(122);
+subplot(132);
 plotSpread(NDATA2);
 title('Normalized Song Similarity as a function of warping');
+subplot(133);
+plotSpread(NDATA3);
+title('Normalized Song Amplitude as a function of warping');
+
+
+% Song amplitude vs Df/f
+figure(); 
+hold on;
+% col = ['r','g','b','c']
+% for ix = 1:4;
+    hold on;
+%plot(((Dt(:,ix))),((Ct(:,ix))),'o','Color',col(ix));
+clear ttt2 ttt toplot toplot2
+figure(); plot(mat2gray(Ea(:)),mat2gray(Da(:)),'o');
+test1 = mat2gray(Da(:));
+test2 = mat2gray(Ba(:));
+test3 = mat2gray(Ea(:));
+counter = 1;
+for i = 0:.1:1;
+    toplot{counter} = test1(find(test3>i & test3<(i+1)));
+    toplot2{counter} = test2(find(test3>i & test3<(i+1)));
+
+
+    Bxv(:,counter) = mean(toplot{counter});
+    err(:,counter) = std(toplot{counter})/sqrt(length(toplot{counter}));
+    
+    Bxv2(:,counter) = mean(toplot2{counter});
+    err2(:,counter) = std(toplot2{counter})/sqrt(length(toplot2{counter}));
+    
+
+counter = counter+1;
+end
+figure(); 
+hold on;
+errorbar(1:length(Bxv),Bxv,err)
+errorbar(1:length(Bxv2),Bxv2,err2)
+    
+    
+% 
+% hold on;
+% end
 
 
 out.dff = NDATA;
