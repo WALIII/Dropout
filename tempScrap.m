@@ -1,36 +1,67 @@
 
-function [out] = tempScrap(s,c,Gconsensus3,D2,t);
+function [out] = tempScrap(s,c,Gconsensus3,D2,t,varargin);
 % 
 
-% function for taking CaIM data and checking the effect of time warping
-
-    % cut out df/f differences at infered burst moments\
+% function for taking CaIM data and checking the effect of time warping % cut out df/f differences at infered burst moments\
+   
+% Default inputs
     counter = 1;
     fs = 48000;
     % bounds
-time_window = 0.001;% 33 ms
+    time_window = 0.001;% 33 ms
     fr = 30; % 25 fps
     frames = 5;
+% Build windows ( ~ 1 frame)
+    mx = 100;
+    mn = 100;%time_window/mean(diff(aVect));
+    thresh = 0.1;
+    
+    
+    %% Custom Paramaters
+nparams=length(varargin);
+
+if mod(nparams,2)>0
+    error('Parameters must be specified as parameter/value pairs');
+end
+
+for i=1:2:nparams
+    switch lower(varargin{i})
+        case 'fs'
+            fs=varargin{i+1};
+        case 'fr' % Firing rate
+            fr=varargin{i+1};
+        case 'frames'
+            frames=varargin{i+1};
+        case 'mx'
+            mx=varargin{i+1};
+            mn=varargin{i+1};
+       case 'thresh'
+           thresh=varargin{i+1};
+     
+    end
+end
+
+    
+    
     
 % Get audio difference vector: 
-interval = median(diff(D2.warped_time(1,:,1)));
-WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.5,:);
+    interval = median(diff(D2.warped_time(1,:,1)));
+    WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.5,:);
 % Start time at zero:
-WT2(1,:,:) = WT(1,:,:)-(WT(1,1,:));
-WT2(2,:,:) = WT(2,:,:)-(WT(2,1,:));
+    WT2(1,:,:) = WT(1,:,:)-(WT(1,1,:));
+    WT2(2,:,:) = WT(2,:,:)-(WT(2,1,:));
 % Make difference vector:
-WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
-aVect = (1:size(WT3))*interval;
-clear WT2 WT% free up memory
+    WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
+    aVect = (1:size(WT3))*interval;
+    clear WT2 WT% free up memory
 
-% Build windows ( ~ 1 frame)
-    mx = 50;
-    mn = 50;%time_window/mean(diff(aVect));
+ 
 
 
+% Get Peaks in Dff
     for i = 1:size(s,2); % for every cell
       clear idx sidx Tidx Gidx
-      [pk,idx] = findpeaks(s(:,i),'MinPeakProminence',0.1); % find spike  frame
+      [pk,idx] = findpeaks(s(:,i),'MinPeakProminence',thresh); % find spike  frame
 
       for ii = 1:size(idx);
         sidx = idx(ii)./fr; % convert spike to 'time'
@@ -58,7 +89,6 @@ clear WT2 WT% free up memory
                    x1 = (squeeze(D2.unsorted(a,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(a,:,i))'));
                    DffIntegrate(a,counter) = trapz(1:length(x1),x1);
                 end
-
         catch
           disp('too close to the end, no pad...');
           DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):end,i))')-min(squeeze(D2.unsorted(:,:,i))');
@@ -68,15 +98,14 @@ clear WT2 WT% free up memory
                    end
           end
        GIndex(1,counter) = i;
-       GIndex(2,counter) = ii;
-       
-        counter = counter+1;
-      
-      
+       GIndex(2,counter) = ii;      
+        counter = counter+1;      
       end
     end
 
+    
 disp( 'Getting the Similarity Score'); 
+
 
     % Sim_score = (ID'd peak * all_song_spectrograms)
 for ii = 1:size(ChoppedGcon,4); % for every example group

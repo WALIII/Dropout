@@ -45,15 +45,16 @@ load('input_data.mat');
 
 
 
-[out{i}] = tempScrap(s,c,Gconsensus3,D2,t);
+[out{i}] = tempScrap(s,c,Gconsensus3,D2,t,inputs);
 
 
 cd(START_DIR_ROOT);
-  end
+    end
 
+  for cho = 3;
 for i = 1: size(out,2)
     
-        out2 =  Block_Sort(out{i}.sim_score,out{i}.DffHeight,out{i}.ChoppedAvect,out{i}.DffIntegrate,out{i}.amplitude_score, out{i}.ChoppedGcon);
+        out2 =  Block_Sort(out{i}.sim_score,out{i}.DffHeight,out{i}.ChoppedAvect,out{i}.DffIntegrate,out{i}.amplitude_score, out{i}.ChoppedGcon, cho);
 
 if i ==1;
 At = out2.At;
@@ -62,14 +63,17 @@ Ct = out2.Ct;
 Dt = out2.Dt;
 Et = out2.Et;
 else
-At = cat(2,At, out2.At);
-Bt = cat(2,Bt, out2.Bt);
-Ct = cat(2,Ct,out2.Ct);
-Dt = cat(2,Dt,out2.Dt);
-Et = cat(2,E2,out2.Et);
+At = cat(1,At, out2.At);
+Bt = cat(1,Bt, out2.Bt);
+Ct = cat(1,Ct,out2.Ct);
+Dt = cat(1,Dt,out2.Dt);
+Et = cat(1,Et,out2.Et);
 end
 end
+DU_BoxPlot_FF(At,Bt,Ct,Dt,Et);
 
+
+  end
 
 
   %Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);
