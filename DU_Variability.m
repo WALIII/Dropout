@@ -57,7 +57,9 @@ end
 
 % % %%+++++ FIGURE 02 +++++++%%
 % Plot population Histogram
+try
 figure();
+
 subplot(121)
 hold on;
 h2 = histogram(U_seg(:),'FaceColor','m')
@@ -75,7 +77,9 @@ h1.Normalization = 'probability';
 h1.BinWidth = 0.1;
 h2.Normalization = 'probability';
 h2.BinWidth = 0.1;
-
+catch
+    disp('error...');
+end
 
 %% % %%+++++ FIGURE 03 +++++++%%
 % FS_plotCDF(sumU(:),sumD(:))
