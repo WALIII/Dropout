@@ -19,6 +19,7 @@ pad_after = 0;
   %
 
   % Run through everything
+  
 
   % Get a list of all files and folders in this folder.
 
@@ -45,13 +46,13 @@ load('input_data.mat');
 
 
 
-[out{i}] = tempScrap(s,c,Gconsensus3,D2,t,inputs);
+[out{i}] = tempScrap(s,c,Gconsensus3,D2,t);
 
 
 cd(START_DIR_ROOT);
     end
 
-  for cho = 3;
+  for cho = 2;
 for i = 1: size(out,2)
     
         out2 =  Block_Sort(out{i}.sim_score,out{i}.DffHeight,out{i}.ChoppedAvect,out{i}.DffIntegrate,out{i}.amplitude_score, out{i}.ChoppedGcon, cho);
