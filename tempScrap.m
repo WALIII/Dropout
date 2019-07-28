@@ -5,6 +5,7 @@ function [out] = tempScrap(s,c,Gconsensus3,D2,t,varargin);
 % function for taking CaIM data and checking the effect of time warping % cut out df/f differences at infered burst moments\
 
 % Default inputs
+Fig_Plotting = 0; % plot figures for each run///
     counter = 1;
     fs = 48000;
     % bounds
@@ -136,7 +137,7 @@ out.ChoppedGcon = ChoppedGcon;
 
 
 % Plot
-
+if Fig_Plotting ==1;
 % Split data into boxplots...
 figure();
 
@@ -280,7 +281,6 @@ for i = 0:.1:1;
 
 counter = counter+1;
 end
-
 % figure();
 % hold on;
 % errorbar(1:length(Bxv),Bxv,err)
@@ -292,13 +292,14 @@ end
 % end
 
 
-% out.dff = NDATA; % dff
-% out.int = NDATA2; % integration
-% out.int = NDATA3; % Amplitude
-% out.B = Ba(:);
-% out.C = Ca(:);
-% out.A = Aa(:);
-% out.D = Da(:);
+out.dff = NDATA; % dff
+out.int = NDATA2; % integration
+out.int = NDATA3; % Amplitude
+out.B = Ba(:);
+out.C = Ca(:);
+out.A = Aa(:);
+out.D = Da(:);
+end
 
 % for iii = 1:3;
 % aa = totAt(:,:,iii);
