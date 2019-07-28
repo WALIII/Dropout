@@ -1,4 +1,4 @@
-function [out] = Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon,cho);
+function DU_PlotFeatures(sim_score, DffHeight,ChoppedAvect,DffIntegrate,amplitude_score)
 % Plot features from tempScrap.m
 
 % NOTE: this is redundant with Bloack_sort!
@@ -6,19 +6,18 @@ function [out] = Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplit
 % WAL3 07/26/19
 
 
-%% Split data into boxplots...
-Fig_plotting ==1; % plot figures
 
-
-
+% Split data into boxplots...
 figure();
+
+clear g I Chl Ahl At Ct
 trials = size(sim_score,2);
 for ROI_Peak = 1:size(ChoppedGcon,4); % for every song segment
     clf
 A = zscore(sim_score(ROI_Peak,:));
-B = zscore(DffHeight(1:trials,ROI_Peak));
-C = abs(zscore(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak)))); % sound difference
-D = zscore(DffIntegrate(1:trials,ROI_Peak));
+B = zscore(DffHeight(1:trials,ROI_Peak))-nanmin(zscore(DffHeight(1:trials,ROI_Peak)));
+C = abs(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak))); % sound difference
+D = zscore(DffIntegrate(1:trials,ROI_Peak))-nanmin(zscore(DffHeight(1:trials,ROI_Peak)));
 E = zscore(amplitude_score(ROI_Peak,:));
 % consolidate data..
 Aa(:,ROI_Peak) = A;
@@ -30,19 +29,9 @@ Ea(:,ROI_Peak) = E;
 % B = (B - min(B)) / ( max(B) - min(B) );\
 
 
-
 siz = 4; % cut data into even blocks, in time, based on the time vect
-
-if cho ==1;
-[Bi,I] = sort(A');
-g = floor(size(A',1)/siz);
-elseif cho ==2;
-[Bi,I] = sort(B);
-g = floor(size(B,1)/siz);
-elseif cho ==3;
 [Bi,I] = sort(C);
 g = floor(size(C,1)/siz);
-end
 
 for i = 1:(siz-1); %val * group
     if i ==1;
@@ -52,6 +41,7 @@ Bhl(:,i) = B(I(1:g));
 Chl(:,i) = C(I(1:g));
 Dhl(:,i) = D(I(1:g));
 Ehl(:,i) = E(I(1:g));
+SplitGcon(:,:,i,ROI_Peak) = mean(squeeze(ChoppedGcon(:,:,I(1:g),ROI_Peak)),3);
     else
 
 Chl(:,i) = C(I(g*i+1:g*(i+1)));
@@ -59,6 +49,8 @@ Ahl(:,i) = A(I(g*i+1:g*(i+1)));
 Bhl(:,i) = B(I(g*i+1:g*(i+1)));
 Dhl(:,i) = D(I(g*i+1:g*(i+1)));
 Ehl(:,i) = E(I(g*i+1:g*(i+1)));
+SplitGcon(:,:,i,ROI_Peak) = mean(squeeze(ChoppedGcon(:,:,I(g*i+1:g*(i+1)),ROI_Peak)),3);
+
     end
 end
 
@@ -71,7 +63,6 @@ Bt(ROI_Peak,:) = mean(Bhl,1);
 Ct(ROI_Peak,:) = mean(Chl,1);
 Dt(ROI_Peak,:) = mean(Dhl,1);
 Et(ROI_Peak,:) = mean(Ehl,1);
-
 
 % all values:
 % for iii = 1:3
@@ -97,14 +88,6 @@ end
 
 % Normalize data- output is mean dff (across the quartile) for each
 % 'event'
-
-
-
-if Fig_plotting ==1;
-% FIgures
-
-
-
 NDATA = mat2gray(Dt);
 NDATA2 = mat2gray(At);
 NDATA3 = mat2gray(Et);
@@ -119,12 +102,12 @@ boxplot(NDATA2,'Notch','on');
 title('Normalized Song Similarity as a function of warping');
 ylabel('Song Similarity');
 
-%
+
 figure();
 boxplot(NDATA3,'Notch','on');
 title('Normalized Song Amplitude as a function of warping');
 ylabel('Song Similarity');
-%
+
 
 figure();
 subplot(131);
@@ -144,7 +127,7 @@ hold on;
 % col = ['r','g','b','c']
 % for ix = 1:4;
     hold on;
-% plot(((Dt(:,ix))),((Ct(:,ix))),'o','Color',col(ix));
+%plot(((Dt(:,ix))),((Ct(:,ix))),'o','Color',col(ix));
 clear ttt2 ttt toplot toplot2
 figure(); plot(mat2gray(Ea(:)),mat2gray(Da(:)),'o');
 test1 = mat2gray(Da(:));
@@ -165,17 +148,30 @@ for i = 0:.1:1;
 
 counter = counter+1;
 end
-figure();
-hold on;
-errorbar(1:length(Bxv),Bxv,err)
-errorbar(1:length(Bxv2),Bxv2,err2)
+
 end
-
-out.At = At;
-out.Bt = Bt;
-out.Ct = Ct;
-out.Dt = Dt;
-out.Et = Et;
-
+% figure();
 % hold on;
+% errorbar(1:length(Bxv),Bxv,err)
+% errorbar(1:length(Bxv2),Bxv2,err2)
+
+
+%
+% hold on;
+% end
+
+
+% out.dff = NDATA; % dff
+% out.int = NDATA2; % integration
+% out.int = NDATA3; % Amplitude
+% out.B = Ba(:);
+% out.C = Ca(:);
+% out.A = Aa(:);
+% out.D = Da(:);
+
+% for iii = 1:3;
+% aa = totAt(:,:,iii);
+% aa1(:,iii) = aa(:);
+% ad = totDt(:,:,iii);
+% ad1(:,iii) = ad(:);
 % end
