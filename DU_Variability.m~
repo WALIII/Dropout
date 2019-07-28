@@ -6,8 +6,7 @@ function [stats var_data] =  DU_Variability(data)
 % d09/29/2017
 % WAL3
 
-alphaVal = 0.001; % significance alpha
-
+alphaVal = 0.001; % significance al
 trialA = 1;
 trialB = 1;
 % Take the all-to-all pearson corrleation of ROIs
@@ -18,8 +17,8 @@ mtxU = corr(GGU);
 mtxD = corr(GGD);
 sumU(cell,:) = mtxU(:); % everything is doubled, but thats OK.
 sumD(cell,:) = mtxD(:);
-sM(1,cell) = mean(mtxU(:)); % mean for each cell
-sM(2,cell) = mean(mtxD(:));
+sM(1,cell) = median(mtxU(:)); % mean for each cell
+sM(2,cell) = median(mtxD(:));
 
 
 [~,HH(cell)] = ranksum(mtxU(:), mtxD(:),'alpha', alphaVal);
@@ -111,11 +110,10 @@ histogram(sM(1,:)-sM(2,:));
 
 % Export Data
 var_data.Stat_Difference = double(HH);
-var_data.Stat_alpha = alphaVal;
+var_data.Stat_Difference = double(HH);
 var_data.PearsonScores_D= sumD(:);
 var_data.PearsonScores_U = sumU(:);
 var_data.MeanPearsonScores = sM;
-
 % figure();
 % bar(sumU(:),sumD(:))
 sum(HH)/size(HH,2)*100;

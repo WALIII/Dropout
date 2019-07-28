@@ -1,9 +1,9 @@
 
 function [out] = tempScrap(s,c,Gconsensus3,D2,t,varargin);
-% 
+%
 
 % function for taking CaIM data and checking the effect of time warping % cut out df/f differences at infered burst moments\
-   
+
 % Default inputs
     counter = 1;
     fs = 48000;
@@ -15,8 +15,8 @@ function [out] = tempScrap(s,c,Gconsensus3,D2,t,varargin);
     mx = 100;
     mn = 100;%time_window/mean(diff(aVect));
     thresh = 0.1;
-    
-    
+
+
     %% Custom Paramaters
 nparams=length(varargin);
 
@@ -37,14 +37,14 @@ for i=1:2:nparams
             mn=varargin{i+1};
        case 'thresh'
            thresh=varargin{i+1};
-     
+
     end
 end
 
-    
-    
-    
-% Get audio difference vector: 
+
+
+
+% Get audio difference vector:
     interval = median(diff(D2.warped_time(1,:,1)));
     WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.5,:);
 % Start time at zero:
@@ -55,7 +55,7 @@ end
     aVect = (1:size(WT3))*interval;
     clear WT2 WT% free up memory
 
- 
+
 
 
 % Get Peaks in Dff
@@ -75,7 +75,7 @@ end
         ChoppedAvect(:,counter) = sum(diff(WT3(Aidx-mn:Aidx,:)-WT3(Aidx-mn,:))); % get sum of timing diffetence in this window
         AudioVect(:,:,counter) = D2.song_w(:,(0.25*fs+sidx*fs-+0.10*fs):(0.25*fs+sidx*fs)+0.033*fs); % get audio chopped out...
         catch
-            
+
             disp('cutting close on the song...');
         continue
         end
@@ -84,7 +84,7 @@ end
         %ChoppedSongTime(:,counter) = (f1(1,1)-f1(1,end))-  (f1(2,1)-f1(2,end));
         try
           DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+frames,i))')-min(squeeze(D2.unsorted(:,:,i))');
-          
+
                 for a = 1:size(D2.unsorted(:,idx(ii):idx(ii)+frames,i),1);
                    x1 = (squeeze(D2.unsorted(a,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(a,:,i))'));
                    DffIntegrate(a,counter) = trapz(1:length(x1),x1);
@@ -98,13 +98,13 @@ end
                    end
           end
        GIndex(1,counter) = i;
-       GIndex(2,counter) = ii;      
-        counter = counter+1;      
+       GIndex(2,counter) = ii;
+        counter = counter+1;
       end
     end
 
-    
-disp( 'Getting the Similarity Score'); 
+
+disp( 'Getting the Similarity Score');
 
 
     % Sim_score = (ID'd peak * all_song_spectrograms)
@@ -120,8 +120,9 @@ for ii = 1:size(ChoppedGcon,4); % for every example group
      sim_score(isnan(sim_score))=0;
      disp('warning! Nans are afoot');
  end
+
  
-         
+
   end
 end
 
@@ -137,8 +138,8 @@ out.ChoppedGcon = ChoppedGcon;
 % Plot
 
 %% Split data into boxplots...
-% figure(); 
-% 
+% figure();
+%
 % clear g I Chl Ahl At Ct
 % trials = size(sim_score,2);
 % for ROI_Peak = 1:size(ChoppedGcon,4); % for every song segment
@@ -156,17 +157,17 @@ out.ChoppedGcon = ChoppedGcon;
 % Ea(:,ROI_Peak) = E;
 % %C = abs(zscore(ChoppedAvect(1:400,cl)));
 % % B = (B - min(B)) / ( max(B) - min(B) );\
-% 
-% 
-% 
-% 
+%
+%
+%
+%
 % siz = 4; % cut data into even blocks, in time, based on the time vect
 % [Bi,I] = sort(C);
 % g = floor(size(C,1)/siz);
-% 
+%
 % for i = 1:(siz-1); %val * group
 %     if i ==1;
-% 
+%
 % Ahl(:,i) = A(I(1:g));
 % Bhl(:,i) = B(I(1:g));
 % Chl(:,i) = C(I(1:g));
@@ -174,73 +175,73 @@ out.ChoppedGcon = ChoppedGcon;
 % Ehl(:,i) = E(I(1:g));
 % SplitGcon(:,:,i,ROI_Peak) = mean(squeeze(ChoppedGcon(:,:,I(1:g),ROI_Peak)),3);
 %     else
-% 
+%
 % Chl(:,i) = C(I(g*i+1:g*(i+1)));
 % Ahl(:,i) = A(I(g*i+1:g*(i+1)));
 % Bhl(:,i) = B(I(g*i+1:g*(i+1)));
 % Dhl(:,i) = D(I(g*i+1:g*(i+1)));
 % Ehl(:,i) = E(I(g*i+1:g*(i+1)));
 % SplitGcon(:,:,i,ROI_Peak) = mean(squeeze(ChoppedGcon(:,:,I(g*i+1:g*(i+1)),ROI_Peak)),3);
-% 
+%
 %     end
 % end
-% 
+%
 % % mean of the dff for each time section ( eventually, every dot is the mean
 % % ROI df/f for the 1-33%, 34-67% and 68-99% most streached songs)
-% 
-% 
+%
+%
 % At(ROI_Peak,:) = mean(Ahl,1); % mean dff for this segment
-% Bt(ROI_Peak,:) = mean(Bhl,1); 
-% Ct(ROI_Peak,:) = mean(Chl,1); 
+% Bt(ROI_Peak,:) = mean(Bhl,1);
+% Ct(ROI_Peak,:) = mean(Chl,1);
 % Dt(ROI_Peak,:) = mean(Dhl,1);
 % Et(ROI_Peak,:) = mean(Ehl,1);
-% 
+%
 % % all values:
 % % for iii = 1:3
 % % totCt(cl,:,iii) = Chl(:,iii);
 % % totAt(cl,:,iii) = Ahl(:,iii);
 % % totDt(cl,:,iii) = Dhl(:,iii);
 % % end
-% % Ct(cl,:) = Chl(:); % mean across song segment 
+% % Ct(cl,:) = Chl(:); % mean across song segment
 % % At(cl,:) = Ahl(:);
 % % Dt(cl,:) = Dhl(:);
-% 
+%
 % % subplot(1,2,2);
 % % boxplot(Chl,'Notch','on','Labels',{'mu = 5','mu = 6'});
 % % pause()
-% 
+%
 % end
-% % 
+% %
 % % At = Ct;
-% % figure(); plot(zeros(size(At(:,1))),At(:,1)-At(:,1),'*'); 
-% % hold on; 
-% % plot(ones(size(At(:,1))),At(:,2)-At(:,1),'*'); 
+% % figure(); plot(zeros(size(At(:,1))),At(:,1)-At(:,1),'*');
+% % hold on;
+% % plot(ones(size(At(:,1))),At(:,2)-At(:,1),'*');
 % % line([zeros(size(At(:,1))),ones(size(At(:,1)))],[At(:,1)-At(:,1),At(:,2)-At(:,1)])
-% 
+%
 % % Normalize data- output is mean dff (across the quartile) for each
 % % 'event'
 % NDATA = mat2gray(Dt);
 % NDATA2 = mat2gray(At);
 % NDATA3 = mat2gray(Et);
-% 
+%
 % figure();
 % boxplot(NDATA,'Notch','on');
 % title('df/f as a function of applied time warping');
 % ylabel('normalized df/f');
-% 
+%
 % figure();
 % boxplot(NDATA2,'Notch','on');
 % title('Normalized Song Similarity as a function of warping');
 % ylabel('Song Similarity');
-% 
-% 
+%
+%
 % figure();
 % boxplot(NDATA3,'Notch','on');
 % title('Normalized Song Amplitude as a function of warping');
 % ylabel('Song Similarity');
-% 
-% 
-% figure(); 
+%
+%
+% figure();
 % subplot(131);
 % plotSpread(NDATA);
 % title('df/f as a function of applied time warping');
@@ -250,10 +251,10 @@ out.ChoppedGcon = ChoppedGcon;
 % subplot(133);
 % plotSpread(NDATA3);
 % title('Normalized Song Amplitude as a function of warping');
-% 
-% 
+%
+%
 % % Song amplitude vs Df/f
-% figure(); 
+% figure();
 % hold on;
 % % col = ['r','g','b','c']
 % % for ix = 1:4;
@@ -268,28 +269,28 @@ out.ChoppedGcon = ChoppedGcon;
 % for i = 0:.1:1;
 %     toplot{counter} = test1(find(test3>i & test3<(i+1)));
 %     toplot2{counter} = test2(find(test3>i & test3<(i+1)));
-% 
-% 
+%
+%
 %     Bxv(:,counter) = mean(toplot{counter});
 %     err(:,counter) = std(toplot{counter})/sqrt(length(toplot{counter}));
-%     
+%
 %     Bxv2(:,counter) = mean(toplot2{counter});
 %     err2(:,counter) = std(toplot2{counter})/sqrt(length(toplot2{counter}));
-%     
-% 
+%
+%
 % counter = counter+1;
 % end
-% % figure(); 
+% % figure();
 % % hold on;
 % % errorbar(1:length(Bxv),Bxv,err)
 % % errorbar(1:length(Bxv2),Bxv2,err2)
-%     
-%     
-% % 
+%
+%
+% %
 % % hold on;
 % % end
-% 
-% 
+%
+%
 % out.dff = NDATA; % dff
 % out.int = NDATA2; % integration
 % out.int = NDATA3; % Amplitude
@@ -297,11 +298,11 @@ out.ChoppedGcon = ChoppedGcon;
 % out.C = Ca(:);
 % out.A = Aa(:);
 % out.D = Da(:);
-% 
+%
 % % for iii = 1:3;
 % % aa = totAt(:,:,iii);
 % % aa1(:,iii) = aa(:);
 % % ad = totDt(:,:,iii);
 % % ad1(:,iii) = ad(:);
 % % end
-% 
+%

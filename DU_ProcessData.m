@@ -1,4 +1,4 @@
-function [pooled, stats_amp, amp_data, stats_var, var_data] = DU_ProcessData();
+function [pooled, stats_amp, amp_data, stats_var, var_data, FINAL] = DU_ProcessData();
 
 % DU_ProcessData.m
 
@@ -67,5 +67,21 @@ pie(X,explode,labels)
 title('Significant variance; p < 1e-5 Wilcox rank-sum ')
 
 
+% COncat all data
+clear combined_amp;
 
+for i = 1:size(mov_listing,1)
+    if i ==1;
+    combined_amp(1,:) = amp_data{i}.MeanROI(1,:);
+    combined_amp(2,:) = amp_data{i}.MeanROI(2,:);
+    else
+        temp(1,:) = amp_data{i}.MeanROI(1,:);
+        temp(2,:) = amp_data{i}.MeanROI(2,:);
+
+        combined_amp = cat(2,combined_amp,temp);
+        clear temp
+    end
+end
+
+FINAL.combined_amp = combined_amp;
 % Summary Statistics:

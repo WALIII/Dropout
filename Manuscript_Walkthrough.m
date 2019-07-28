@@ -42,7 +42,6 @@ DirUndir_Plot(DataD,DataU) % plotting and basic visuals
 [stats] = DU_Variability(data)
 % TO DO: Add stats
 
-
 %    ** ROI correlation Matrix **
 
 [stats] = DU_CorrMatrix(data)
