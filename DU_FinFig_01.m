@@ -52,7 +52,7 @@ load('input_data.mat');
 cd(START_DIR_ROOT);
     end
 
-  for cho = 2;
+  for cho = 3; % 3 = song length, 2 = dff
 for i = 1: size(out,2)
     
         out2 =  Block_Sort(out{i}.sim_score,out{i}.DffHeight,out{i}.ChoppedAvect,out{i}.DffIntegrate,out{i}.amplitude_score, out{i}.ChoppedGcon, cho);
@@ -72,6 +72,17 @@ Et = cat(1,Et,out2.Et);
 end
 end
 DU_BoxPlot_FF(At,Bt,Ct,Dt,Et);
+
+%% Stats tests: (for different stats, you may need to re-run, change the value of 'cho', which is the sort..) 
+
+% Dff vs warping
+[sD1 sD2] = ranksum(At(:,1),At(:,3));
+% Sound amplitude vs warping
+[sD1 sD2] = ranksum(At(:,1),At(:,3));
+
+% Song Similarity vs warping ( control) 
+
+
 
 
   end

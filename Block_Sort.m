@@ -7,8 +7,15 @@ function [out] = Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplit
 
 
 %% Split data into boxplots...
-Fig_plotting ==1; % plot figures
+Fig_plotting =0; % plot figures
 
+if cho ==1;
+disp('sorting by song similarity');
+elseif cho ==2;
+disp('sorting by Dff height');
+elseif cho ==3;
+disp('sorting by warping');
+end
 
 
 figure();
@@ -17,7 +24,7 @@ for ROI_Peak = 1:size(ChoppedGcon,4); % for every song segment
     clf
 A = zscore(sim_score(ROI_Peak,:));
 B = zscore(DffHeight(1:trials,ROI_Peak));
-C = abs(zscore(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak)))); % sound difference
+C = abs(zscore(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak)))); % sound difference/length
 D = zscore(DffIntegrate(1:trials,ROI_Peak));
 E = zscore(amplitude_score(ROI_Peak,:));
 % consolidate data..
