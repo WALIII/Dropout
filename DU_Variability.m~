@@ -6,7 +6,7 @@ function [stats var_data] =  DU_Variability(data)
 % d09/29/2017
 % WAL3
 
-alphaVal = 0.05./(size(data.directed,3)*2); % significance alpha
+alphaVal = 0.001; % significance alpha
 
 trialA = 1;
 trialB = 1;
@@ -22,12 +22,10 @@ sM(1,cell) = mean(mtxU(:)); % mean for each cell
 sM(2,cell) = mean(mtxD(:));
 
 
-% to check distributions:
-%figure(); hold on; histogram(mtxU(:),20,'FaceColor','m','Normalization','probability'); histogram(mtxD(:),20,'FaceColor','g','Normalization','probability');
-[~,HH(1,cell)] = ranksum(mtxU(:), mtxD(:),'alpha', alphaVal,'tail','left');
-[~,HH(2,cell)] = ranksum(mtxU(:), mtxD(:),'alpha', alphaVal,'tail','right');
+figure(); hold on; hisogram(mtxU(:)); histogram(mtxD(:));
+[~,HH(cell)] = ranksum(mtxU(:), mtxD(:),'alpha', alphaVal,'tail','left');
 
-if HH(1,cell)
+if HH(cell)
     U_seg(trialA,:) = mtxU(:);
     D_seg(trialA,:) = mtxD(:);
     trialA = trialA+1;
@@ -113,7 +111,7 @@ histogram(sM(1,:)-sM(2,:));
 
 
 % Export Data
-var_data.Stat_Difference = HH;
+var_data.Stat_Difference = double(HH);
 var_data.Stat_alpha = alphaVal;
 var_data.PearsonScores_D= sumD(:);
 var_data.PearsonScores_U = sumU(:);

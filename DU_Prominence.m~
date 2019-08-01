@@ -101,7 +101,7 @@ end
 
 
 % PCompute statistic for trial-trial amplitude Differences for each cell
-alphaVal = 0.05./(size(data.directed,3)*2);
+alphaVal = 0.001*size(data.directed,3;
 for i = 1: size(data.directed,3) % for all cells
 GD = max(data.directed(:,:,i),[],2)-min(data.directed(:,:,i),[],2);
 GU = max(data.undirected(:,:,i),[],2)-min(data.undirected(:,:,i),[],2);
@@ -109,11 +109,8 @@ GU = max(data.undirected(:,:,i),[],2)-min(data.undirected(:,:,i),[],2);
 [pvalU(i),HH2(i)] = ranksum(GU, GD,'alpha', alphaVal,'tail','left');
 clear GD GU
 end
-SigUndirected = sum(HH1)./(size(data.directed,3))*100
-SigDirected = sum(HH2)./(size(data.directed,3))*100
-Msig(:,1) = HH1;
-Msig(:,2) = HH2;
-
+left = sum(HH1)
+right = sum(HH2)
     
     % Plot amplitude Differences
 
@@ -149,4 +146,3 @@ amp_data.MeanROI(1,:) = DCa;
 amp_data.MeanROI(2,:) = UCa;
 amp_data.Prom_D = pVD;
 amp_data.Prom_U = pVU;
-amp_data.Msig = Msig;

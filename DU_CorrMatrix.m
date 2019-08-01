@@ -7,6 +7,7 @@ function [stats, output] =  DU_CorrMatrix(data,FIG)
 % d10/05/2017
 % WAL3
 
+warning off
 if nargin<2
 FIG = 1;
 end
@@ -36,11 +37,9 @@ cells = size(data.undirected,3);
 % Take the correlation of each cell across trials
 for ii = 1:cells;
 GX(:,ii) = squeeze(mean(sumD2(ii,:,:),3));
+GX2(:,ii) = squeeze(mean(sumU2(ii,:,:),3));
 end
 
-for ii = 1:cells;
-GX2(:,ii) = squeeze(median(sumU2(ii,:,:),3));
-end
 
 %clean up the data by normalizing to the variance
 
@@ -131,8 +130,9 @@ ylim([-0.5 1]);
 end
 
 output.CVC_U = CVC_U;
-output.CVC_U = CVC_D;
-
+output.CVC_D = CVC_D;
+output.mCVC_U = mean(CVC_U);
+output.mCVC_D = mean(CVC_D);
 
 %%%%%%%=======================%%%%%%%%
 %       Final Figure Plotting        %
@@ -231,13 +231,19 @@ end
 
 Ga = data.directed;
 Gb = data.undirected;
-for i = 1: 40
+for i = 1:size(Ga,1);
+    try
    G1= squeeze(Ga(i,:,:))';
    G2= squeeze(Gb(i,:,:))';
+   warning off
 [dim_to_use1, result1] = findzdim(G1);
 [dim_to_use2, result2] = findzdim(G2);
+warning on;
 pool1(:,i) = result1.line;
 pool2(:,i) = result2.line;
+    catch
+        break
+    end
 end
 
 figure(); hold on; plot(pool1,'g'); plot(pool2,'m');

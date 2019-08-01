@@ -1,5 +1,5 @@
 
-function [eig1,eig2,sorting]= FS_cellclust_comp(data)
+function [eig1,eig2,sorting,output]= FS_cellclust_comp(data)
 % Make covariance matirx for imaging data input format: data.directed(trial,time,cell)
 % TG
 % modified by WAL3
@@ -203,3 +203,16 @@ eig2 = CVC2;
 title('Sorted Covariance matrix')
 % colormap(hot)
 % colorbar
+
+
+% output
+etemp1 = eig1;
+etemp2 = eig2;
+
+% etemp1(etemp1 ==1) = [];
+% etemp2(etemp2 ==1) = [];
+
+output.CVC_U = etemp1;
+output.CVC_D = etemp2;
+output.mCVC_U = mean((etemp1));
+output.mCVC_D = mean((etemp2));

@@ -138,11 +138,12 @@ for i = 1:6
     end
 end
 
+Vsig = Vsig';
 % Print out stats
 Significane_Amplitude = ranksum(M1,M2,'tail','right')
 Significane_VarMean = ranksum(MPS(2,:),MPS(1,:),'tail','right')
 Significane_CorrMean = ranksum(mCU,mCD,'tail','right')
-AllSigUnits_Var = sum(Vsig)./size(Vsig,1)*100
+AllSigUnits_Var = sum(Vsig)./size(Vsig,2)*100
 AllSigUnits_Mean = sum(Msig)./size(Vsig,2)*100
 
 [p, observeddifference, effectsize] = permutationTest(mCU,mCD, 100000)
