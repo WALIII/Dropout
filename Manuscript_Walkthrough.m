@@ -2,7 +2,7 @@
 % Directed/Undirected paper walkthrough and statistics aggregator
 
 % d09/29/17
-% d11/01/17
+% d07/29/19
 % WAL3
 
 
@@ -50,9 +50,15 @@ DirUndir_Plot(DataD,DataU) % plotting and basic visuals
 
 %% [stats] = DU_CalAud(data)
 
+%--------=======[  Batch Functions ]=======--------%
+ %% this is what will go in the paper...
 
+% For all the Undirected/Directed processing and stats:
+DU_analysis_190729 % up-to-date data is in the dropbox
 
+% For all the Undirected processing and stats:
 
+DU_FinFig_01% up to date data is on Typhos Liberti_archive/Dropout_paper_Final_figure)data/processed.
 
 
 
