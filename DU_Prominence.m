@@ -118,12 +118,12 @@ Msig(:,2) = HH2;
     % Plot amplitude Differences
 
     X = (mean(data.directed(:,:,:),1));
-    X2 = squeeze(max(X)+min(X));
+    X2 = squeeze(max(X)-min(X));
 
     DCa = X2;
 
     X = (mean(data.undirected(:,:,:),1));
-    X2 = squeeze(max(X)+min(X));
+    X2 = squeeze(max(X)-min(X));
     UCa = X2;
 
 % %%+++++ FIGURE 02 +++++++%%

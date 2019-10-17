@@ -19,9 +19,8 @@ for i =1:size(DffHeight_time,2)
 end
 
 
-
 % Plot timing matrix:
-figure(); imagesc(Amat(tb,tb))
+figure(); imagesc(Amat(tb,tb)); colorbar();
 title('timing structure');
 
 

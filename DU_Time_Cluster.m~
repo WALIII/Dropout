@@ -1,4 +1,4 @@
-function [out] = DU_Time_Cluster(DffHeight_time,DffHeight)
+function [out] = DU_Time_Cluster(DffHeight_time,DffHeight,neighborhood1,neighborhood2)
 
 
 
@@ -19,14 +19,13 @@ for i =1:size(DffHeight_time,2)
 end
 
 
-neighborhood_2 = 1;
 % Plot timing matrix:
 figure(); imagesc(Amat(tb,tb))
 title('timing structure');
 
 
-A_near_indx = find(Amat<neighborhood_2);
-A_far_indx = find(Amat>=neighborhood_2);
+A_near_indx = find(Amat>=neighborhood1 & Amat<neighborhood2);
+A_far_indx = find(Amat>=neighborhood2);
 
 A_near = B_unsort(A_near_indx);
 A_near = A_near(:);
@@ -47,4 +46,7 @@ histogram(A_near,'BinWidth',0.07,'FaceColor','r','Normalization','probability');
 
  
  % export data...
- A_near 
+ out.A_near = A_near;
+ out.A_far = A_far;
+  out.A_near_mean = mean(A_near);
+ out.A_far_mean = mean(A_far);

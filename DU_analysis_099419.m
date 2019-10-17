@@ -1,7 +1,7 @@
 
 function DU_analysis_099419
 
-
+close all
 
 % Go thorugh all files and gather data...
 
@@ -56,7 +56,7 @@ for ii=1:length(mov_listing)
     
     
     
-[pvalD{ii},A1t{ii},A2t{ii},B_sort{ii}, B_unsort{ii},Brand{ii}] = DU_PeakSearch(data_temp);
+[pvalD{ii},A1t{ii},A2t{ii},B_sort{ii}, B_unsort{ii},Brand{ii},out1{ii}] = DU_PeakSearch(data_temp);
 end
 
 
@@ -94,11 +94,32 @@ neighborhood = 10;
 
 DU_diaganol(Brand,neighborhood);
 
+
+%% For closest cells ( uncoment) 
+% for i = 1: 6
+%     Inp{1} = B_sort{i};
+% [out] = DU_diaganol(Inp,neighborhood);
+% Mn(:,i) = out.Mnear;
+% Mf(:,i) = out.MFar;
+% end
+
+% For time window ( uncomment)
 for i = 1: 6
-    Inp{1} = B_sort{i};
-[out] = DU_diaganol(Inp,neighborhood);
-Mn(:,i) = out.Mnear;
-Mf(:,i) = out.MFar;
+[out] = DU_Time_Cluster(out1{i}.DffHeight_time,out1{i}.DffHeight,1,2);
+Mn(:,i) = out.A_near_mean;
+Mf(:,i) = out.A_far_mean;
+
+if i ==1
+    nAll = out.A_near(:);
+    fAll = out.A_far(:);
+else
+     nAllt = out.A_near(:);
+    fAllt = out.A_far(:);
+    nAll = cat(1,nAll,nAllt);
+   fAll = cat(1,fAll,fAllt);
+   clear nAllt fAllt;
+end   
+    
 end
 
 % Plot the values
@@ -115,7 +136,24 @@ scatter(x(2), y(2), 20, 'r', 'filled')
 axis([0.5  2.5    -.1  .2])
 end
 
+
+% Plot and get stats:
+
+  figure();
+ hold on;
+histogram(nAll,'BinWidth',0.07,'FaceColor','r','Normalization','probability');
+ histogram((fAll),'BinWidth',0.07,'FaceColor','b','Normalization','probability');
+ title(' blue is far');
+ 
+ [pval_combined_data_tailed,~] = ranksum(((nAll)), ((fAll)),'tail','right')
+ 
+ 
+  [pval_combined_data,~] = ranksum(((nAll)), ((fAll)))
+
+ 
 DU_diaganol(B_sort,neighborhood);
+% DU_diaganol(B_sort,neighborhood);
+
 
 
 % Check Directed vs Undirected
