@@ -1,14 +1,13 @@
-function DU_diaganol(Input_Mat);
+function [out] = DU_diaganol(Input_Mat,neighborhood);
 
 % Input_Mat is Bmat from DU_PeakSearch!
+bound = neighborhood;
 
-
-for iii = 1:6
+for iii = 1:size(Input_Mat);
 TT = Input_Mat{iii};
 
-bound = 5;
 
-TTrep = TT;
+
 counter = 1;
 % get local correlations
     for ii = -bound:bound
@@ -42,8 +41,9 @@ if iii == 1;
     Nsum =  Near;
     Fsum = Far;
 else
-    cat(1,Nsum,Near);
-    cat(1,Fsum,Far);
+    
+  Nsum =   cat(1,Nsum,Near);
+    Fsum = cat(1,Fsum,Far);
     
 end
 
@@ -53,16 +53,21 @@ end
  figure();
  hold on;
 histogram(Nsum,20,'FaceColor','r','Normalization','probability');
- histogram((Fsum),20,'FaceColor','b','Normalization','probability');
+ histogram(Fsum,20,'FaceColor','b','Normalization','probability');
  title(' blue is far');
  
  
   figure();
  hold on;
-histogram(Nsum,20,'FaceColor','r','Normalization','probability');
- histogram((Fsum),20,'FaceColor','b','Normalization','probability');
+histogram(Nsum,'BinWidth',0.07,'FaceColor','r','Normalization','probability');
+ histogram((Fsum),'BinWidth',0.07,'FaceColor','b','Normalization','probability');
  title(' blue is far');
  
+ 
+ [pvalD,~] = ranksum(((Nsum)), ((Fsum)),'tail','right')
+
+ out.Mnear = mean(Nsum);
+ out.MFar = mean(Fsum);
  
     
     

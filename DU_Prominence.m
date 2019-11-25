@@ -114,7 +114,7 @@ SigDirected = sum(HH2)./(size(data.directed,3))*100
 Msig(:,1) = HH1;
 Msig(:,2) = HH2;
 
-    
+
     % Plot amplitude Differences
 
     X = (mean(data.directed(:,:,:),1));

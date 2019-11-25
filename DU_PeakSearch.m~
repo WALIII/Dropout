@@ -5,7 +5,7 @@ function [pvalD,A1sort,A2sort,Bsort, B_unsort,B_rand, out] = DU_PeakSearch(data)
 
 
 % Manual Prams:
-thresh = 0.1;
+thresh = 0.01;
 fr = 25; % 25 fps
 counter = 1;
 frames = 2;
@@ -65,7 +65,7 @@ for i = 1:size(s,2); % for every cell
     end
 end
 
-DffHeight = (DffHeight-mean(DffHeight,2));
+DffHeight = (DffHeight);
 % Seperate by directed and undirected: 
 In_a =  DffHeight(1:size(data.directed,1),:);
 In_t =  DffHeight_time(:,:);
@@ -100,15 +100,8 @@ disp('kk');
 % Covariance matrix across songs, for directed and undeirected
 
 
-% Differences in peak height
 figure();
-hold on;
-histogram(In_a(:),100,'FaceColor','g','Normalization','probability');
-histogram(In_b(:),100,'FaceColor','m','Normalization','probability');
-title('Differences in Peak Height');
 
-
-figure();
 %% Undirected
 B= corr(DffHeight);
 imagesc(B(tb,tb),[-.0 0.7]);
@@ -118,8 +111,8 @@ disp('kk');
 
 figure();
 hold on;
-histogram(A1(:),50,'FaceColor','g','Normalization','probability');
-histogram(A2(:),50,'FaceColor','m','Normalization','probability');
+histogram(In_a(:),100,'FaceColor','g','Normalization','probability');
+histogram(In_b(:),100,'FaceColor','m','Normalization','probability');
 
 
 A1sort = A1(tb,tb);
