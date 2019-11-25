@@ -27,7 +27,7 @@ D2 = WarpRegress(FS_ROI_Data);
 % Get SDI
 % Check Spectrogram:
 fs = 48000;
-  figure(); FS_Spectrogram(D2.song_r(1,fs*0.25:end-(fs*0.50)),fs);
+  figure(); FS_Spectrogram(D2.song_r(2,fs*0.25:end-(fs*0.50)),fs);
 
 % Get Gconsensus
   disp(' Getting Gcon');

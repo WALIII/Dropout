@@ -65,8 +65,8 @@ FrameRate = 25;
 
 i = 1;
 
-  min_dat = 0;
-  max_dat = 35;
+  min_dat = 5;
+  max_dat = 30;
 
 [data{i}] = FS_Data(S.calcium,S.align,S.Motif_ind,min_dat,max_dat);
 
