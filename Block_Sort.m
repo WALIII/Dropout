@@ -14,7 +14,7 @@ disp('sorting by song similarity');
 elseif cho ==2;
 disp('sorting by Dff height');
 elseif cho ==3;
-disp('sorting by warping');
+disp('sorting by warping')
 end
 
 

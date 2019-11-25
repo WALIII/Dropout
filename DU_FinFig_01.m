@@ -4,7 +4,7 @@ function DU_FinFig_01
 
 
 % Default params ( if not passed as inputs)
-frame_rates = [25 25 30] % vid frame rate can be different...
+frame_rates = [25 25 25 25 25 25 25 25 25] % vid frame rate can be different...
 
 pad_prior = 100; % pad for sound ( 100ms)
 pad_after = 0;
@@ -46,7 +46,7 @@ load('input_data.mat');
 
 
 
-[out{i}] = tempScrap(s,c,Gconsensus3,D2,t);
+[out{i}] = tempScrap(s,c,Gconsensus3,D2,t,'fr',frame_rates(i));
 
 
 cd(START_DIR_ROOT);
@@ -86,6 +86,8 @@ DU_BoxPlot_FF(At,Bt,Ct,Dt,Et);
 
 
   end
+  
+  disp('done');
 
 
   %Block_Sort(sim_score,DffHeight,ChoppedAvect,DffIntegrate,amplitude_score, ChoppedGcon);

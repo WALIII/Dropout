@@ -5,17 +5,17 @@ function [out] = tempScrap(s,c,Gconsensus3,D2,t,varargin);
 % function for taking CaIM data and checking the effect of time warping % cut out df/f differences at infered burst moments\
 
 % Default inputs
-Fig_Plotting = 0; % plot figures for each run///
+Fig_Plotting = 1; % plot figures for each run///
     counter = 1;
     fs = 48000;
     % bounds
     time_window = 0.001;% 33 ms
     fr = 30; % 25 fps
-    frames = 5;
+    frames = 5; % offset to deal with pad ( 5 is default for alignment)
 % Build windows ( ~ 1 frame)
     mx = 100;
     mn = 100;%time_window/mean(diff(aVect));
-    thresh = 0.1;
+    thresh = 0.01;
 
 
     %% Custom Paramaters
@@ -55,15 +55,18 @@ end
     WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
     aVect = (1:size(WT3))*interval;
     clear WT2 WT% free up memory
-
-
+% smooth audio timing vector
+ [a, b] = size(WT3);
+WT3 = smooth(WT3,2000);    
+WT3 = reshape(WT3,a,b);
+WT3 = zscore(WT3,[],1);
 
 
 % Get Peaks in Dff
     for i = 1:size(s,2); % for every cell
       clear idx sidx Tidx Gidx
       [pk,idx] = findpeaks(s(:,i),'MinPeakProminence',thresh); % find spike  frame
-
+idx(idx>25) = []; if size(idx,2) ==0; continue; end
       for ii = 1:size(idx);
         sidx = idx(ii)./fr; % convert spike to 'time'
         [cx Gidx] = min(abs(sidx-(t))); % find the closest index into the Gconsensus
@@ -73,7 +76,21 @@ end
         try
             %[c Tidx] = min(abs(sidx+0.25-(D2.warped_time(2,:)))); % find the closest index into the Time Vector
         ChoppedGcon(:,:,:,counter) = Gconsensus3{1}(:,Gidx-mx:Gidx,:);
-        ChoppedAvect(:,counter) = sum(diff(WT3(Aidx-mn:Aidx,:)-WT3(Aidx-mn,:))); % get sum of timing diffetence in this window
+      
+        
+      %  Sum of difference vector  
+      %  ChoppedAvect(:,counter) = sum(diff(WT3(Aidx-mn:Aidx,:)-WT3(Aidx-mn,:))) - mean(sum(diff(WT3(Aidx-mn:Aidx,:)-WT3(Aidx-mn,:)))); % get sum of timing diffetence in this window
+       
+      % Calculate the slope...
+        for iii = 1: size(WT3,2)
+        % angle of the difference
+        h = WT3(Aidx-mn:Aidx,iii);
+        p = polyfit(1:length(h),h',1);
+
+        ChoppedAvect(iii,counter) = p(1); % get slope of timing diffetence in this window
+        clear ph;
+        end
+
         AudioVect(:,:,counter) = D2.song_w(:,(0.25*fs+sidx*fs-+0.10*fs):(0.25*fs+sidx*fs)+0.033*fs); % get audio chopped out...
         catch
 
@@ -84,7 +101,7 @@ end
         %f1 = D2.warped_time(:,Tidx-20:Tidx+10);
         %ChoppedSongTime(:,counter) = (f1(1,1)-f1(1,end))-  (f1(2,1)-f1(2,end));
         try
-          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+frames,i))')-min(squeeze(D2.unsorted(:,:,i))');
+          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(:,:,i))'));
 
                 for a = 1:size(D2.unsorted(:,idx(ii):idx(ii)+frames,i),1);
                    x1 = (squeeze(D2.unsorted(a,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(a,:,i))'));
@@ -92,7 +109,7 @@ end
                 end
         catch
           disp('too close to the end, no pad...');
-          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):end,i))')-min(squeeze(D2.unsorted(:,:,i))');
+          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):end,i))'-min(squeeze(D2.unsorted(:,:,i))'));
                  for a = 1:size(D2.unsorted(:,idx(ii):end,i),1);
                     x1 = (squeeze(D2.unsorted(a,idx(ii):end,i))'-min(squeeze(D2.unsorted(a,:,i))'));
                     DffIntegrate(a,counter) = trapz(1:length(x1),x1);
@@ -115,7 +132,7 @@ for ii = 1:size(ChoppedGcon,4); % for every example group
   for i = 1:size(ChoppedGcon,3) % calc the sim score
       %sim_score(i)=norm(consensus(:,:,i).*Mean_c)/sqrt(norm(consensus(:,:,i)).*norm(Mean_c));
       sim_score(ii,i)= sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).*Mean_c2))./sqrt(sum(sum(squeeze(ChoppedGcon(:,:,i,ii)).^2)).*sum(sum(Mean_c2.^2))+.1);
-      amplitude_score(ii,i) = mean(squeeze(abs(AudioVect(:,i,ii))))-Mean_amp;
+      amplitude_score(ii,i) = mean(squeeze(abs(AudioVect(:,i,ii))));
       %vector_score(:,i) =  (sum(consensus(:,:,i).*Mean_c2))./sqrt((sum(consensus(:,:,i).^2)).*(sum(Mean_c2.^2)));
  if sum(sum(isnan(sim_score))) >1;
      sim_score(isnan(sim_score))=0;
@@ -127,6 +144,10 @@ for ii = 1:size(ChoppedGcon,4); % for every example group
   end
 end
 
+% remove correlated trends from Chopped Avect:
+ChoppedAvect;
+% ChoppedAvect= ChoppedAvect- mean(ChoppedAvect,1);
+% ChoppedAvect = zscore(ChoppedAvect);
 
 out.sim_score = sim_score;
 out.DffHeight = DffHeight;
@@ -134,6 +155,7 @@ out.ChoppedAvect = ChoppedAvect;
 out.DffIntegrate = DffIntegrate;
 out.amplitude_score = amplitude_score;
 out.ChoppedGcon = ChoppedGcon;
+out.WT3 = WT3;
 
 
 % Plot
@@ -159,7 +181,11 @@ Ea(:,ROI_Peak) = E;
 %C = abs(zscore(ChoppedAvect(1:400,cl)));
 % B = (B - min(B)) / ( max(B) - min(B) );\
 
-
+out.X_simScore_peaks(:,ROI_Peak) = A;
+out.X_DffHeight_peaks(:,ROI_Peak) = B;
+out.X_SoundTime_peaks(:,ROI_Peak) = (ChoppedAvect(:,ROI_Peak));
+out.X_DffIntegrate_peaks(:,ROI_Peak) = D;
+out.X_SoundAmp(:,ROI_Peak) = E;
 
 
 siz = 4; % cut data into even blocks, in time, based on the time vect
