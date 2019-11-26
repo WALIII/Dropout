@@ -5,7 +5,7 @@ function [out] = tempScrap(s,c,Gconsensus3,D2,t,varargin);
 % function for taking CaIM data and checking the effect of time warping % cut out df/f differences at infered burst moments\
 
 % Default inputs
-Fig_Plotting = 1; % plot figures for each run///
+Fig_Plotting = 0; % plot figures for each run///
     counter = 1;
     fs = 48000;
     % bounds
@@ -13,9 +13,11 @@ Fig_Plotting = 1; % plot figures for each run///
     fr = 30; % 25 fps
     frames = 5; % offset to deal with pad ( 5 is default for alignment)
 % Build windows ( ~ 1 frame)
-    mx = 100;
+    mx = 50;
+    
     mn = 100;%time_window/mean(diff(aVect));
-    thresh = 0.01;
+    mn2 = 200;
+    thresh = 0.05;
 
 
     %% Custom Paramaters
@@ -35,8 +37,11 @@ for i=1:2:nparams
             frames=varargin{i+1};
         case 'mx'
             mx=varargin{i+1};
-            mn=varargin{i+1};
-       case 'thresh'
+        case 'mn1'
+            mn=varargin{i+1};  
+        case 'mn2'
+            mn2=varargin{i+1};         
+        case 'thresh'
            thresh=varargin{i+1};
 
     end
@@ -66,7 +71,9 @@ WT3 = zscore(WT3,[],1);
     for i = 1:size(s,2); % for every cell
       clear idx sidx Tidx Gidx
       [pk,idx] = findpeaks(s(:,i),'MinPeakProminence',thresh); % find spike  frame
-idx(idx>25) = []; if size(idx,2) ==0; continue; end
+idx(idx>25) = []; %remove hits at end
+idx(idx<4) = []; % remove onset hits
+if size(idx,2) ==0; continue; end
       for ii = 1:size(idx);
         sidx = idx(ii)./fr; % convert spike to 'time'
         [cx Gidx] = min(abs(sidx-(t))); % find the closest index into the Gconsensus
@@ -75,7 +82,7 @@ idx(idx>25) = []; if size(idx,2) ==0; continue; end
 
         try
             %[c Tidx] = min(abs(sidx+0.25-(D2.warped_time(2,:)))); % find the closest index into the Time Vector
-        ChoppedGcon(:,:,:,counter) = Gconsensus3{1}(:,Gidx-mx:Gidx,:);
+        ChoppedGcon(:,:,:,counter) = Gconsensus3{1}(:,Gidx-mx:Gidx+mx,:);
       
         
       %  Sum of difference vector  
@@ -84,7 +91,7 @@ idx(idx>25) = []; if size(idx,2) ==0; continue; end
       % Calculate the slope...
         for iii = 1: size(WT3,2)
         % angle of the difference
-        h = WT3(Aidx-mn:Aidx,iii);
+        h = WT3(Aidx-mn:Aidx+mn2,iii);
         p = polyfit(1:length(h),h',1);
 
         ChoppedAvect(iii,counter) = p(1); % get slope of timing diffetence in this window
@@ -101,15 +108,15 @@ idx(idx>25) = []; if size(idx,2) ==0; continue; end
         %f1 = D2.warped_time(:,Tidx-20:Tidx+10);
         %ChoppedSongTime(:,counter) = (f1(1,1)-f1(1,end))-  (f1(2,1)-f1(2,end));
         try
-          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(:,:,i))'));
+          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(:,3:end-2,i))'));
 
                 for a = 1:size(D2.unsorted(:,idx(ii):idx(ii)+frames,i),1);
-                   x1 = (squeeze(D2.unsorted(a,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(a,:,i))'));
+                   x1 = (squeeze(D2.unsorted(a,idx(ii):idx(ii)+frames,i))'-min(squeeze(D2.unsorted(a,2:end-2,i))'));
                    DffIntegrate(a,counter) = trapz(1:length(x1),x1);
                 end
         catch
           disp('too close to the end, no pad...');
-          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):end,i))'-min(squeeze(D2.unsorted(:,:,i))'));
+          DffHeight(:,counter) = max(squeeze(D2.unsorted(:,idx(ii):end,i))'-min(squeeze(D2.unsorted(:,3:end-2,i))'));
                  for a = 1:size(D2.unsorted(:,idx(ii):end,i),1);
                     x1 = (squeeze(D2.unsorted(a,idx(ii):end,i))'-min(squeeze(D2.unsorted(a,:,i))'));
                     DffIntegrate(a,counter) = trapz(1:length(x1),x1);
@@ -146,7 +153,7 @@ end
 
 % remove correlated trends from Chopped Avect:
 ChoppedAvect;
-% ChoppedAvect= ChoppedAvect- mean(ChoppedAvect,1);
+ ChoppedAvect= ChoppedAvect- mean(ChoppedAvect,1);
 % ChoppedAvect = zscore(ChoppedAvect);
 
 out.sim_score = sim_score;
@@ -169,7 +176,8 @@ for ROI_Peak = 1:size(ChoppedGcon,4); % for every song segment
     clf
 A = zscore(sim_score(ROI_Peak,:));
 B = zscore(DffHeight(1:trials,ROI_Peak))-nanmin(zscore(DffHeight(1:trials,ROI_Peak)));
-C = abs(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak))); % sound difference
+%C = abs(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak))); % sound difference
+C = abs(ChoppedAvect(1:trials,ROI_Peak));
 D = zscore(DffIntegrate(1:trials,ROI_Peak))-nanmin(zscore(DffHeight(1:trials,ROI_Peak)));
 E = zscore(amplitude_score(ROI_Peak,:));
 % consolidate data..
@@ -320,7 +328,7 @@ end
 
 out.dff = NDATA; % dff
 out.int = NDATA2; % integration
-out.int = NDATA3; % Amplitude
+out.amp = NDATA3; % Amplitude
 out.B = Ba(:);
 out.C = Ca(:);
 out.A = Aa(:);

@@ -1,10 +1,13 @@
-function DU_FinFig_01
+function DU_FinFig_01(mn1,mn2,cho)
 % Build final figures from aggregated data...
+
+% cho = 2 is song length
+% cho = 3 is df/f
 
 
 
 % Default params ( if not passed as inputs)
-frame_rates = [25 25 25 25 25 25 25 25 25] % vid frame rate can be different...
+frame_rates = [25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25] % vid frame rate can be different...
 
 pad_prior = 100; % pad for sound ( 100ms)
 pad_after = 0;
@@ -46,13 +49,13 @@ load('input_data.mat');
 
 
 
-[out{i}] = tempScrap(s,c,Gconsensus3,D2,t,'fr',frame_rates(i));
+[out{i}] = tempScrap(s,c,Gconsensus3,D2,t,'fr',frame_rates(i),'mn1',mn1,'mn2',mn2);
 
 
 cd(START_DIR_ROOT);
     end
 
-  for cho = 3; % 3 = song length, 2 = dff
+  %for cho % 3 = song length, 2 = dff
 for i = 1: size(out,2)
     
         out2 =  Block_Sort(out{i}.sim_score,out{i}.DffHeight,out{i}.ChoppedAvect,out{i}.DffIntegrate,out{i}.amplitude_score, out{i}.ChoppedGcon, cho);
@@ -76,7 +79,7 @@ DU_BoxPlot_FF(At,Bt,Ct,Dt,Et);
 %% Stats tests: (for different stats, you may need to re-run, change the value of 'cho', which is the sort..) 
 
 % Dff vs warping
-[sD1 sD2] = ranksum(At(:,1),At(:,3));
+[sD1 sD2] = ranksum(At(:,1),At(:,3))
 % Sound amplitude vs warping
 [sD1 sD2] = ranksum(At(:,1),At(:,3));
 
@@ -85,7 +88,7 @@ DU_BoxPlot_FF(At,Bt,Ct,Dt,Et);
 
 
 
-  end
+  %end
   
   disp('done');
 

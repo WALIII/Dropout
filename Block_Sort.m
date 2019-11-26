@@ -25,6 +25,7 @@ for ROI_Peak = 1:size(ChoppedGcon,4); % for every song segment
 A = zscore(sim_score(ROI_Peak,:));
 B = zscore(DffHeight(1:trials,ROI_Peak));
 C = abs(zscore(ChoppedAvect(1:trials,ROI_Peak)-nanmean(ChoppedAvect(1:trials,ROI_Peak)))); % sound difference/length
+%C = ChoppedAvect(1:trials,ROI_Peak);
 D = zscore(DffIntegrate(1:trials,ROI_Peak));
 E = zscore(amplitude_score(ROI_Peak,:));
 % consolidate data..
