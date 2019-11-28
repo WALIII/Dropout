@@ -20,7 +20,7 @@ end
 
 figure();
 trials = size(sim_score,2);
-for ROI_Peak = 1:size(ChoppedGcon,4); % for every song segment
+for ROI_Peak = 1:size(ChoppedAvect,2); % for every song segment
     clf
 A = zscore(sim_score(ROI_Peak,:));
 B = zscore(DffHeight(1:trials,ROI_Peak));

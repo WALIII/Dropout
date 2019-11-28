@@ -19,9 +19,9 @@ function [out_new] = DU_compute_Full_LinModel(out)
 
 for i = 1: size(out,2);
     if i ==1;
-Df = zscore(out{i}.X_DffHeight_peaks);
-ST = zscore(out{i}.X_SoundTime_peaks);
-SS = zscore(out{i}.X_simScore_peaks);
+Df = out{i}.X_DffHeight_peaks;
+ST = out{i}.X_SoundTime_peaks;
+SS = out{i}.X_simScore_peaks;
  x = (1:size(Df,1));
  x = repmat(x,size(Df,2),1);
  x = x';
@@ -31,9 +31,9 @@ SS = zscore(out{i}.X_simScore_peaks);
  x = x(:);
     else
         
-tDf = zscore(out{i}.X_DffHeight_peaks);
-tST = zscore(out{i}.X_SoundTime_peaks);
-tSS = zscore(out{i}.X_simScore_peaks);
+tDf = out{i}.X_DffHeight_peaks;
+tST = out{i}.X_SoundTime_peaks;
+tSS = out{i}.X_simScore_peaks;
  tx = (1:size(tDf,1));
  tx = repmat(tx,size(tDf,2),1);
  
@@ -54,6 +54,11 @@ out_new.SimilarityScores = SS;
 out_new.WarpScores = ST;
 out_new.OrderInSong = x;
 out_new.DffScores = Df;
+% 
+% SS(x>500) = [];
+% ST(x>500) = [];
+% Df(x>500) = [];
+% x(x>500) = [];
 
  
 tbl = table(Df,SS,ST,x,'VariableName',{'Dff','SongSim','SongTime','TimeDay'});
@@ -89,8 +94,8 @@ end
 figure();
 hold on
 histogram(a_dist,40,'Normalization','probability');
-line([a_real a_real], [0 .1], 'LineWidth',2,'Color','r');
-title('slope difference of linear fit of dff vs time, and Syllable Length vs time compaerd to a null distribution')
+% line([a_real a_real], [0 .1], 'LineWidth',2,'Color','r');
+% title('slope difference of linear fit of dff vs time, and Syllable Length vs time compaerd to a null distribution')
 
 
 
@@ -98,10 +103,10 @@ figure();
 
 hold on;
 scatter(ST,Df,'.')
-P3 = polyfit(ST,Df,2);
-x2 = -4:0.1:6;
-y2 = polyval(P3,x2);
-plot(x2,y2);
+% P3 = polyfit(ST,Df,2);
+% x2 = -4:0.1:6;
+% y2 = polyval(P3,x2);
+% plot(x2,y2);
 title('Syllable Warping');
 
 
@@ -110,10 +115,10 @@ figure();
 
 hold on;
 scatter((SS),Df,'.')
-P3 = polyfit((SS),Df,1);
-x2 = -4:0.1:6;
-y2 = polyval(P3,x2);
-plot(x2,y2);
+% P3 = polyfit((SS),Df,1);
+% x2 = -4:0.1:6;
+% y2 = polyval(P3,x2);
+% plot(x2,y2);
 title('Song Similarity');
 
 out_new.model_01 = mdl_01;
