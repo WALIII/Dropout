@@ -1,11 +1,30 @@
 
-function DU_SongDifference(D2,Gconsensus3,WT3,cell2use)
+function DU_SongDifference(D2,Gconsensus3,cell2use)
 
 % plot from peak to trougth
 cs = 1:size(D2.unsorted,1);
 Dff_mat = D2.unsorted(cs,:,cell2use)'- min(D2.unsorted(cs,5:end-5,cell2use)');
 
 t1 = floor(cs(end)/3);
+
+
+% Calcultae song difference vector
+% Get audio difference vector:
+interval = median(diff(D2.warped_time(1,:,1)));
+WT = D2.warped_time(:,(1/interval)*0.25:end-(1/interval)*0.5,:);
+% Start time at zero:
+WT2(1,:,:) = WT(1,:,:)-(WT(1,1,:));
+WT2(2,:,:) = WT(2,:,:)-(WT(2,1,:));
+% Make difference vector:
+WT3 = squeeze(WT2(1,:,:)-WT2(2,:,:));
+aVect = (1:size(WT3))*interval;
+clear WT2 WT% free up memory
+% smooth audio timing vector
+[a, b] = size(WT3);
+WT3 = zscore(smooth(WT3,200));
+WT3 = reshape(WT3,a,b);
+WT3 = (WT3);
+
 
 
 % make time dff vector
