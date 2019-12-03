@@ -75,8 +75,8 @@ end
 %%% Warping Scores
 % Sort the warps into three groups
 W1{1} = WT4(:,idmb(dX1));
-W1{2} = WT4(:,idmb(dX2);
-W1{3} = WT4(:,dX3);
+W1{2} = WT4(:,idmb(dX2));
+W1{3} = WT4(:,idmb(dX3));
 W1{4} = WT4(:,:);
 
 
@@ -138,7 +138,7 @@ col = hsv(4);
 for i = 1:3;
     % take top 10 trials
  
-    adata = (W1{i}-mean(W1{4},2));
+    adata = (W1{i}-median(W1{4},2));
 [a, b] = size(adata);
 adata = (smooth(adata,100));
 adata = reshape(adata,a,b);
@@ -157,9 +157,14 @@ plot(mn,'Color',col(i,:));
 end
 
 subplot(414);
+figure();
 hold on;
-plot( abs(zscore(mean(W1{1},2)-mean(W1{3},2))),'g','LineWidth',3);
+plot( abs(zscore(mean(W1{1},2)-mean(W1{3},2))),'b','LineWidth',3);
 plot( abs(zscore(smooth(mean(SS2{1},2)-mean(SS2{3},2),50))),'r','LineWidth',3);
+
+plot( abs(zscore(std(W1{1},[],2)-std(W1{3},[],2))),'c','LineWidth',1);
+plot( abs(zscore(smooth(std(SS2{1},[],2),50)-smooth(std(SS2{3},[],2),50))),'m','LineWidth',1);
+
 legend('Green = warping','Red = spectral');
 
 
