@@ -138,7 +138,7 @@ col = hsv(4);
 for i = 1:3;
     % take top 10 trials
  
-    adata = (W1{i}-mean(W1{4},2));
+    adata = (W1{i}-median(W1{4},2));
 [a, b] = size(adata);
 adata = (smooth(adata,100));
 adata = reshape(adata,a,b);
