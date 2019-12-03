@@ -74,9 +74,9 @@ end
 
 %%% Warping Scores
 % Sort the warps into three groups
-W1{1} = WT4(:,dX1);
-W1{2} = WT4(:,dX2);
-W1{3} = WT4(:,dX3);
+W1{1} = WT4(:,idmb(dX1));
+W1{2} = WT4(:,idmb(dX2));
+W1{3} = WT4(:,idmb(dX3));
 W1{4} = WT4(:,:);
 
 
@@ -157,7 +157,6 @@ plot(mn,'Color',col(i,:));
 end
 
 subplot(414);
-
 hold on;
 plot( abs(zscore(mean(W1{1},2)-mean(W1{3},2))),'g','LineWidth',3);
 plot( abs(zscore(smooth(mean(SS2{1},2)-mean(SS2{3},2),50))),'r','LineWidth',3);

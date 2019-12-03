@@ -60,7 +60,7 @@ S1{4} = Gconsensus3{1}(:,:,randperm(700,400));
 G{1} = mean(Gconsensus3{1}(:,:,idmb(dX1)),3);
 G{2} = mean(Gconsensus3{1}(:,:,idmb(dX2)),3);
 G{3} = mean(Gconsensus3{1}(:,:,idmb(dX3)),3);
-G{4} = mean(Gconsensus3{1}(:,:,:),3); % mean of all songs
+G{4} = mean(Gconsensus3{1}(:,:,:),3);%randperm(700,400)),3); % mean of all songs
 
 [r1,r2] = CaBMI_XMASS(G{1},G{2},G{3});
 figure(); imagesc(flipud(r1));
@@ -68,13 +68,14 @@ figure(); imagesc(flipud(r1));
 % calcultae the similarity scores
 for i = 1:4; % 4 is a 'random' assortment
 SS1{i} = flipud((S1{i}-G{4})); % full spectrogram
-SS2{i} = (squeeze(sum(SS1{i},1))); % diff vs time
+%SS2{i} = (squeeze(sum(SS1{i},1))); % diff vs time
+SS2{i} = squeeze(sum(S1{i}-G{4})./std(sum(G{4})));
 end
 
 %%% Warping Scores
 % Sort the warps into three groups
-W1{1} = WT4(:,dX1);
-W1{2} = WT4(:,dX2);
+W1{1} = WT4(:,idmb(dX1));
+W1{2} = WT4(:,idmb(dX2);
 W1{3} = WT4(:,dX3);
 W1{4} = WT4(:,:);
 
@@ -109,7 +110,7 @@ col = hsv(4);
 for i = 1:3;
     % take top 10 trials
  
-    adata = (SS2{i});
+    adata = (SS2{i}-median(SS2{4},2));
 [a, b] = size(adata);
 adata = (smooth(adata,100));
 adata = reshape(adata,a,b);
@@ -124,7 +125,7 @@ mn = median(adata);
 
 h = fill([1:L L:-1:1],[mn-se fliplr(mn+se)],col(i,:)); alpha(0.5);
 plot(mn,'Color',col(i,:));
- 
+ clear adata a b 
 end
 
 
@@ -156,7 +157,6 @@ plot(mn,'Color',col(i,:));
 end
 
 subplot(414);
-
 hold on;
 plot( abs(zscore(mean(W1{1},2)-mean(W1{3},2))),'g','LineWidth',3);
 plot( abs(zscore(smooth(mean(SS2{1},2)-mean(SS2{3},2),50))),'r','LineWidth',3);
