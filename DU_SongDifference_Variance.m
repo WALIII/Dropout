@@ -163,7 +163,7 @@ plot( abs(zscore(smooth(mean(SS2{1},2)-mean(SS2{3},2),50))),'r','LineWidth',3);
 
 plot( abs(zscore(std(W1{1},[],2)-std(W1{3},[],2))),'c','LineWidth',1);
 plot( abs(zscore(smooth(std(SS2{1},[],2),50)-smooth(std(SS2{3},[],2),50))),'m','LineWidth',1);
-
+ylim([0 3]);
 legend('Green = warping','Red = spectral');
 
 
