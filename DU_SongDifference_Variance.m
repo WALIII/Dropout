@@ -95,6 +95,10 @@ title('mean plot');
 
  
 figure();
+subplot(2,1,1);
+imagesc(Dff_mat(:,idmb)');
+title(['ROI ',num2str(cell2use)]);
+subplot(2,1,2)
 hold on;
 % Plot with shadding
 col = hsv(4);
@@ -112,7 +116,7 @@ adata = (adata)';
     
 L = size(adata,2);
 se = std(adata)/10;%sqrt(length(adata));
-mn = mean(adata);
+mn = median(adata);
  
 
 h = fill([1:L L:-1:1],[mn-se fliplr(mn+se)],col(i,:)); alpha(0.5);
