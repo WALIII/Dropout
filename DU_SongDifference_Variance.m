@@ -29,6 +29,7 @@ clear WT2 WT% free up memory
 WT3 = zscore(smooth(WT3,200));
 WT3 = reshape(WT3,a,b);
 WT3 = (WT3);
+WT4 = diff(WT3);
 
 
 
@@ -72,33 +73,35 @@ end
 
 %%% Warping Scores
 % Sort the warps into three groups
-
-
+W1{1} = WT4(:,dX1);
+W1{2} = WT4(:,dX2);
+W1{3} = WT4(:,dX3);
+W1{4} = WT4(:,:);
 
 
 %%% Plot XMASS image, underlay the Warping and Spectral STD
 
 
-%%% Mean Plots
-figure();
-subplot(121);
-hold on; for i = 1:3; plot(smooth(sum(SS2{i}'),10)-smooth(sum(SS2{4}'),10)); end;
-legend('max','med','min');
-title('mean plot');
-subplot(122);
-hold on; for i = 1:3; plot(smooth(std(SS2{i}'),1)-(smooth(std(SS2{4}'),1))); end;
-legend('max','med','min');
-title('mean plot');
+% %%% Mean Plots
+% figure();
+% subplot(121);
+% hold on; for i = 1:3; plot(smooth(sum(SS2{i}'),10)-smooth(sum(SS2{4}'),10)); end;
+% legend('max','med','min');
+% title('mean plot');
+% subplot(122);
+% hold on; for i = 1:3; plot(smooth(std(SS2{i}'),1)-(smooth(std(SS2{4}'),1))); end;
+% legend('max','med','min');
+% title('mean plot');
 
 
 % plot with shadding:
 
  
 figure();
-subplot(2,1,1);
+subplot(4,1,1);
 imagesc(Dff_mat(:,idmb)');
 title(['ROI ',num2str(cell2use)]);
-subplot(2,1,2)
+subplot(4,1,2)
 hold on;
 % Plot with shadding
 col = hsv(4);
@@ -125,8 +128,38 @@ plot(mn,'Color',col(i,:));
 end
 
 
-%%% STD plots
+%%% Warping plots:
+subplot(4,1,3)
+hold on;
+% Plot with shadding
+col = hsv(4);
 
+for i = 1:3;
+    % take top 10 trials
+ 
+    adata = (W1{i}-mean(W1{4},2));
+[a, b] = size(adata);
+adata = (smooth(adata,100));
+adata = reshape(adata,a,b);
+adata = (adata)';
+    % smooth data
+    
+    
+L = size(adata,2);
+se = std(adata)/10;%sqrt(length(adata));
+mn = median(adata);
+ 
 
+h = fill([1:L L:-1:1],[mn-se fliplr(mn+se)],col(i,:)); alpha(0.5);
+plot(mn,'Color',col(i,:));
+ 
+end
+
+subplot(414);
+
+hold on;
+plot( abs(zscore(mean(W1{1},2)-mean(W1{3},2))),'g','LineWidth',3);
+plot( abs(zscore(smooth(mean(SS2{1},2)-mean(SS2{3},2),50))),'r','LineWidth',3);
+legend('Green = warping','Red = spectral');
 
 
