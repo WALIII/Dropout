@@ -46,9 +46,12 @@ t1 = floor(cs(end)/3);
 
 
 % Define the grouping
-dX1 = 1:100;
-dX2 = 301:500;
-dX3 = 601:700;
+% groups of 7 :
+groupingNo = 7;
+Gp = floor(size(Dff_mat,2)/groupingNo);
+dX1 = 1:Gp;
+dX2 = Gp*3:Gp:4;
+dX3 = size(Dff_mat,2)-Gp:size(Dff_mat,2);
 
 %%% Similarity score
 % Sort the contours into three groups
