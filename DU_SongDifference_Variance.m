@@ -161,8 +161,8 @@ end
 
 subplot(414);
 hold on;
-plot( abs(zscore(mean(W1{1},2)-mean(W1{3},2))),'b','LineWidth',3);
-plot( abs(zscore(smooth(mean(SS2{1},2)-mean(SS2{3},2),50))),'r','LineWidth',3);
+plot( abs(zscore(median(W1{1},2)-median(W1{3},2))),'b','LineWidth',3);
+plot( abs(zscore(smooth(median(SS2{1},2)-median(SS2{3},2),50))),'r','LineWidth',3);
 
 plot( abs(zscore(std(W1{1},[],2)-std(W1{3},[],2))),'c','LineWidth',1);
 plot( abs(zscore(smooth(std(SS2{1},[],2),50)-smooth(std(SS2{3},[],2),50))),'m','LineWidth',1);
