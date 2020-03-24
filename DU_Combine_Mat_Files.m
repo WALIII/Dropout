@@ -9,10 +9,10 @@ function DU_Combine_Mat_Files();
 DIR = pwd;
 
 % % Make metadata file:
-metadata.initial_median_filter_kernal = 5;
-metadata.median_filter_kernal = 5;
+metadata.initial_median_filter_kernal = 3;
+metadata.median_filter_kernal = 3;
 metadata.artifact_reject =1;
-metadata.temp_downsample = 0.5;
+metadata.temp_downsample = 0.25;
 
 
 %% 1. Get all mat files:
@@ -42,6 +42,6 @@ end
 
 
 mov_data =  ImBat_denoise(mov_data,'metadata',metadata);
-
+FS_tiff(mov_data);
 disp('done');
 
