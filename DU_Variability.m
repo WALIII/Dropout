@@ -13,7 +13,9 @@ trialB = 1;
 % Take the all-to-all pearson corrleation of ROIs
 for cell = 1:size(data.directed,3);
 GGD = squeeze((data.directed(:,:,cell)'-min(data.directed(:,:,cell)')));
+
 GGU = squeeze((data.undirected(:,:,cell)'-min(data.undirected(:,:,cell)')));
+
 mtxU = corr(GGU);
 mtxD = corr(GGD);
 sumU(cell,:) = mtxU(:); % everything is doubled, but thats OK.
@@ -37,7 +39,7 @@ else
     trialB = trialB+1;
 end
 
-    
+
 % figure();
 % hold on;
 % histogram(mtxD(1:1000));
