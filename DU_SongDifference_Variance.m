@@ -50,7 +50,7 @@ t1 = floor(cs(end)/3);
 groupingNo = 7;
 Gp = floor(size(Dff_mat,2)/groupingNo);
 dX1 = 1:Gp;
-dX2 = Gp*3:Gp:4;
+dX2 = Gp*3:Gp*4;
 dX3 = size(Dff_mat,2)-Gp:size(Dff_mat,2);
 
 %%% Similarity score
@@ -58,7 +58,7 @@ dX3 = size(Dff_mat,2)-Gp:size(Dff_mat,2);
 S1{1} = Gconsensus3{1}(:,:,idmb(dX1));
 S1{2} = Gconsensus3{1}(:,:,idmb(dX2));
 S1{3} = Gconsensus3{1}(:,:,idmb(dX3));
-S1{4} = Gconsensus3{1}(:,:,randperm(700,400));
+S1{4} = Gconsensus3{1}(:,:,:);
 
 G{1} = mean(Gconsensus3{1}(:,:,idmb(dX1)),3);
 G{2} = mean(Gconsensus3{1}(:,:,idmb(dX2)),3);
