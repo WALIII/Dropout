@@ -44,8 +44,9 @@ for i=1:length(mov_listing)
         audio_data = audio.data;
         audio_time = (1:size(audio.data,1))/48000;
         % trim audio
-        audio_time(audio_time > max(max(video.times))) = [];
         audio_data(audio_time > max(max(video.times))) = [];
+        audio_time(audio_time > max(max(video.times))) = [];
+        
         
         idx.audio_idx(i) = size(audio.data,1);
         
@@ -55,13 +56,13 @@ for i=1:length(mov_listing)
         temp_audio = audio.data;
         
         temp_audio_time =(1:size(audio.data,1))/48000;
-         
+        
         % trim audio
-        temp_audio_time(temp_audio_time > max(max(video.times))) = [];
         temp_audio(temp_audio_time > max(max(video.times))) = [];
+        temp_audio_time(temp_audio_time > max(max(video.times))) = [];
         
         temp_audio_time =  max(audio_time)+temp_audio_time;
-
+        
         
         
         temp_mov_time = max(mov_time) + video.times';
@@ -86,7 +87,7 @@ end
 mov_data =  ImBat_denoise(mov_data,'metadata',metadata);
 
 if save_movie ==1;
-FS_tiff(mov_data);
+    FS_tiff(mov_data);
 else
 end
 

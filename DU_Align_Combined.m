@@ -9,7 +9,7 @@ for ii = 1:size(song_start,2)
     
     idx1=song_start(ii); %time in seconds
     
-    [~,loc1]= min(abs(idx1-out.mov_time));
+    [~,loc1]= min(abs(out.mov_time-idx1));
     
     %remainder{counter} = roi_ave.interp_time{i}(loc1)-idx1; % this is the offset
     
