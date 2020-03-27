@@ -24,3 +24,5 @@ DirectedTrials = G2(2:end);
 
 out.index.directed = zeros(1,size(out.index.movie_idx,2));
 out.index.directed(G2(2:end)) = 1;
+
+[out] = DU_assign_directed(out);
