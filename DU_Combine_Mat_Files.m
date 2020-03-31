@@ -37,6 +37,11 @@ for i=1:length(mov_listing)
         % Movie data
         mov_data = imresize(FS_Format(video.frames,1),metadata.temp_downsample);
         mov_time = video.times';
+        % remove the last frame for alignment
+        mov_data(:,:,end) = [];
+        mov_time(end) = [];
+        video.times(end) = [];
+        
         filename{i} = mov_listing{i};
         idx.movie_idx(i) = size(mov_data,3);
         
@@ -44,25 +49,28 @@ for i=1:length(mov_listing)
         audio_data = audio.data;
         audio_time = (1:size(audio.data,1))/48000;
         % trim audio
-        audio_data(audio_time > max(max(video.times))) = [];
-        audio_time(audio_time > max(max(video.times))) = [];
+        audio_data(audio_time >= max(max(video.times))) = [];
+        audio_time(audio_time >= max(max(video.times))) = [];
         
         
         idx.audio_idx(i) = size(audio.data,1);
         
     else
         temp_mov = imresize(FS_Format(video.frames,1),metadata.temp_downsample);
+        % remove last video frame for alignment
+        temp_mov(:,:,end) = [];
+        video.times(end) = [];
+        
         % have to cut audio to fit video:
         temp_audio = audio.data;
         
         temp_audio_time =(1:size(audio.data,1))/48000;
         
         % trim audio
-        temp_audio(temp_audio_time > max(max(video.times))) = [];
-        temp_audio_time(temp_audio_time > max(max(video.times))) = [];
+        temp_audio(temp_audio_time >= max(max(video.times))) = [];
+        temp_audio_time(temp_audio_time >= max(max(video.times))) = [];
         
         temp_audio_time =  max(audio_time)+temp_audio_time;
-        
         
         
         temp_mov_time = max(mov_time) + video.times';
@@ -73,6 +81,7 @@ for i=1:length(mov_listing)
         audio_time = cat(2,audio_time,temp_audio_time);
         mov_time = cat(2,mov_time,temp_mov_time);
         
+        residual = max(audio_time)- max(mov_time);        
         %indexing
         idx.audio_idx(i) = size(audio.data,1);
         idx.movie_idx(i) = size(mov_data,3);
