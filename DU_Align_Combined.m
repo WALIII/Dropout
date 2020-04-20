@@ -59,6 +59,7 @@ out.index.start_frame =  start_frame;
  
  figure(); 
  for i = 1: size(start_frame,2)
+     try
      alignedVid = out.mov_data(:,:,start_frame(i)-20:start_frame(i)+40);
      allVids(:,:,:,i) = alignedVid;
      
@@ -66,9 +67,14 @@ out.index.start_frame =  start_frame;
       aligned.C_raw(:,:,i) = results.C_raw(:,start_frame(i)-20:start_frame(i)+30);
       aligned.C(:,:,i) = results.C(:,start_frame(i)-20:start_frame(i)+30);
       aligned.S(:,:,i) = full(results.S(:,start_frame(i)-20:start_frame(i)+30));
-      
+     catch
+         disp(' too close to end foc current pad');
+         allVids(:,:,:,i) = zeros(size(out.mov_data,1),size(out.mov_data,2),61); 
+     end
  end
  
+ disp('done');
  
 
+ out.aligned = aligned;
  
