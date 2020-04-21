@@ -24,7 +24,7 @@ for i = 1:length(subFolders);
     cd([subFolders(i).folder,'/',subFolders(i).name]);
     
      %   extract .mov files:
-  %     FS_AV_Parse();
+       FS_AV_Parse();
 end
 
 cd(HomeDir);
