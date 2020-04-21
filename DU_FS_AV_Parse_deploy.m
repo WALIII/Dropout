@@ -52,6 +52,7 @@ for i = 1:length(subFolders);
         % 3. find songs ( Load Template data)
         [out.index.song_start, out.index.song_end, out.index.score_d] = find_audio(out.audio_data, T.TEMPLATE, 48000, 'match_single', false);
         
+        load('results.mat');
         % 4. Align everything
         [out.allVids,out.index.start_frame,out.index.start_time,out.aligned,out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
         
