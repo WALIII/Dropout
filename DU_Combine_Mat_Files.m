@@ -100,6 +100,9 @@ if save_movie ==1;
 else
 end
 
+
+% remove first 10 frames of mov_data:
+mov_data(:,:,1:10) = mean(mov_data(:,:,11:13),3);
 % Data
 out.mov_data = mov_data;
 out.audio_data = audio_data;

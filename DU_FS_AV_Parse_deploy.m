@@ -1,9 +1,26 @@
-function DU_FS_AV_Parse_deploy
+function DU_FS_AV_Parse_deploy(varargin)
 
+% windows: DU_FS_AV_Parse_deploy('cnmfe',1)
+AVparse = 0;
+cnmfe = 0;
+nparams=length(varargin);
 
+if mod(nparams,2)>0
+    error('Parameters must be specified as parameter/value pairs');
+end
 
+for i=1:2:nparams
+    switch lower(varargin{i})
+        case 'cnmfe'
+            cnmfe=varargin{i+1};
+        case 'avparse'
+            av=varargin{i+1};
+    end
+end
 
 HomeDir = cd;
+T = load([HomeDir,'/template/template_data']);
+
 % Get all folders in directory
 files = dir(pwd);
 files(ismember( {files.name}, {'.', '..','template'})) = [];  %remove . and .. and Processed
@@ -23,8 +40,24 @@ for i = 1:length(subFolders);
     
     cd([subFolders(i).folder,'/',subFolders(i).name]);
     
-     %   extract .mov files:
-       FS_AV_Parse();
+    %   extract .mov files:
+    if exist('mat')<1 && avparse ==1;
+        FS_AV_Parse();
+    elseif cnmfe == 1 
+        [out,metadata] = DU_CNMFE;
+        
+        metadata.TEMPLATE = T.TEMPLATE;
+        
+        % 3. find songs ( Load Template data)
+        [out.index.song_start, out.index.song_end, out.index.score_d] = find_audio(out.audio_data, T.TEMPLATE, 48000, 'match_single', false);
+        
+        % 4. Align everything
+        [out.allVids,out.index.start_frame,out.index.start_time,out.aligned,out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
+        
+        
+        % save data
+        save('Processed_Data.mat','out','metadata');
+    end
 end
-
-cd(HomeDir);
+    
+    cd(HomeDir);
