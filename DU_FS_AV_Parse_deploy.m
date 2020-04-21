@@ -44,6 +44,7 @@ for i = 1:length(subFolders);
     if exist('mat')<1 && avparse ==1;
         FS_AV_Parse();
     elseif cnmfe == 1 
+        cd('mat');
         [out,metadata] = DU_CNMFE;
         
         metadata.TEMPLATE = T.TEMPLATE;

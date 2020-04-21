@@ -102,7 +102,10 @@ end
 
 
 % remove first 10 frames of mov_data:
-mov_data(:,:,1:10) = mean(mov_data(:,:,11:13),3);
+for i = 1:10;
+mov_data(:,:,i) = mean(mov_data(:,:,11:13),3);
+end
+
 % Data
 out.mov_data = mov_data;
 out.audio_data = audio_data;
