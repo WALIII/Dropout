@@ -27,7 +27,7 @@ CNMFe_extract2(nam,'metadata',metadata);
 [out.index.song_start, out.index.song_end, score_d] = find_audio(out.audio_data, TEMPLATE, 48000, 'match_single', false);
 
 % 4. Align everything
-[allVids,out.index.start_frame,out.index.start_time,aligned,out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
+[out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
 
 % 5. seperate Directed and Undirected; ( Load context index)
 out = DU_Check_Directed(out, directed,undirected);

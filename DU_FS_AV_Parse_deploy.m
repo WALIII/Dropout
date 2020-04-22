@@ -54,7 +54,7 @@ for i = 1:length(subFolders);
         
         load('results.mat');
         % 4. Align everything
-        [out.allVids,out.index.start_frame,out.index.start_time,out.aligned,out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
+        [out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
         
         
         % save data

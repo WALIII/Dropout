@@ -1,4 +1,4 @@
-function [allVids,start_frame,start_time,aligned,out] =  DU_Align_Combined(out,song_start,song_end,results);
+function [out] =  DU_Align_Combined(out,song_start,song_end,results);
 
 % [song_start, song_end, score_d] = find_audio(out.audio_data, TEMPLATE, 48000, 'match_single', false);
 
@@ -77,4 +77,8 @@ out.index.start_frame =  start_frame;
  
 
  out.aligned = aligned;
+ 
+ out.allVids = allVids;
+ out.start_frame = start_frame;
+ out.start_time = start_time;
  
