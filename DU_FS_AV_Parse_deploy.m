@@ -44,6 +44,7 @@ for i = 1:length(subFolders);
     if exist('mat')<1 && avparse ==1;
         FS_AV_Parse();
     elseif cnmfe == 1 
+        cd('mat');
         [out,metadata] = DU_CNMFE;
         
         metadata.TEMPLATE = T.TEMPLATE;
@@ -51,6 +52,7 @@ for i = 1:length(subFolders);
         % 3. find songs ( Load Template data)
         [out.index.song_start, out.index.song_end, out.index.score_d] = find_audio(out.audio_data, T.TEMPLATE, 48000, 'match_single', false);
         
+        load('results.mat');
         % 4. Align everything
         [out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
         
