@@ -50,7 +50,7 @@ for i = 1:length(subFolders);
         metadata.TEMPLATE = T.TEMPLATE;
         
         % 3. find songs ( Load Template data)
-        [out.index.song_start, out.index.song_end, out.index.score_d] = find_audio(out.audio_data, T.TEMPLATE, 48000, 'match_single', false);
+        [out.index.song_start, out.index.song_end, out.index.score_d] = find_audio(out.audio_data, metadata.TEMPLATE, 48000, 'match_single', false);
         
         load('results.mat');
         % 4. Align everything
