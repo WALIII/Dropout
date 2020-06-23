@@ -89,7 +89,7 @@ A2(A2 ==1) = [];
 histogram((A1(:)),100,'FaceColor','g','Normalization','probability');
 histogram((A2(:)),100,'FaceColor','m','Normalization','probability');
 
-neighborhood = 10;
+neighborhood = 5;
 
 
 DU_diaganol(Brand,neighborhood);
@@ -105,7 +105,7 @@ DU_diaganol(Brand,neighborhood);
 
 % For time window ( uncomment)
 for i = 1: 6
-[out] = DU_Time_Cluster(out1{i}.DffHeight_time,out1{i}.DffHeight,1,2);
+[out] = DU_Time_Cluster(out1{i}.DffHeight_time,out1{i}.DffHeight,1,3); % last 2 are frame values
 Mn(:,i) = out.A_near_mean;
 Mf(:,i) = out.A_far_mean;
 
