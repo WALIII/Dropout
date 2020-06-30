@@ -42,7 +42,8 @@ disp('Loading Data...');
 Data{i}.BirdID = subFolders2(1).name;
 Data{i}.ROI = out.aligned;
 Data{i}.ROI_A = results.A;
-Data{i}.Background = results.X;
+Data{i}.ROI_A = results.A;
+%Data{i}.Background = results.X;
 
 clear out results
 cd(homeDir)
