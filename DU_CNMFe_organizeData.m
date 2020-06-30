@@ -39,14 +39,14 @@ disp('Loading Data...');
    out =  load('Processed_Data','out');     out = out.out;
    load('results.mat');
 
-Data{i}.BirdID = subFolders2(1).name;
-Data{i}.ROI = out.aligned;
+Data{i}.BirdID = subFolders(i).name;
+Data{i}.ROIs_aligned = out.aligned;
 Data{i}.ROI_A = results.A;
-Data{i}.Background = results.X;
+%Data{i}.Background = results.X;
 
 clear out results
 cd(homeDir)
 
 end
 
-save('processed/AllData.mat',Data);
+save('processed/AllData.mat','Data');
