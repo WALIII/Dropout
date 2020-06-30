@@ -20,7 +20,12 @@ end
 
 HomeDir = cd;
 T = load([HomeDir,'/template/template_data']);
-
+try
+    load([HomeDir,'/template/context_index.mat']);
+    DirUndir = 1;
+catch
+    DirUndir =0;
+end
 % Get all folders in directory
 files = dir(pwd);
 files(ismember( {files.name}, {'.', '..','template'})) = [];  %remove . and .. and Processed
@@ -56,7 +61,9 @@ for i = 1:length(subFolders);
         % 4. Align everything
         [out] =  DU_Align_Combined(out,out.index.song_start,out.index.song_end,results);
         
-        
+        if DirUndir ==1;
+        out = DU_Check_Directed(out, directed,undirected);
+        end
         % save data
         save('Processed_Data.mat','out','metadata');
     end
