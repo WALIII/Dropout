@@ -19,7 +19,7 @@ for i=1:2:nparams
 end
 
 HomeDir = cd;
-T = load([HomeDir,'/template/template_data']);
+T = load([HomeDir,'/template/template_data.mat']);
 try
     load([HomeDir,'/template/context_index.mat']);
     DirUndir = 1;
